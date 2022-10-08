@@ -32,12 +32,12 @@ public class MemberService {
         return mapper.isNicknameExist(nickname);
     }
 
-    public Optional<Member> getMemberByLoginIdAndLoginPassword(String loginId, String password) {
+    public Optional<Member> getMemberByLoginIdAndPassword(String loginId, String password) {
 
         if (!isLoginIdExist(loginId)) return Optional.empty();
 
         Optional<Member> member =
-                Optional.ofNullable(mapper.getMemberByLoginIdAndLoginPassword(loginId, password));
+                Optional.ofNullable(mapper.getMemberByLoginId(loginId));
 
         if (BCrypt.checkpw(password, member.get()
                                                 .getPassword())) {

@@ -18,11 +18,10 @@
         SELECT EXISTS (SELECT * FROM member WHERE nickname = #{nickname})
     </select>
 
-    <select id="getMemberByLoginIdAndLoginPassword" resultType="soccerfriend.dto.Member">
-        SELECT id, loginId, password, nickname, point, soccer_info_id, created_at, updated_at
+    <select id="getMemberByLoginId" resultType="soccerfriend.dto.Member">
+        SELECT id, loginId, password, nickname, point, soccerInfoId, createdAt, updatedAt
         FROM member
         WHERE loginId = #{loginId}
-          AND loginPassword = #{loginPassword}
     </select>
 
     <update id="setSoccerInfo" parameterType="int">
