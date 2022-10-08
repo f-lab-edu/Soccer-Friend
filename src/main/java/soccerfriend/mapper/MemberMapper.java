@@ -9,6 +9,8 @@ public interface MemberMapper {
 
     public int insert(Member member);
 
+    public void delete(String LoginId);
+
     public Member getMemberByLoginId(String loginId);
 
     public boolean isLoginIdExist(String login_id);

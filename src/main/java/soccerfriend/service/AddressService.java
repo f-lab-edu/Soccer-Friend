@@ -13,7 +13,7 @@ public class AddressService {
 
     private final AddressMapper mapper;
 
-    public List<Address> getAddressByCity(String city){
+    public List<Address> getAddressByCity(String city) {
         return mapper.getAddressByCity(city);
     }
 }

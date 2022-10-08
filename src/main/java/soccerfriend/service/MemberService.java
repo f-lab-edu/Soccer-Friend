@@ -21,7 +21,12 @@ public class MemberService {
                                        .point(0)
                                        .build();
 
-        return mapper.insert(encryptedMember);
+        mapper.insert(encryptedMember);
+        return encryptedMember.getId();
+    }
+
+    public void delete(String loginId) {
+        mapper.delete(loginId);
     }
 
     public boolean isLoginIdExist(String login_id) {
@@ -40,7 +45,7 @@ public class MemberService {
                 Optional.ofNullable(mapper.getMemberByLoginId(loginId));
 
         if (BCrypt.checkpw(password, member.get()
-                                                .getPassword())) {
+                                           .getPassword())) {
             return member;
         }
 

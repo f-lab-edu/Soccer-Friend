@@ -9,7 +9,6 @@ import soccerfriend.service.PositionsService;
 
 import java.util.List;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/positions")

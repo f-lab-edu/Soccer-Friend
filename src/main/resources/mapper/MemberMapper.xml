@@ -10,6 +10,12 @@
         VALUES (#{loginId}, #{password}, #{nickname}, #{point})
     </insert>
 
+    <delete id="delete" parameterType="String">
+        DELETE
+        FROM member
+        WHERE loginId = #{loginId}
+    </delete>
+
     <select id="isLoginIdExist" resultType="boolean">
         SELECT EXISTS (SELECT * FROM member WHERE loginId = #{loginId})
     </select>
@@ -19,7 +25,14 @@
     </select>
 
     <select id="getMemberByLoginId" resultType="soccerfriend.dto.Member">
-        SELECT id, loginId, password, nickname, point, soccerInfoId, createdAt, updatedAt
+        SELECT id,
+               loginId,
+               password,
+               nickname,
+               point,
+               soccerInfoId,
+               createdAt,
+               updatedAt
         FROM member
         WHERE loginId = #{loginId}
     </select>

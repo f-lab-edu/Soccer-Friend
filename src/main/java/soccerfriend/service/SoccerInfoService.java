@@ -31,6 +31,7 @@ public class SoccerInfoService {
     }
 
     public int insert(SoccerInfo soccerInfo){
-        return soccerInfoMapper.insert(soccerInfo);
+        soccerInfoMapper.insert(soccerInfo);
+        return soccerInfo.getId();
     }
 }

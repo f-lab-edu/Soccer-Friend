@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import soccerfriend.dto.SoccerInfo;
 import soccerfriend.service.SoccerInfoService;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/soccerinfo")

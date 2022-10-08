@@ -8,6 +8,9 @@ import soccerfriend.dto.Member;
 import soccerfriend.service.LoginService;
 import soccerfriend.service.MemberService;
 
+import javax.servlet.http.HttpSession;
+
+import static soccerfriend.service.LoginService.LOGIN_MEMBER;
 import static utility.HttpStatusCode.CONFLICT;
 import static utility.HttpStatusCode.OK;
 
@@ -31,6 +34,12 @@ public class MemberController {
     @GetMapping("/logout")
     public void logout() {
         loginService.logout();
+    }
+
+    @DeleteMapping("")
+    public void deleteAccount(HttpSession httpSession) {
+        String loginId = (String) httpSession.getAttribute(LOGIN_MEMBER);
+        memberService.delete(loginId);
     }
 
     @GetMapping("/exist/loginId/{loginId}")

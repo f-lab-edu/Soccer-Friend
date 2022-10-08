@@ -25,7 +25,7 @@ public class SessionLoginService implements LoginService {
 
         if (!member.isPresent()) return BAD_REQUEST;
 
-        httpSession.setAttribute(LOGIN_USER, loginForm.getLoginId());
+        httpSession.setAttribute(LOGIN_MEMBER, loginForm.getLoginId());
         httpSession.setMaxInactiveInterval(30 * 60);
 
         return OK;
