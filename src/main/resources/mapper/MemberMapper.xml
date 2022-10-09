@@ -46,13 +46,15 @@
 
     <update id="updateNickname">
         UPDATE member
-        SET nickname = #{nickname}
+        SET nickname = #{nickname},
+            updatedAt=now()
         WHERE loginId = #{loginId}
     </update>
 
     <update id="updatePassword">
         UPDATE member
-        SET password = #{password}
+        SET password = #{password},
+            updatedAt=now()
         WHERE loginId = #{loginId}
     </update>
 
