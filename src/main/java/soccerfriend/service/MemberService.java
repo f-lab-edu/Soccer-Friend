@@ -62,9 +62,11 @@ public class MemberService {
     }
 
     /**
+     * loginId와 password를 입력받아 해당 member를 반환합니다.
+     *
      * @param loginId
      * @param password
-     * @return
+     * @return member의 Optional 객체
      */
     public Optional<Member> getMemberByLoginIdAndPassword(String loginId, String password) {
 
