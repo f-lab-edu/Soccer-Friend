@@ -5,7 +5,7 @@
 <mapper namespace="soccerfriend.mapper.AddressMapper">
 
     <select id="getAddressByCity" resultType="soccerfriend.dto.Address">
-        SELECT id, city, town, createdAt, updatedAt
+        SELECT id, city, town, created_at, updated_at
         FROM address
         WHERE city = #{city}
     </select>

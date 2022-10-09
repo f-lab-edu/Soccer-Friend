@@ -16,7 +16,6 @@ public class AddressController {
 
     @GetMapping("/{city}")
     public List<Address> getAddressByCity(@PathVariable String city) {
-        System.out.println("city = " + city);
         return service.getAddressByCity(city);
     }
 }

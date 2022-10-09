@@ -6,18 +6,18 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.Member" useGeneratedKeys="true" keyProperty="id">
         INSERT
-        INTO member(loginId, password, nickname, point)
+        INTO member(login_id, password, nickname, point)
         VALUES (#{loginId}, #{password}, #{nickname}, #{point})
     </insert>
 
     <delete id="delete" parameterType="String">
         DELETE
         FROM member
-        WHERE loginId = #{loginId}
+        WHERE login_id = #{loginId}
     </delete>
 
     <select id="isLoginIdExist" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM member WHERE loginId = #{loginId})
+        SELECT EXISTS (SELECT * FROM member WHERE login_id = #{loginId})
     </select>
 
     <select id="isNicknameExist" resultType="boolean">
@@ -25,37 +25,30 @@
     </select>
 
     <select id="getMemberByLoginId" resultType="soccerfriend.dto.Member">
-        SELECT id,
-               loginId,
-               password,
-               nickname,
-               point,
-               soccerInfoId,
-               createdAt,
-               updatedAt
+        SELECT id, login_id, password, nickname, point, created_at, updated_at
         FROM member
-        WHERE loginId = #{loginId}
+        WHERE login_id = #{loginId}
     </select>
 
     <update id="setSoccerInfo">
         UPDATE member
-        SET soccerInfoId = #{soccerInfoId},
-            updatedAt=now()
-        WHERE loginId = #{loginId}
+        SET soccer_info_id = #{soccerInfoId},
+            updated_at=now()
+        WHERE login_id = #{loginId}
     </update>
 
     <update id="updateNickname">
         UPDATE member
-        SET nickname = #{nickname},
-            updatedAt=now()
-        WHERE loginId = #{loginId}
+        SET nickname  = #{nickname},
+            updated_at=now()
+        WHERE login_id = #{loginId}
     </update>
 
     <update id="updatePassword">
         UPDATE member
-        SET password = #{password},
-            updatedAt=now()
-        WHERE loginId = #{loginId}
+        SET password  = #{password},
+            updated_at=now()
+        WHERE login_id = #{loginId}
     </update>
 
 </mapper>

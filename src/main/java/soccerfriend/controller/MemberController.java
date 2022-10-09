@@ -65,7 +65,7 @@ public class MemberController {
         return OK;
     }
 
-    @PatchMapping("/soccerinfo")
+    @PatchMapping("/soccerInfo")
     public void setSoccerInfo(@RequestParam int soccerInfoId) {
         String loginId = (String) httpSession.getAttribute(LOGIN_MEMBER);
 

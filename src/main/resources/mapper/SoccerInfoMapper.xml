@@ -4,9 +4,9 @@
 
 <mapper namespace="soccerfriend.mapper.SoccerInfoMapper">
 
-    <insert id="insert" parameterType="soccerfriend.dto.Member" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="soccerfriend.dto.SoccerInfo" useGeneratedKeys="true" keyProperty="id">
         INSERT
-        INTO soccerInfo(positionsId, addressId)
+        INTO soccer_info(positions_id, address_id)
         VALUES (#{positionsId}, #{addressId})
     </insert>
 
