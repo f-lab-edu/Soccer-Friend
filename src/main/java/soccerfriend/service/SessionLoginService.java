@@ -1,16 +1,12 @@
 package soccerfriend.service;
 
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import soccerfriend.dto.LoginForm;
+import soccerfriend.controller.MemberController;
 import soccerfriend.dto.Member;
 
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
-
-import static utility.HttpStatusCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -19,18 +15,27 @@ public class SessionLoginService implements LoginService {
     private final MemberService memberService;
     private final HttpSession httpSession;
 
+    /**
+     * 로그인을 수행합니다.
+     *
+     * @param loginForm loginId, password를 포함하는 객체
+     * @return 로그인 성공 여부
+     */
     @Override
-    public ResponseEntity<Void> login(LoginForm loginForm) {
+    public boolean login(MemberController.LoginForm loginForm) {
         Optional<Member> member = memberService.getMemberByLoginIdAndPassword(loginForm.getLoginId(), loginForm.getPassword());
 
-        if (!member.isPresent()) return BAD_REQUEST;
+        if (!member.isPresent()) return false;
 
         httpSession.setAttribute(LOGIN_MEMBER, loginForm.getLoginId());
         httpSession.setMaxInactiveInterval(30 * 60);
 
-        return OK;
+        return true;
     }
 
+    /**
+     * 로그아웃을 수행합니다.
+     */
     @Override
     public void logout() {
         httpSession.invalidate();

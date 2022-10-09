@@ -1,4 +1,4 @@
-package utility;
+package soccerfriend.utility;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -11,6 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/address")
 public class AddressController {
+
     private final AddressService service;
 
     @GetMapping("/{city}")

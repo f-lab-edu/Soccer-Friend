@@ -13,9 +13,13 @@ public interface MemberMapper {
 
     public Member getMemberByLoginId(String loginId);
 
-    public boolean isLoginIdExist(String login_id);
+    public boolean isLoginIdExist(String loginId);
 
     public boolean isNicknameExist(String nickname);
 
-    public void setSoccerInfo(@Param("memberId") int memberId, @Param("soccerInfoId") int soccerInfoId);
+    public void setSoccerInfo(@Param("loginId") String loginId, @Param("soccerInfoId") int soccerInfoId);
+
+    public void updateNickname(@Param("loginId") String loginId, @Param("nickname") String nickname);
+
+    public void updatePassword(@Param("loginId") String loginId, @Param("password") String password);
 }

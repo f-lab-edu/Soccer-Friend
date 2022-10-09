@@ -12,6 +12,7 @@ import soccerfriend.service.SoccerInfoService;
 @RequiredArgsConstructor
 @RequestMapping("/soccerinfo")
 public class SoccerInfoController {
+
     private final SoccerInfoService service;
 
     @PostMapping("")

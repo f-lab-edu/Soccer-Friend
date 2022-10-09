@@ -37,11 +37,23 @@
         WHERE loginId = #{loginId}
     </select>
 
-    <update id="setSoccerInfo" parameterType="int">
+    <update id="setSoccerInfo">
         UPDATE member
         SET soccerInfoId = #{soccerInfoId},
             updatedAt=now()
-        WHERE id = #{memberId}
+        WHERE loginId = #{loginId}
+    </update>
+
+    <update id="updateNickname">
+        UPDATE member
+        SET nickname = #{nickname}
+        WHERE loginId = #{loginId}
+    </update>
+
+    <update id="updatePassword">
+        UPDATE member
+        SET password = #{password}
+        WHERE loginId = #{loginId}
     </update>
 
 </mapper>

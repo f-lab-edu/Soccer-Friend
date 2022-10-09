@@ -13,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/positions")
 public class PositionsController {
+
     private final PositionsService service;
 
     @GetMapping("")
