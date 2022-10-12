@@ -2,8 +2,10 @@ package soccerfriend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import soccerfriend.controller.MemberController;
+import soccerfriend.controller.MemberController.LoginRequest;
 import soccerfriend.dto.Member;
+import soccerfriend.exception.member.IdNotExistException;
+import soccerfriend.exception.member.PasswordIncorrectException;
 
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
@@ -22,15 +24,20 @@ public class SessionLoginService implements LoginService {
      * @return 로그인 성공 여부
      */
     @Override
-    public boolean login(MemberController.LoginRequest loginForm) {
+    public void login(LoginRequest loginForm) {
+
+        if(!memberService.isLoginIdExist(loginForm.getLoginId())){
+            throw new IdNotExistException();
+        }
+
         Optional<Member> member = memberService.getMemberByLoginIdAndPassword(loginForm.getLoginId(), loginForm.getPassword());
 
-        if (!member.isPresent()) return false;
+        if (!member.isPresent()){
+            throw new PasswordIncorrectException();
+        }
 
         httpSession.setAttribute(LOGIN_MEMBER, loginForm.getLoginId());
         httpSession.setMaxInactiveInterval(30 * 60);
-
-        return true;
     }
 
     /**

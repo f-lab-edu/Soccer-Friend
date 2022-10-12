@@ -1,16 +1,10 @@
 package soccerfriend.controller;
 
 import lombok.*;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Member;
 import soccerfriend.service.LoginService;
 import soccerfriend.service.MemberService;
-
-import javax.servlet.http.HttpSession;
-
-import static soccerfriend.service.LoginService.LOGIN_MEMBER;
-import static soccerfriend.utility.HttpStatusCode.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,19 +13,16 @@ public class MemberController {
 
     private final MemberService memberService;
     private final LoginService loginService;
-    private final HttpSession httpSession;
 
-    @PostMapping()
+
+    @PostMapping
     public int signUp(@RequestBody Member member) {
         return memberService.signUp(member);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginRequest loginForm) {
-        boolean result = loginService.login(loginForm);
-
-        if (!result) return BAD_REQUEST;
-        return OK;
+    public void login(@RequestBody LoginRequest loginForm) {
+        loginService.login(loginForm);
     }
 
     @GetMapping("/logout")
@@ -41,28 +32,14 @@ public class MemberController {
 
     @DeleteMapping
     public void deleteAccount() {
-        String loginId = (String) httpSession.getAttribute(LOGIN_MEMBER);
-        memberService.delete(loginId);
+        memberService.delete();
     }
 
     @GetMapping("/exist/login-id")
-    public ResponseEntity<Void> isLoginIdExist(@RequestParam String loginId) {
+    public boolean isLoginIdExist(@RequestParam String loginId) {
         boolean isDuplicated = memberService.isLoginIdExist(loginId);
 
-        if (isDuplicated) {
-            return CONFLICT;
-        }
-        return OK;
-    }
-
-    @GetMapping("/exist/nickname")
-    public ResponseEntity<Void> isNicknameExist(@RequestParam String nickname) {
-        boolean isDuplicated = memberService.isNicknameExist(nickname);
-
-        if (isDuplicated) {
-            return CONFLICT;
-        }
-        return OK;
+        return isDuplicated;
     }
 
     @PatchMapping("/soccer-info")
@@ -72,23 +49,13 @@ public class MemberController {
     }
 
     @PatchMapping("/nickname")
-    public ResponseEntity<Void> updateNickname(@RequestParam String nickname) {
-        boolean result = memberService.updateNickname(nickname);
-
-        if (!result) {
-            return BAD_REQUEST;
-        }
-        return OK;
+    public void updateNickname(@RequestParam String nickname) {
+        memberService.updateNickname(nickname);
     }
 
     @PatchMapping("/password")
-    public ResponseEntity<Void> updatePassword(@RequestBody UpdatePasswordRequest passwordForm) {
-        boolean result = memberService.updatePassword(passwordForm);
-
-        if (!result) {
-            return BAD_REQUEST;
-        }
-        return OK;
+    public void updatePassword(@RequestBody UpdatePasswordRequest passwordForm) {
+        memberService.updatePassword(passwordForm);
     }
 
     @Getter

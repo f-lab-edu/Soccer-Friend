@@ -23,6 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({NicknameDuplicatedException.class})
     protected ResponseEntity handleNicknameDuplicatedException(NicknameDuplicatedException ex) {
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@");
         return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }
@@ -33,8 +34,8 @@ public class GlobalExceptionHandler {
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }
 
-    @ExceptionHandler({PasswordNotMatchException.class})
-    protected ResponseEntity handlePasswordNotMatchException(PasswordNotMatchException ex) {
+    @ExceptionHandler({PasswordSameException.class})
+    protected ResponseEntity handlePasswordSameException(PasswordSameException ex) {
         return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }

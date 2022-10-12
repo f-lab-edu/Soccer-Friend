@@ -1,6 +1,6 @@
 package soccerfriend.service;
 
-import soccerfriend.controller.MemberController;
+import static soccerfriend.controller.MemberController.*;
 
 public interface LoginService {
 
@@ -10,9 +10,8 @@ public interface LoginService {
      * 로그인을 수행합니다.
      *
      * @param loginForm loginId, password를 포함하는 객체
-     * @return 로그인 성공 여부
      */
-    public boolean login(MemberController.LoginRequest loginForm);
+    public void login(LoginRequest loginForm);
 
 
     /**

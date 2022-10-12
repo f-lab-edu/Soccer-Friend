@@ -5,6 +5,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import soccerfriend.controller.MemberController.UpdatePasswordRequest;
 import soccerfriend.dto.Member;
+import soccerfriend.exception.member.NicknameDuplicatedException;
+import soccerfriend.exception.member.PasswordSameException;
 import soccerfriend.mapper.MemberMapper;
 
 import javax.servlet.http.HttpSession;
@@ -25,6 +27,9 @@ public class MemberService {
      * @return 회원가입한 member의 id
      */
     public int signUp(Member member) {
+        if(isNicknameExist(member.getNickname())){
+            throw new NicknameDuplicatedException();
+        }
         Member encryptedMember = Member.builder()
                                        .loginId(member.getLoginId())
                                        .password(BCrypt.hashpw(member.getPassword(), BCrypt.gensalt()))
@@ -39,9 +44,9 @@ public class MemberService {
     /**
      * 회원정보를 삭제합니다.
      *
-     * @param loginId 삭제할 loginId
      */
-    public void delete(String loginId) {
+    public void delete() {
+        String loginId = (String) httpSession.getAttribute(LOGIN_MEMBER);
         mapper.delete(loginId);
     }
 
@@ -79,8 +84,7 @@ public class MemberService {
         Optional<Member> member =
                 Optional.ofNullable(mapper.getMemberByLoginId(loginId));
 
-        if (BCrypt.checkpw(password, member.get()
-                                           .getPassword())) {
+        if (BCrypt.checkpw(password, member.get().getPassword())) {
             return member;
         }
 
@@ -101,35 +105,31 @@ public class MemberService {
      * member의 nickname을 수정합니다.
      *
      * @param nickname 새로 수정하려는 nickname
-     * @return nickname 변경 성공 여부
      */
-    public boolean updateNickname(String nickname) {
+    public void updateNickname(String nickname) {
         String loginId = (String) httpSession.getAttribute(LOGIN_MEMBER);
         if (isNicknameExist(nickname)) {
-            return false;
+            throw new NicknameDuplicatedException();
         }
         mapper.updateNickname(loginId, nickname);
-        return true;
     }
 
     /**
      * member의 password를 변경합니다.
      *
      * @param passwordForm before(현재 password), after(새로운 password)를 가지는 객체
-     * @return password 변경 성공 여부
      */
-    public boolean updatePassword(UpdatePasswordRequest passwordForm) {
+    public void updatePassword(UpdatePasswordRequest passwordForm) {
         String loginId = (String) httpSession.getAttribute(LOGIN_MEMBER);
         String before = passwordForm.getBefore();
         String after = passwordForm.getAfter();
         String encryptedCurrent = mapper.getMemberByLoginId(loginId).getPassword();
 
         if (BCrypt.checkpw(after, encryptedCurrent)) {
-            return false;
+            throw new PasswordSameException();
         }
 
         after = BCrypt.hashpw(after, BCrypt.gensalt());
         mapper.updatePassword(loginId, after);
-        return true;
     }
 }
