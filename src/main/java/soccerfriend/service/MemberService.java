@@ -3,15 +3,19 @@ package soccerfriend.service;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-import soccerfriend.controller.MemberController.UpdatePasswordForm;
+import soccerfriend.controller.MemberController.UpdatePasswordRequest;
 import soccerfriend.dto.Member;
 import soccerfriend.mapper.MemberMapper;
 
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
+
+import static soccerfriend.service.LoginService.LOGIN_MEMBER;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+    private final HttpSession httpSession;
     private final MemberMapper mapper;
 
     /**
@@ -86,21 +90,21 @@ public class MemberService {
     /**
      * member에게 soccerInfo를 추가합니다.
      *
-     * @param loginId      soccerInfo를 추가할 member의 loginId
      * @param soccerInfoId 추가하려는 soccerInfo의 id
      */
-    public void setSoccerInfo(String loginId, int soccerInfoId) {
+    public void setSoccerInfo(int soccerInfoId) {
+        String loginId = (String) httpSession.getAttribute(LOGIN_MEMBER);
         mapper.setSoccerInfo(loginId, soccerInfoId);
     }
 
     /**
      * member의 nickname을 수정합니다.
      *
-     * @param loginId  nickname을 수정하려는 member의 loginId
      * @param nickname 새로 수정하려는 nickname
      * @return nickname 변경 성공 여부
      */
-    public boolean updateNickname(String loginId, String nickname) {
+    public boolean updateNickname(String nickname) {
+        String loginId = (String) httpSession.getAttribute(LOGIN_MEMBER);
         if (isNicknameExist(nickname)) {
             return false;
         }
@@ -111,11 +115,11 @@ public class MemberService {
     /**
      * member의 password를 변경합니다.
      *
-     * @param loginId      password를 수정하려는 member의 loginId
      * @param passwordForm before(현재 password), after(새로운 password)를 가지는 객체
      * @return password 변경 성공 여부
      */
-    public boolean updatePassword(String loginId, UpdatePasswordForm passwordForm) {
+    public boolean updatePassword(UpdatePasswordRequest passwordForm) {
+        String loginId = (String) httpSession.getAttribute(LOGIN_MEMBER);
         String before = passwordForm.getBefore();
         String after = passwordForm.getAfter();
         String encryptedCurrent = mapper.getMemberByLoginId(loginId).getPassword();

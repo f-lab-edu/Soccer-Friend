@@ -14,20 +14,20 @@ import static soccerfriend.utility.HttpStatusCode.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/members")
 public class MemberController {
 
     private final MemberService memberService;
     private final LoginService loginService;
     private final HttpSession httpSession;
 
-    @PostMapping("")
+    @PostMapping()
     public int signUp(@RequestBody Member member) {
         return memberService.signUp(member);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginForm loginForm) {
+    public ResponseEntity<Void> login(@RequestBody LoginRequest loginForm) {
         boolean result = loginService.login(loginForm);
 
         if (!result) return BAD_REQUEST;
@@ -45,7 +45,7 @@ public class MemberController {
         memberService.delete(loginId);
     }
 
-    @GetMapping("/exist/loginId")
+    @GetMapping("/exist/login-id")
     public ResponseEntity<Void> isLoginIdExist(@RequestParam String loginId) {
         boolean isDuplicated = memberService.isLoginIdExist(loginId);
 
@@ -65,17 +65,15 @@ public class MemberController {
         return OK;
     }
 
-    @PatchMapping("/soccerInfo")
+    @PatchMapping("/soccer-info")
     public void setSoccerInfo(@RequestParam int soccerInfoId) {
-        String loginId = (String) httpSession.getAttribute(LOGIN_MEMBER);
 
-        memberService.setSoccerInfo(loginId, soccerInfoId);
+        memberService.setSoccerInfo(soccerInfoId);
     }
 
     @PatchMapping("/nickname")
     public ResponseEntity<Void> updateNickname(@RequestParam String nickname) {
-        String loginId = (String) httpSession.getAttribute(LOGIN_MEMBER);
-        boolean result = memberService.updateNickname(loginId, nickname);
+        boolean result = memberService.updateNickname(nickname);
 
         if (!result) {
             return BAD_REQUEST;
@@ -84,9 +82,8 @@ public class MemberController {
     }
 
     @PatchMapping("/password")
-    public ResponseEntity<Void> updatePassword(@RequestBody UpdatePasswordForm passwordForm) {
-        String loginId = (String) httpSession.getAttribute(LOGIN_MEMBER);
-        boolean result = memberService.updatePassword(loginId, passwordForm);
+    public ResponseEntity<Void> updatePassword(@RequestBody UpdatePasswordRequest passwordForm) {
+        boolean result = memberService.updatePassword(passwordForm);
 
         if (!result) {
             return BAD_REQUEST;
@@ -96,14 +93,14 @@ public class MemberController {
 
     @Getter
     @Setter
-    public static class UpdatePasswordForm {
+    public static class UpdatePasswordRequest {
         private String before;
         private String after;
     }
 
     @Getter
     @Setter
-    public static class LoginForm {
+    public static class LoginRequest {
         String loginId;
         String password;
     }

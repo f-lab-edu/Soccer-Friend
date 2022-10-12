@@ -22,7 +22,7 @@ public class SessionLoginService implements LoginService {
      * @return 로그인 성공 여부
      */
     @Override
-    public boolean login(MemberController.LoginForm loginForm) {
+    public boolean login(MemberController.LoginRequest loginForm) {
         Optional<Member> member = memberService.getMemberByLoginIdAndPassword(loginForm.getLoginId(), loginForm.getPassword());
 
         if (!member.isPresent()) return false;

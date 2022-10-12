@@ -10,12 +10,12 @@ import soccerfriend.service.SoccerInfoService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/soccerInfo")
+@RequestMapping("/soccer-infos")
 public class SoccerInfoController {
 
     private final SoccerInfoService service;
 
-    @PostMapping("")
+    @PostMapping()
     public int signUp(@RequestBody SoccerInfo soccerInfo) {
         return service.insert(soccerInfo);
     }

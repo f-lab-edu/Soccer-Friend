@@ -12,7 +12,7 @@ public interface LoginService {
      * @param loginForm loginId, password를 포함하는 객체
      * @return 로그인 성공 여부
      */
-    public boolean login(MemberController.LoginForm loginForm);
+    public boolean login(MemberController.LoginRequest loginForm);
 
 
     /**
