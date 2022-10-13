@@ -4,11 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import soccerfriend.controller.MemberController.LoginRequest;
 import soccerfriend.dto.Member;
+import soccerfriend.exception.ExceptionCode;
 import soccerfriend.exception.member.IdNotExistException;
 import soccerfriend.exception.member.PasswordIncorrectException;
 
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
+
+import static soccerfriend.exception.ExceptionCode.ID_NOT_EXIST;
+import static soccerfriend.exception.ExceptionCode.PASSWORD_INCORRECT;
 
 @Service
 @RequiredArgsConstructor
@@ -26,14 +30,14 @@ public class SessionLoginService implements LoginService {
     @Override
     public void login(LoginRequest loginForm) {
 
-        if(!memberService.isMemberIdExist(loginForm.getMemberId())){
-            throw new IdNotExistException();
+        if (!memberService.isMemberIdExist(loginForm.getMemberId())) {
+            throw new IdNotExistException(ID_NOT_EXIST);
         }
 
         Optional<Member> member = memberService.getMemberByLoginIdAndPassword(loginForm.getMemberId(), loginForm.getPassword());
 
-        if (!member.isPresent()){
-            throw new PasswordIncorrectException();
+        if (!member.isPresent()) {
+            throw new PasswordIncorrectException(PASSWORD_INCORRECT);
         }
 
         httpSession.setAttribute(LOGIN_MEMBER, loginForm.getMemberId());

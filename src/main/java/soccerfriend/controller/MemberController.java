@@ -1,10 +1,13 @@
 package soccerfriend.controller;
 
 import lombok.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Member;
 import soccerfriend.service.LoginService;
 import soccerfriend.service.MemberService;
+
+import static utility.HttpStatusCode.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +20,7 @@ public class MemberController {
     /**
      * member 회원가입을 수행합니다.
      *
-     * @param member memberId, password, nickname을 가진 member 객체
+     * @param member memberId, password, nickname, positionsId, addressId를 가진 member 객체
      * @return member의 id
      */
     @PostMapping
@@ -55,25 +58,16 @@ public class MemberController {
      * member의 중복된 memberId가 있는지 확인합니다.
      *
      * @param memberId
-     * @return 중복여부 (true: 중복, false: 중복아님)
+     * @return (200 : 중복되지 않음, 409 : 중복됨)
      */
     @GetMapping("/exist/{memberId}")
-    public boolean isMemberIdExist(@PathVariable String memberId) {
+    public ResponseEntity<Void> isMemberIdExist(@PathVariable String memberId) {
         boolean isDuplicated = memberService.isMemberIdExist(memberId);
 
-        return isDuplicated;
-    }
-
-
-    /**
-     * member 객체에 soccerInfo를 추가합니다.
-     *
-     * @param soccerInfoId
-     */
-    @PatchMapping("/soccer-info")
-    public void setSoccerInfo(@RequestParam int soccerInfoId) {
-
-        memberService.setSoccerInfo(soccerInfoId);
+        if (isDuplicated) {
+            return CONFLICT;
+        }
+        return OK;
     }
 
     /**

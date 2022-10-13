@@ -5,6 +5,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import soccerfriend.controller.MemberController.UpdatePasswordRequest;
 import soccerfriend.dto.Member;
+import soccerfriend.exception.ExceptionCode;
 import soccerfriend.exception.member.IdDuplicatedException;
 import soccerfriend.exception.member.NicknameDuplicatedException;
 import soccerfriend.exception.member.PasswordSameException;
@@ -13,6 +14,7 @@ import soccerfriend.mapper.MemberMapper;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
+import static soccerfriend.exception.ExceptionCode.*;
 import static soccerfriend.service.LoginService.LOGIN_MEMBER;
 
 @Service
@@ -24,20 +26,22 @@ public class MemberService {
     /**
      * 회원가입을 수행합니다.
      *
-     * @param member memberId, password, nickname 값을 포함하는 member 객체
+     * @param member memberId, password, nickname, positionsId, addressId를 포함하는 member 객체
      * @return 회원가입한 member의 id
      */
     public int signUp(Member member) {
-        if(isMemberIdExist(member.getMemberId())){
-            throw new IdDuplicatedException();
+        if (isMemberIdExist(member.getMemberId())) {
+            throw new IdDuplicatedException(ID_DUPLICATED);
         }
-        if(isNicknameExist(member.getNickname())){
-            throw new NicknameDuplicatedException();
+        if (isNicknameExist(member.getNickname())) {
+            throw new NicknameDuplicatedException(NICKNAME_DUPLICATED);
         }
         Member encryptedMember = Member.builder()
                                        .memberId(member.getMemberId())
                                        .password(BCrypt.hashpw(member.getPassword(), BCrypt.gensalt()))
                                        .nickname(member.getNickname())
+                                       .positionsId(member.getPositionsId())
+                                       .addressId(member.getAddressId())
                                        .point(0)
                                        .build();
 
@@ -47,7 +51,6 @@ public class MemberService {
 
     /**
      * 회원정보를 삭제합니다.
-     *
      */
     public void delete() {
         String memberId = (String) httpSession.getAttribute(LOGIN_MEMBER);
@@ -96,16 +99,6 @@ public class MemberService {
     }
 
     /**
-     * member에게 soccerInfo를 추가합니다.
-     *
-     * @param soccerInfoId 추가하려는 soccerInfo의 id
-     */
-    public void setSoccerInfo(int soccerInfoId) {
-        String memberId = (String) httpSession.getAttribute(LOGIN_MEMBER);
-        mapper.setSoccerInfo(memberId, soccerInfoId);
-    }
-
-    /**
      * member의 nickname을 수정합니다.
      *
      * @param nickname 새로 수정하려는 nickname
@@ -113,7 +106,7 @@ public class MemberService {
     public void updateNickname(String nickname) {
         String memberId = (String) httpSession.getAttribute(LOGIN_MEMBER);
         if (isNicknameExist(nickname)) {
-            throw new NicknameDuplicatedException();
+            throw new NicknameDuplicatedException(NICKNAME_DUPLICATED);
         }
         mapper.updateNickname(memberId, nickname);
     }
@@ -130,7 +123,7 @@ public class MemberService {
         String encryptedCurrent = mapper.getMemberByMemberId(memberId).getPassword();
 
         if (BCrypt.checkpw(after, encryptedCurrent)) {
-            throw new PasswordSameException();
+            throw new PasswordSameException(PASSWORD_SAME);
         }
 
         after = BCrypt.hashpw(after, BCrypt.gensalt());

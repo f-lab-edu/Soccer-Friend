@@ -6,8 +6,8 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.Member" useGeneratedKeys="true" keyProperty="id">
         INSERT
-        INTO member(member_id, password, nickname, point)
-        VALUES (#{memberId}, #{password}, #{nickname}, #{point})
+        INTO member(member_id, password, nickname, point, positions_id, address_id)
+        VALUES (#{memberId}, #{password}, #{nickname}, #{point}, #{positionsId}, #{addressId})
     </insert>
 
     <delete id="delete" parameterType="String">
@@ -25,17 +25,10 @@
     </select>
 
     <select id="getMemberByMemberId" resultType="soccerfriend.dto.Member">
-        SELECT id, member_id, password, nickname, point, created_at, updated_at
+        SELECT id, member_id, password, nickname, point, positions_id, address_id, created_at, updated_at
         FROM member
         WHERE membeR_id = #{memberId}
     </select>
-
-    <update id="setSoccerInfo">
-        UPDATE member
-        SET soccer_info_id = #{soccerInfoId},
-            updated_at=now()
-        WHERE member_id = #{memberId}
-    </update>
 
     <update id="updateNickname">
         UPDATE member

@@ -20,16 +20,20 @@ public class Member {
 
     int point;
 
-    int soccerInfoId;
+    int positionsId;
+
+    int addressId;
 
     LocalDateTime createdAt;
 
     LocalDateTime updatedAt;
 
     @Builder
-    public Member(String memberId, String password, String nickname) {
+    public Member(String memberId, String password, String nickname, int positionsId, int addressId) {
         this.memberId = memberId;
         this.password = password;
         this.nickname = nickname;
+        this.positionsId = positionsId;
+        this.addressId = addressId;
     }
 }
