@@ -17,7 +17,7 @@ public class MemberController {
     /**
      * member 회원가입을 수행합니다.
      *
-     * @param member loginId, password, nickname을 가진 member 객체
+     * @param member memberId, password, nickname을 가진 member 객체
      * @return member의 id
      */
     @PostMapping
@@ -52,13 +52,14 @@ public class MemberController {
     }
 
     /**
-     * member의 중복된 loginId가 있는지 확인합니다.
-     * @param loginId
+     * member의 중복된 memberId가 있는지 확인합니다.
+     *
+     * @param memberId
      * @return 중복여부 (true: 중복, false: 중복아님)
      */
-    @GetMapping("/exist/login-id")
-    public boolean isLoginIdExist(@RequestParam String loginId) {
-        boolean isDuplicated = memberService.isLoginIdExist(loginId);
+    @GetMapping("/exist/{memberId}")
+    public boolean isMemberIdExist(@PathVariable String memberId) {
+        boolean isDuplicated = memberService.isMemberIdExist(memberId);
 
         return isDuplicated;
     }
@@ -111,7 +112,7 @@ public class MemberController {
     @Getter
     @Setter
     public static class LoginRequest {
-        String loginId;
+        String memberId;
         String password;
     }
 }

@@ -20,23 +20,23 @@ public class SessionLoginService implements LoginService {
     /**
      * 로그인을 수행합니다.
      *
-     * @param loginForm loginId, password를 포함하는 객체
+     * @param loginForm memberId, password를 포함하는 객체
      * @return 로그인 성공 여부
      */
     @Override
     public void login(LoginRequest loginForm) {
 
-        if(!memberService.isLoginIdExist(loginForm.getLoginId())){
+        if(!memberService.isMemberIdExist(loginForm.getMemberId())){
             throw new IdNotExistException();
         }
 
-        Optional<Member> member = memberService.getMemberByLoginIdAndPassword(loginForm.getLoginId(), loginForm.getPassword());
+        Optional<Member> member = memberService.getMemberByLoginIdAndPassword(loginForm.getMemberId(), loginForm.getPassword());
 
         if (!member.isPresent()){
             throw new PasswordIncorrectException();
         }
 
-        httpSession.setAttribute(LOGIN_MEMBER, loginForm.getLoginId());
+        httpSession.setAttribute(LOGIN_MEMBER, loginForm.getMemberId());
         httpSession.setMaxInactiveInterval(30 * 60);
     }
 

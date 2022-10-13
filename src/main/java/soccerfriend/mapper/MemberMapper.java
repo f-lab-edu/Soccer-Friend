@@ -9,17 +9,17 @@ public interface MemberMapper {
 
     public int insert(Member member);
 
-    public void delete(String LoginId);
+    public void delete(String memberId);
 
-    public Member getMemberByLoginId(String loginId);
+    public Member getMemberByMemberId(String memberId);
 
-    public boolean isLoginIdExist(String loginId);
+    public boolean isMemberIdExist(String memberId);
 
     public boolean isNicknameExist(String nickname);
 
-    public void setSoccerInfo(@Param("loginId") String loginId, @Param("soccerInfoId") int soccerInfoId);
+    public void setSoccerInfo(@Param("memberId") String memberId, @Param("soccerInfoId") int soccerInfoId);
 
-    public void updateNickname(@Param("loginId") String loginId, @Param("nickname") String nickname);
+    public void updateNickname(@Param("memberId") String memberId, @Param("nickname") String nickname);
 
-    public void updatePassword(@Param("loginId") String loginId, @Param("password") String password);
+    public void updatePassword(@Param("memberId") String memberId, @Param("password") String password);
 }

@@ -7,11 +7,12 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     int id;
 
-    String loginId;
+    String memberId;
 
     String password;
 
@@ -25,4 +26,10 @@ public class Member {
 
     LocalDateTime updatedAt;
 
+    @Builder
+    public Member(String memberId, String password, String nickname) {
+        this.memberId = memberId;
+        this.password = password;
+        this.nickname = nickname;
+    }
 }

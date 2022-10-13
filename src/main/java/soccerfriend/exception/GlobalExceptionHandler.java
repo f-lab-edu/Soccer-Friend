@@ -23,7 +23,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({NicknameDuplicatedException.class})
     protected ResponseEntity handleNicknameDuplicatedException(NicknameDuplicatedException ex) {
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@");
         return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }

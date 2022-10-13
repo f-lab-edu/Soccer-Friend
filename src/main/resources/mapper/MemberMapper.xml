@@ -6,49 +6,49 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.Member" useGeneratedKeys="true" keyProperty="id">
         INSERT
-        INTO member(login_id, password, nickname, point)
-        VALUES (#{loginId}, #{password}, #{nickname}, #{point})
+        INTO member(member_id, password, nickname, point)
+        VALUES (#{memberId}, #{password}, #{nickname}, #{point})
     </insert>
 
     <delete id="delete" parameterType="String">
         DELETE
         FROM member
-        WHERE login_id = #{loginId}
+        WHERE member_id = #{memberId}
     </delete>
 
-    <select id="isLoginIdExist" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM member WHERE login_id = #{loginId})
+    <select id="isMemberIdExist" resultType="boolean">
+        SELECT EXISTS (SELECT * FROM member WHERE member_id = #{memberId})
     </select>
 
     <select id="isNicknameExist" resultType="boolean">
         SELECT EXISTS (SELECT * FROM member WHERE nickname = #{nickname})
     </select>
 
-    <select id="getMemberByLoginId" resultType="soccerfriend.dto.Member">
-        SELECT id, login_id, password, nickname, point, created_at, updated_at
+    <select id="getMemberByMemberId" resultType="soccerfriend.dto.Member">
+        SELECT id, member_id, password, nickname, point, created_at, updated_at
         FROM member
-        WHERE login_id = #{loginId}
+        WHERE membeR_id = #{memberId}
     </select>
 
     <update id="setSoccerInfo">
         UPDATE member
         SET soccer_info_id = #{soccerInfoId},
             updated_at=now()
-        WHERE login_id = #{loginId}
+        WHERE member_id = #{memberId}
     </update>
 
     <update id="updateNickname">
         UPDATE member
         SET nickname  = #{nickname},
             updated_at=now()
-        WHERE login_id = #{loginId}
+        WHERE member_id = #{memberId}
     </update>
 
     <update id="updatePassword">
         UPDATE member
         SET password  = #{password},
             updated_at=now()
-        WHERE login_id = #{loginId}
+        WHERE member_id = #{member_id}
     </update>
 
 </mapper>
