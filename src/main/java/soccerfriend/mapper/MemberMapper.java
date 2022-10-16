@@ -11,7 +11,7 @@ public interface MemberMapper {
 
     public void delete(String memberId);
 
-    public Member getMemberByMemberId(String memberId);
+    public Member getMember(String memberId);
 
     public boolean isMemberIdExist(String memberId);
 

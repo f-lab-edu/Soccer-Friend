@@ -86,7 +86,7 @@ public class MemberService {
         if (!isMemberIdExist(memberId)) return Optional.empty();
 
         Optional<Member> member =
-                Optional.ofNullable(mapper.getMemberByMemberId(memberId));
+                Optional.ofNullable(mapper.getMember(memberId));
 
         if (BCrypt.checkpw(password, member.get().getPassword())) {
             return member;
@@ -117,7 +117,7 @@ public class MemberService {
         String memberId = authorizeService.getMemberId();
         String before = passwordForm.getBefore();
         String after = passwordForm.getAfter();
-        String encryptedCurrent = mapper.getMemberByMemberId(memberId).getPassword();
+        String encryptedCurrent = mapper.getMember(memberId).getPassword();
 
         if (BCrypt.checkpw(after, encryptedCurrent)) {
             throw new PasswordSameException(PASSWORD_SAME);
