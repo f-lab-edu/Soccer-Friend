@@ -17,8 +17,6 @@ public interface MemberMapper {
 
     public boolean isNicknameExist(String nickname);
 
-    public void setSoccerInfo(@Param("memberId") String memberId, @Param("soccerInfoId") int soccerInfoId);
-
     public void updateNickname(@Param("memberId") String memberId, @Param("nickname") String nickname);
 
     public void updatePassword(@Param("memberId") String memberId, @Param("password") String password);
