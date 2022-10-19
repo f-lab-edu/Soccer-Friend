@@ -4,7 +4,7 @@
 
 <mapper namespace="soccerfriend.mapper.StadiumOwnerMapper">
 
-    <insert id="insert" parameterType="soccerfriend.dto.Member" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="soccerfriend.dto.StadiumOwner" useGeneratedKeys="true" keyProperty="id">
         INSERT
         INTO member(member_id, password, nickname, point, positions_id, address_id)
         VALUES (#{memberId}, #{password}, #{nickname}, #{point}, #{positionsId}, #{addressId})

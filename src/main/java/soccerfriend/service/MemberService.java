@@ -26,7 +26,7 @@ public class MemberService {
      * @param member memberId, password, nickname, positionsId, addressId를 포함하는 member 객체
      * @return 회원가입한 member의 id
      */
-    public int signUp(Member member) {
+    public void signUp(Member member) {
         if (isMemberIdExist(member.getMemberId())) {
             throw new IdDuplicatedException(ID_DUPLICATED);
         }
@@ -43,7 +43,6 @@ public class MemberService {
                                        .build();
 
         mapper.insert(encryptedMember);
-        return encryptedMember.getId();
     }
 
     /**

@@ -24,8 +24,8 @@ public class MemberController {
      * @return member의 id
      */
     @PostMapping
-    public int signUp(@RequestBody Member member) {
-        return memberService.signUp(member);
+    public void signUp(@RequestBody Member member) {
+        memberService.signUp(member);
     }
 
     /**
