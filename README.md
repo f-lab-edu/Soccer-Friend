@@ -5,7 +5,7 @@
 https://glib-pawpaw-9b5.notion.site/ce3898d1bbe8429a8e0419198b1823b7
 
 ## ERD (수정중)
-<img src = "https://user-images.githubusercontent.com/35839248/194738362-4d0d1877-a4f2-494c-8164-56922ae8d23f.png"/>
+<img src = "https://user-images.githubusercontent.com/35839248/196602657-2b7c3ac1-6b13-4cd4-9448-288b71cfa1cd.png"/>
 
 ## 사용 기술 및 환경
 - Java 11
