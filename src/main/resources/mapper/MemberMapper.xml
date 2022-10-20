@@ -41,7 +41,7 @@
         UPDATE member
         SET password  = #{password},
             updated_at=now()
-        WHERE member_id = #{member_id}
+        WHERE member_id = #{memberId}
     </update>
 
 </mapper>
