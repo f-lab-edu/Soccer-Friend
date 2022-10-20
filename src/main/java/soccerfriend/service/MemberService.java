@@ -3,11 +3,12 @@ package soccerfriend.service;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-import soccerfriend.controller.MemberController.UpdatePasswordRequest;
 import soccerfriend.dto.Member;
 import soccerfriend.exception.member.DuplicatedException;
 import soccerfriend.exception.member.NotMatchException;
 import soccerfriend.mapper.MemberMapper;
+import utility.InputForm;
+import utility.InputForm.UpdatePasswordRequest;
 
 import java.util.Optional;
 

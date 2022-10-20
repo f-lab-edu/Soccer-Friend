@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Member;
 import soccerfriend.service.AuthorizeService;
 import soccerfriend.service.MemberService;
+import utility.InputForm;
+import utility.InputForm.LoginRequest;
 
 import static utility.HttpStatusCode.*;
 
@@ -21,7 +23,6 @@ public class MemberController {
      * member 회원가입을 수행합니다.
      *
      * @param member memberId, password, nickname, positionsId, addressId를 가진 member 객체
-     * @return member의 id
      */
     @PostMapping
     public void signUp(@RequestBody Member member) {
@@ -31,11 +32,11 @@ public class MemberController {
     /**
      * member의 로그인을 수행합니다.
      *
-     * @param loginForm memberId, password
+     * @param loginRequest id, password
      */
     @PostMapping("/login")
-    public void login(@RequestBody LoginRequest loginForm) {
-        authorizeService.memberLogin(loginForm);
+    public void login(@RequestBody LoginRequest loginRequest) {
+        authorizeService.memberLogin(loginRequest);
     }
 
     /**
@@ -88,29 +89,9 @@ public class MemberController {
      * @param passwordForm 기존 password, 새로운 password
      */
     @PatchMapping("/password")
-    public void updatePassword(@RequestBody UpdatePasswordRequest passwordForm) {
+    public void updatePassword(@RequestBody InputForm.UpdatePasswordRequest passwordForm) {
         String memberId = authorizeService.getMemberId();
         memberService.updatePassword(memberId, passwordForm);
         authorizeService.logout();
-    }
-
-    /**
-     * password를 변경하기 위해 입력해야 하는 값들
-     */
-    @Getter
-    @Setter
-    public static class UpdatePasswordRequest {
-        private String before;
-        private String after;
-    }
-
-    /**
-     * login 하기위해 입력해야 하는 값들
-     */
-    @Getter
-    @Setter
-    public static class LoginRequest {
-        String id;
-        String password;
     }
 }

@@ -14,13 +14,13 @@ import static soccerfriend.exception.ExceptionCode.*;
 @Service
 @RequiredArgsConstructor
 public class StadiumOwnerService {
-    private final AuthorizeService authorizeService;
+
     private final StadiumOwnerMapper mapper;
 
     /**
      * 회원가입을 수행합니다.
      *
-     * @param stadiumOwner memberId, password, nickname, positionsId, addressId를 포함하는 member 객체
+     * @param stadiumOwner stadiumOwnerId, password, representative, companyName, address, taxpayerId, accountBankId, accountNumber를 가진 StadiumOwner 객체
      * @return 회원가입한 StadiumOwner의 stadiumOwnerId
      */
     public void signUp(StadiumOwner stadiumOwner) {
@@ -43,21 +43,21 @@ public class StadiumOwnerService {
     }
 
     /**
-     * 해당 stadiumOwnerId를 사용중인 StadiumOwner가 있는지 확인합니다.
+     * 해당 stadiumOwnerId를 사용중인 stadiumOwner가 있는지 확인합니다.
      *
      * @param stadiumOwnerId 존재 유무를 확인하려는 stadiumOwnerId
-     * @return memberId 존재 유무(true: 있음, false: 없음)
+     * @return stadiumOwnerId 존재 유무(true: 있음, false: 없음)
      */
     public boolean isStadiumOwnerExist(String stadiumOwnerId) {
         return mapper.isStadiumOwnerIdExist(stadiumOwnerId);
     }
 
     /**
-     * stadiumOwnerId와 password를 입력받아 해당 member를 반환합니다.
+     * stadiumOwnerId와 password를 입력받아 해당 stadiumOwner를 반환합니다.
      *
      * @param stadiumOwnerId
      * @param password
-     * @return member의 Optional 객체
+     * @return stadiumOwner의 Optional 객체
      */
     public Optional<StadiumOwner> getStadiumOwnerByStadiumOwnerIdAndPassword(String stadiumOwnerId, String password) {
 

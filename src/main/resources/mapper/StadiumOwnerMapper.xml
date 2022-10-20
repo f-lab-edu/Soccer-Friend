@@ -7,7 +7,7 @@
     <insert id="insert" parameterType="soccerfriend.dto.StadiumOwner" useGeneratedKeys="true" keyProperty="id">
         INSERT
         INTO stadium_owner(stadium_owner_id, password, representative, company_name, address, taxpayer_id, account_bank_id, account_number, point)
-        VALUES (#{stadiumOwnerId}, #{password}, #{representative}, #{companyName}, #{address}, #{taxpayer_id}, #{accountBankId}, #{accountNumber}, #{point})
+        VALUES (#{stadiumOwnerId}, #{password}, #{representative}, #{companyName}, #{address}, #{taxpayerId}, #{accountBankId}, #{accountNumber}, #{point})
     </insert>
 
     <select id="isStadiumOwnerIdExist" resultType="boolean">

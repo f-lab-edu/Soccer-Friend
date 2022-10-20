@@ -15,7 +15,7 @@ public interface StadiumOwnerMapper {
 
     public boolean isStadiumOwnerIdExist(String stadiumOwnerId);
 
-    // 수정
+    // 추가예정
     public void updateStadiumOwner(@Param("stadiumOwnerId") String stadiumOwnerId, StadiumOwner stadiumOwner);
 
     public void updatePassword(@Param("stadiumOwnerId") String stadiumOwnerId, @Param("password") String password);
