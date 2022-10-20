@@ -27,7 +27,7 @@
     <select id="getMember" resultType="soccerfriend.dto.Member">
         SELECT id, member_id, password, nickname, point, positions_id, address_id, created_at, updated_at
         FROM member
-        WHERE membeR_id = #{memberId}
+        WHERE member_id = #{memberId}
     </select>
 
     <update id="updateNickname">

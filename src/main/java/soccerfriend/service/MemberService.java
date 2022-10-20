@@ -5,9 +5,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import soccerfriend.controller.MemberController.UpdatePasswordRequest;
 import soccerfriend.dto.Member;
-import soccerfriend.exception.member.IdDuplicatedException;
-import soccerfriend.exception.member.NicknameDuplicatedException;
-import soccerfriend.exception.member.PasswordSameException;
+import soccerfriend.exception.member.DuplicatedException;
+import soccerfriend.exception.member.NotMatchException;
 import soccerfriend.mapper.MemberMapper;
 
 import java.util.Optional;
@@ -28,10 +27,10 @@ public class MemberService {
      */
     public void signUp(Member member) {
         if (isMemberIdExist(member.getMemberId())) {
-            throw new IdDuplicatedException(ID_DUPLICATED);
+            throw new DuplicatedException(ID_DUPLICATED);
         }
         if (isNicknameExist(member.getNickname())) {
-            throw new NicknameDuplicatedException(NICKNAME_DUPLICATED);
+            throw new DuplicatedException(NICKNAME_DUPLICATED);
         }
         Member encryptedMember = Member.builder()
                                        .memberId(member.getMemberId())
@@ -48,7 +47,7 @@ public class MemberService {
     /**
      * 회원정보를 삭제합니다.
      */
-    public void delete(String memberId) {
+    public void deleteAccount(String memberId) {
         mapper.delete(memberId);
     }
 
@@ -100,7 +99,7 @@ public class MemberService {
      */
     public void updateNickname(String memberId, String nickname) {
         if (isNicknameExist(nickname)) {
-            throw new NicknameDuplicatedException(NICKNAME_DUPLICATED);
+            throw new DuplicatedException(NICKNAME_DUPLICATED);
         }
         mapper.updateNickname(memberId, nickname);
     }
@@ -116,7 +115,7 @@ public class MemberService {
         String encryptedCurrent = mapper.getMember(memberId).getPassword();
 
         if (BCrypt.checkpw(after, encryptedCurrent)) {
-            throw new PasswordSameException(PASSWORD_SAME);
+            throw new NotMatchException(PASSWORD_SAME);
         }
 
         after = BCrypt.hashpw(after, BCrypt.gensalt());

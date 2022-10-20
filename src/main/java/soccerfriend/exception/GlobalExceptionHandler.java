@@ -9,32 +9,20 @@ import soccerfriend.exception.member.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({IdDuplicatedException.class})
-    protected ResponseEntity handleIdDuplicatedException(IdDuplicatedException ex) {
+    @ExceptionHandler({DuplicatedException.class})
+    protected ResponseEntity handleIdDuplicatedException(DuplicatedException ex) {
         return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }
 
-    @ExceptionHandler({IdNotExistException.class})
-    protected ResponseEntity handleIdNotExistException(IdNotExistException ex) {
+    @ExceptionHandler({NotExistException.class})
+    protected ResponseEntity handleIdNotExistException(NotExistException ex) {
         return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }
 
-    @ExceptionHandler({NicknameDuplicatedException.class})
-    protected ResponseEntity handleNicknameDuplicatedException(NicknameDuplicatedException ex) {
-        return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
-                HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
-    }
-
-    @ExceptionHandler({PasswordIncorrectException.class})
-    protected ResponseEntity handlePasswordIncorrectException(PasswordIncorrectException ex) {
-        return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
-                HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
-    }
-
-    @ExceptionHandler({PasswordSameException.class})
-    protected ResponseEntity handlePasswordSameException(PasswordSameException ex) {
+    @ExceptionHandler({NotMatchException.class})
+    protected ResponseEntity handleNotMatchException(NotMatchException ex) {
         return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }

@@ -4,7 +4,7 @@ import soccerfriend.controller.MemberController;
 
 public interface AuthorizeService {
 
-    public static final String LOGIN_MEMBER = "loginMember";
+
 
     /**
      * 로그인 되어 있는 member의 memberId를 반환합니다.

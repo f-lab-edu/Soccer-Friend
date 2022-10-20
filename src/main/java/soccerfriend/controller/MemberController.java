@@ -52,7 +52,7 @@ public class MemberController {
     @DeleteMapping
     public void deleteAccount() {
         String memberId = authorizeService.getMemberId();
-        memberService.delete(memberId);
+        memberService.deleteAccount(memberId);
     }
 
     /**

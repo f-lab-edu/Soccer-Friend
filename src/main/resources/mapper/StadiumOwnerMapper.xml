@@ -6,42 +6,18 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.StadiumOwner" useGeneratedKeys="true" keyProperty="id">
         INSERT
-        INTO member(member_id, password, nickname, point, positions_id, address_id)
-        VALUES (#{memberId}, #{password}, #{nickname}, #{point}, #{positionsId}, #{addressId})
+        INTO stadium_owner(stadium_owner_id, password, representative, company_name, address, taxpayer_id, account_bank_id, account_number, point)
+        VALUES (#{stadiumOwnerId}, #{password}, #{representative}, #{companyName}, #{address}, #{taxpayer_id}, #{accountBankId}, #{accountNumber}, #{point})
     </insert>
 
-    <delete id="delete" parameterType="String">
-        DELETE
-        FROM member
-        WHERE member_id = #{memberId}
-    </delete>
-
-    <select id="isMemberIdExist" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM member WHERE member_id = #{memberId})
+    <select id="isStadiumOwnerIdExist" resultType="boolean">
+        SELECT EXISTS (SELECT * FROM stadium_owner WHERE stadium_owner_id = #{stadiumOwnerId})
     </select>
 
-    <select id="isNicknameExist" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM member WHERE nickname = #{nickname})
+    <select id="getStadiumOwner" resultType="soccerfriend.dto.StadiumOwner">
+        SELECT id, stadium_owner_id, password, representative, company_name, address, taxpayer_id, account_bank_id, account_number, point, created_at, updated_at
+        FROM stadium_owner
+        WHERE stadium_owner_id = #{stadiumOwnerId}
     </select>
-
-    <select id="getMember" resultType="soccerfriend.dto.Member">
-        SELECT id, member_id, password, nickname, point, positions_id, address_id, created_at, updated_at
-        FROM member
-        WHERE membeR_id = #{memberId}
-    </select>
-
-    <update id="updateNickname">
-        UPDATE member
-        SET nickname  = #{nickname},
-            updated_at=now()
-        WHERE member_id = #{memberId}
-    </update>
-
-    <update id="updatePassword">
-        UPDATE member
-        SET password  = #{password},
-            updated_at=now()
-        WHERE member_id = #{member_id}
-    </update>
 
 </mapper>
