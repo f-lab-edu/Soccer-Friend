@@ -1,9 +1,8 @@
 package soccerfriend.service;
 
-import soccerfriend.controller.MemberController;
+import static soccerfriend.controller.MemberController.*;
 
 public interface AuthorizeService {
-
 
 
     /**
@@ -14,11 +13,18 @@ public interface AuthorizeService {
     public String getMemberId();
 
     /**
-     * 로그인을 수행합니다.
+     * member의 로그인을 수행합니다.
      *
      * @param loginForm loginId, password를 포함하는 객체
      */
-    public void login(MemberController.LoginRequest loginForm);
+    public void memberLogin(LoginRequest loginForm);
+
+    /**
+     * stadiumOwner의 로그인을 수행합니다.
+     *
+     * @param loginForm loginId, password를 포함하는 객체
+     */
+    void stadiumOwnerLogin(LoginRequest loginForm);
 
     /**
      * 로그아웃을 수행합니다.

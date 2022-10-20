@@ -35,7 +35,7 @@ public class MemberController {
      */
     @PostMapping("/login")
     public void login(@RequestBody LoginRequest loginForm) {
-        authorizeService.login(loginForm);
+        authorizeService.memberLogin(loginForm);
     }
 
     /**
@@ -110,7 +110,7 @@ public class MemberController {
     @Getter
     @Setter
     public static class LoginRequest {
-        String memberId;
+        String id;
         String password;
     }
 }
