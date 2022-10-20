@@ -1,9 +1,6 @@
 package soccerfriend.service;
 
-import utility.InputForm;
-
-import static soccerfriend.controller.MemberController.*;
-import static utility.InputForm.*;
+import static soccerfriend.utility.InputForm.*;
 
 public interface AuthorizeService {
 

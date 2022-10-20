@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Member;
 import soccerfriend.service.AuthorizeService;
 import soccerfriend.service.MemberService;
-import utility.InputForm;
-import utility.InputForm.LoginRequest;
+import soccerfriend.utility.InputForm.LoginRequest;
+import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
-import static utility.HttpStatusCode.*;
+import static soccerfriend.utility.HttpStatusCode.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -86,12 +86,12 @@ public class MemberController {
     /**
      * member의 pasword를 수정합니다.
      *
-     * @param passwordForm 기존 password, 새로운 password
+     * @param passwordRequest 기존 password, 새로운 password
      */
     @PatchMapping("/password")
-    public void updatePassword(@RequestBody InputForm.UpdatePasswordRequest passwordForm) {
+    public void updatePassword(@RequestBody UpdatePasswordRequest passwordRequest) {
         String memberId = authorizeService.getMemberId();
-        memberService.updatePassword(memberId, passwordForm);
+        memberService.updatePassword(memberId, passwordRequest);
         authorizeService.logout();
     }
 }

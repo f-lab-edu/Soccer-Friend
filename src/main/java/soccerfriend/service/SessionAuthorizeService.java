@@ -6,7 +6,7 @@ import soccerfriend.dto.Member;
 import soccerfriend.dto.StadiumOwner;
 import soccerfriend.exception.member.NotExistException;
 import soccerfriend.exception.member.NotMatchException;
-import utility.InputForm.LoginRequest;
+import soccerfriend.utility.InputForm.LoginRequest;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,8 +14,8 @@ import java.util.Optional;
 
 import static soccerfriend.exception.ExceptionCode.LOGIN_FORM_INCORRECT;
 import static soccerfriend.exception.ExceptionCode.LOGIN_INFO_NOT_EXIST;
-import static utility.SessionKey.SESSION_LOGIN_MEMBER;
-import static utility.SessionKey.SESSION_LOGIN_STADIUM_OWNER;
+import static soccerfriend.utility.SessionKey.SESSION_LOGIN_MEMBER;
+import static soccerfriend.utility.SessionKey.SESSION_LOGIN_STADIUM_OWNER;
 
 @RequiredArgsConstructor
 @Service

@@ -7,8 +7,7 @@ import soccerfriend.dto.Member;
 import soccerfriend.exception.member.DuplicatedException;
 import soccerfriend.exception.member.NotMatchException;
 import soccerfriend.mapper.MemberMapper;
-import utility.InputForm;
-import utility.InputForm.UpdatePasswordRequest;
+import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
 import java.util.Optional;
 
@@ -108,11 +107,11 @@ public class MemberService {
     /**
      * member의 password를 변경합니다.
      *
-     * @param passwordForm before(현재 password), after(새로운 password)를 가지는 객체
+     * @param passwordRequest before(현재 password), after(새로운 password)를 가지는 객체
      */
-    public void updatePassword(String memberId, UpdatePasswordRequest passwordForm) {
-        String before = passwordForm.getBefore();
-        String after = passwordForm.getAfter();
+    public void updatePassword(String memberId, UpdatePasswordRequest passwordRequest) {
+        String before = passwordRequest.getBefore();
+        String after = passwordRequest.getAfter();
         String encryptedCurrent = mapper.getMember(memberId).getPassword();
 
         if (BCrypt.checkpw(after, encryptedCurrent)) {

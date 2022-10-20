@@ -26,4 +26,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }
+
+    @ExceptionHandler({BadRequestException.class})
+    protected ResponseEntity handleBadRequestException(BadRequestException ex) {
+        return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
+                HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
+    }
 }

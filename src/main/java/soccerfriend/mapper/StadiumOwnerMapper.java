@@ -3,6 +3,7 @@ package soccerfriend.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import soccerfriend.dto.StadiumOwner;
+import soccerfriend.utility.InputForm.UpdateStadiumOwnerRequest;
 
 @Mapper
 public interface StadiumOwnerMapper {
@@ -15,8 +16,7 @@ public interface StadiumOwnerMapper {
 
     public boolean isStadiumOwnerIdExist(String stadiumOwnerId);
 
-    // 추가예정
-    public void updateStadiumOwner(@Param("stadiumOwnerId") String stadiumOwnerId, StadiumOwner stadiumOwner);
+    public void updateStadiumOwner(@Param("target") String stadiumOwnerId, @Param("request") UpdateStadiumOwnerRequest stadiumOwnerRequest);
 
     public void updatePassword(@Param("stadiumOwnerId") String stadiumOwnerId, @Param("password") String password);
 }

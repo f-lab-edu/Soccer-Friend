@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.StadiumOwner;
 import soccerfriend.service.AuthorizeService;
 import soccerfriend.service.StadiumOwnerService;
-import utility.InputForm.LoginRequest;
+import soccerfriend.utility.InputForm.LoginRequest;
+import soccerfriend.utility.InputForm.UpdatePasswordRequest;
+import soccerfriend.utility.InputForm.UpdateStadiumOwnerRequest;
 
-import static utility.HttpStatusCode.CONFLICT;
-import static utility.HttpStatusCode.OK;
+import static soccerfriend.utility.HttpStatusCode.CONFLICT;
+import static soccerfriend.utility.HttpStatusCode.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,18 +50,51 @@ public class StadiumOwnerController {
     }
 
     /**
+     * stadiumOwner의 탈퇴를 수행합니다.
+     */
+    @DeleteMapping
+    public void deleteAccount() {
+        String stadiumOwnerId = authorizeService.getStadiumOwnerId();
+        stadiumOwnerService.deleteAccount(stadiumOwnerId);
+    }
+
+    /**
      * member의 중복된 memberId가 있는지 확인합니다.
      *
      * @param stadiumOwnerId
      * @return (200 : 중복되지 않음, 409 : 중복됨)
      */
     @GetMapping("/exist/{stadiumOwnerId}")
-    public ResponseEntity<Void> isMemberIdExist(@PathVariable String stadiumOwnerId) {
+    public ResponseEntity<Void> isStadiumOwnerIdExist(@PathVariable String stadiumOwnerId) {
         boolean isDuplicated = stadiumOwnerService.isStadiumOwnerExist(stadiumOwnerId);
 
         if (isDuplicated) {
             return CONFLICT;
         }
         return OK;
+    }
+
+    /**
+     * stadiumOwner의 정보를 변경합니다. (비밀번호, 아이디, 포인트 제외)
+     *
+     * @param stadiumOwnerRequest
+     */
+    @PatchMapping
+    public void updateStadiumOwner(@RequestBody UpdateStadiumOwnerRequest stadiumOwnerRequest) {
+        String stadiumOwnerId = authorizeService.getStadiumOwnerId();
+        stadiumOwnerService.updateStadiumOwner(stadiumOwnerId, stadiumOwnerRequest);
+        authorizeService.logout();
+    }
+
+    /**
+     * stadiumOwner의 pasword를 수정합니다.
+     *
+     * @param passwordRequest 기존 password, 새로운 password
+     */
+    @PatchMapping("/password")
+    public void updatePassword(@RequestBody UpdatePasswordRequest passwordRequest) {
+        String stadiumOwnerId = authorizeService.getStadiumOwnerId();
+        stadiumOwnerService.updatePassword(stadiumOwnerId, passwordRequest);
+        authorizeService.logout();
     }
 }

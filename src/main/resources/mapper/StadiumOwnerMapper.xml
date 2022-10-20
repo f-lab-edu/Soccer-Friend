@@ -10,6 +10,12 @@
         VALUES (#{stadiumOwnerId}, #{password}, #{representative}, #{companyName}, #{address}, #{taxpayerId}, #{accountBankId}, #{accountNumber}, #{point})
     </insert>
 
+    <delete id="delete" parameterType="String">
+        DELETE
+        FROM stadium_owner
+        WHERE stadium_owner_id = #{stadiumOwnerId}
+    </delete>
+
     <select id="isStadiumOwnerIdExist" resultType="boolean">
         SELECT EXISTS (SELECT * FROM stadium_owner WHERE stadium_owner_id = #{stadiumOwnerId})
     </select>
@@ -20,4 +26,23 @@
         WHERE stadium_owner_id = #{stadiumOwnerId}
     </select>
 
+    <update id="updateStadiumOwner">
+        UPDATE stadium_owner
+        SET
+            representative = #{request.representative},
+            company_name = #{request.companyName},
+            address = #{request.address},
+            taxpayer_id = #{request.taxpayerId},
+            account_bank_id = #{request.accountBankId},
+            account_number = #{request.accountNumber},
+            updated_at=now()
+        WHERE stadium_owner_id = #{target}
+    </update>
+
+    <update id="updatePassword">
+        UPDATE stadium_owner
+        SET password  = #{password},
+            updated_at=now()
+        WHERE stadium_owner_id = #{stadiumOwnerId}
+    </update>
 </mapper>

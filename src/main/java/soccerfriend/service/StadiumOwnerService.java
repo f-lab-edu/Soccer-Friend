@@ -4,8 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.StadiumOwner;
+import soccerfriend.exception.member.BadRequestException;
 import soccerfriend.exception.member.DuplicatedException;
+import soccerfriend.exception.member.NotMatchException;
 import soccerfriend.mapper.StadiumOwnerMapper;
+import soccerfriend.utility.InputForm.UpdatePasswordRequest;
+import soccerfriend.utility.InputForm.UpdateStadiumOwnerRequest;
 
 import java.util.Optional;
 
@@ -43,6 +47,13 @@ public class StadiumOwnerService {
     }
 
     /**
+     * StadiumOwner 정보를 삭제합니다.
+     */
+    public void deleteAccount(String stadiumOwnerId) {
+        mapper.delete(stadiumOwnerId);
+    }
+
+    /**
      * 해당 stadiumOwnerId를 사용중인 stadiumOwner가 있는지 확인합니다.
      *
      * @param stadiumOwnerId 존재 유무를 확인하려는 stadiumOwnerId
@@ -71,5 +82,40 @@ public class StadiumOwnerService {
         }
 
         return Optional.empty();
+    }
+
+    /**
+     * stadiumOwner의 정보를 변경합니다.
+     *
+     * @param stadiumOwnerRequest
+     */
+    public void updateStadiumOwner(String stadiumOwnerId, UpdateStadiumOwnerRequest stadiumOwnerRequest) {
+        if (stadiumOwnerRequest.getRepresentative() == null
+                || stadiumOwnerRequest.getCompanyName() == null
+                || stadiumOwnerRequest.getAddress() == null
+                || stadiumOwnerRequest.getTaxpayerId() == null
+                || stadiumOwnerRequest.getAccountNumber() == null) {
+            throw new BadRequestException(FORM_NOT_FULL);
+        }
+
+        mapper.updateStadiumOwner(stadiumOwnerId, stadiumOwnerRequest);
+    }
+
+    /**
+     * member의 password를 변경합니다.
+     *
+     * @param passwordRequest before(현재 password), after(새로운 password)를 가지는 객체
+     */
+    public void updatePassword(String stadiumOwnerId, UpdatePasswordRequest passwordRequest) {
+        String before = passwordRequest.getBefore();
+        String after = passwordRequest.getAfter();
+        String encryptedCurrent = mapper.getStadiumOwner(stadiumOwnerId).getPassword();
+
+        if (BCrypt.checkpw(after, encryptedCurrent)) {
+            throw new NotMatchException(PASSWORD_SAME);
+        }
+
+        after = BCrypt.hashpw(after, BCrypt.gensalt());
+        mapper.updatePassword(stadiumOwnerId, after);
     }
 }
