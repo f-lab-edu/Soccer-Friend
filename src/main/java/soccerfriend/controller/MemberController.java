@@ -52,8 +52,8 @@ public class MemberController {
      */
     @DeleteMapping
     public void deleteAccount() {
-        String memberId = authorizeService.getMemberId();
-        memberService.deleteAccount(memberId);
+        int id = authorizeService.getMemberId();
+        memberService.deleteAccount(id);
     }
 
     /**
@@ -79,7 +79,7 @@ public class MemberController {
      */
     @PatchMapping("/nickname")
     public void updateNickname(@RequestParam String nickname) {
-        String memberId = authorizeService.getMemberId();
+        int memberId = authorizeService.getMemberId();
         memberService.updateNickname(memberId, nickname);
     }
 
@@ -90,7 +90,7 @@ public class MemberController {
      */
     @PatchMapping("/password")
     public void updatePassword(@RequestBody UpdatePasswordRequest passwordRequest) {
-        String memberId = authorizeService.getMemberId();
+        int memberId = authorizeService.getMemberId();
         memberService.updatePassword(memberId, passwordRequest);
         authorizeService.logout();
     }
