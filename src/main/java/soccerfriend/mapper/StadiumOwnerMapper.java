@@ -8,7 +8,7 @@ import soccerfriend.utility.InputForm.UpdateStadiumOwnerRequest;
 @Mapper
 public interface StadiumOwnerMapper {
 
-    public int insert(StadiumOwner stadiumOwner);
+    public void insert(StadiumOwner stadiumOwner);
 
     public void delete(String stadiumOwnerId);
 

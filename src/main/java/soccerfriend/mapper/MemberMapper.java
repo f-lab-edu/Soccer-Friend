@@ -7,7 +7,7 @@ import soccerfriend.dto.Member;
 @Mapper
 public interface MemberMapper {
 
-    public int insert(Member member);
+    public void insert(Member member);
 
     public void delete(String memberId);
 
