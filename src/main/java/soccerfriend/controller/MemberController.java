@@ -4,7 +4,7 @@ import lombok.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Member;
-import soccerfriend.service.LoginService;
+import soccerfriend.service.AuthorizeService;
 import soccerfriend.service.MemberService;
 
 import static utility.HttpStatusCode.*;
@@ -15,7 +15,7 @@ import static utility.HttpStatusCode.*;
 public class MemberController {
 
     private final MemberService memberService;
-    private final LoginService loginService;
+    private final AuthorizeService authorizeService;
 
     /**
      * member 회원가입을 수행합니다.
@@ -35,7 +35,7 @@ public class MemberController {
      */
     @PostMapping("/login")
     public void login(@RequestBody LoginRequest loginForm) {
-        loginService.login(loginForm);
+        authorizeService.login(loginForm);
     }
 
     /**
@@ -43,7 +43,7 @@ public class MemberController {
      */
     @GetMapping("/logout")
     public void logout() {
-        loginService.logout();
+        authorizeService.logout();
     }
 
     /**
@@ -51,7 +51,8 @@ public class MemberController {
      */
     @DeleteMapping
     public void deleteAccount() {
-        memberService.delete();
+        String memberId = authorizeService.getMemberId();
+        memberService.delete(memberId);
     }
 
     /**
@@ -77,7 +78,8 @@ public class MemberController {
      */
     @PatchMapping("/nickname")
     public void updateNickname(@RequestParam String nickname) {
-        memberService.updateNickname(nickname);
+        String memberId = authorizeService.getMemberId();
+        memberService.updateNickname(memberId, nickname);
     }
 
     /**
@@ -87,7 +89,9 @@ public class MemberController {
      */
     @PatchMapping("/password")
     public void updatePassword(@RequestBody UpdatePasswordRequest passwordForm) {
-        memberService.updatePassword(passwordForm);
+        String memberId = authorizeService.getMemberId();
+        memberService.updatePassword(memberId, passwordForm);
+        authorizeService.logout();
     }
 
     /**

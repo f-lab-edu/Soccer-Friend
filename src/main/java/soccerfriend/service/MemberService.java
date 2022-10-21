@@ -17,7 +17,7 @@ import static soccerfriend.exception.ExceptionCode.*;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-    private final AuthorizeService authorizeService;
+
     private final MemberMapper mapper;
 
     /**
@@ -49,8 +49,7 @@ public class MemberService {
     /**
      * 회원정보를 삭제합니다.
      */
-    public void delete() {
-        String memberId = authorizeService.getMemberId();
+    public void delete(String memberId) {
         mapper.delete(memberId);
     }
 
@@ -100,8 +99,7 @@ public class MemberService {
      *
      * @param nickname 새로 수정하려는 nickname
      */
-    public void updateNickname(String nickname) {
-        String memberId = authorizeService.getMemberId();
+    public void updateNickname(String memberId, String nickname) {
         if (isNicknameExist(nickname)) {
             throw new NicknameDuplicatedException(NICKNAME_DUPLICATED);
         }
@@ -113,8 +111,7 @@ public class MemberService {
      *
      * @param passwordForm before(현재 password), after(새로운 password)를 가지는 객체
      */
-    public void updatePassword(UpdatePasswordRequest passwordForm) {
-        String memberId = authorizeService.getMemberId();
+    public void updatePassword(String memberId, UpdatePasswordRequest passwordForm) {
         String before = passwordForm.getBefore();
         String after = passwordForm.getAfter();
         String encryptedCurrent = mapper.getMember(memberId).getPassword();
