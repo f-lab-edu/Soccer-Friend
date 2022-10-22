@@ -47,6 +47,7 @@ public class ClubController {
 
     /**
      * club에 가입한 member들의 목록을 반환합니다.
+     *
      * @param clubId
      * @return club에 가입한 member들의 목록
      */
@@ -75,5 +76,4 @@ public class ClubController {
 
         return clubMemberService.getNotAcceptedClubMembers(clubId);
     }
-
 }

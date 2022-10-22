@@ -17,6 +17,11 @@ public class ClubMemberController {
     private final ClubMemberService clubMemberService;
     private final AuthorizeService authorizeService;
 
+    /**
+     * club에 신청한 member를 승인합니다.
+     * @param clubId 신청하려는 club의 id
+     * @param id clubMember의 id
+     */
     @PatchMapping("/approve/{clubId}/{id}")
     public void approve(@PathVariable int clubId, @PathVariable int id) {
         int memberId = authorizeService.getMemberId();
