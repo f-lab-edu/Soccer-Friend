@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.Member;
-import soccerfriend.exception.member.DuplicatedException;
-import soccerfriend.exception.member.NotMatchException;
+import soccerfriend.exception.exception.DuplicatedException;
+import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.mapper.MemberMapper;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
@@ -23,7 +23,6 @@ public class MemberService {
      * 회원가입을 수행합니다.
      *
      * @param member memberId, password, nickname, positionsId, addressId를 포함하는 member 객체
-     * @return 회원가입한 member의 id
      */
     public void signUp(Member member) {
         if (isMemberIdExist(member.getMemberId())) {

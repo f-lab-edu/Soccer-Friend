@@ -1,14 +1,14 @@
-package soccerfriend.exception.member;
+package soccerfriend.exception.exception;
 
 import lombok.Getter;
 import soccerfriend.exception.ExceptionCode;
 
 @Getter
-public class DuplicatedException extends RuntimeException {
+public class BadRequestException extends RuntimeException {
 
     private ExceptionCode exceptionCode;
 
-    public DuplicatedException(ExceptionCode exceptionCode) {
+    public BadRequestException(ExceptionCode exceptionCode) {
         this.exceptionCode = exceptionCode;
     }
 }

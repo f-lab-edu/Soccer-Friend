@@ -6,11 +6,22 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.Club">
         INSERT
-        INTO club(name, leader, address_id, point)
-        VALUES (#{name}, #{leader}, #{addressId}, #{point})
+        INTO club(name, leader, address_id, point, created_at, updated_at)
+        VALUES (#{name}, #{leader}, #{addressId}, #{point}, now(), now())
     </insert>
 
-    <select id="isNameExist" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM club WHERE name = #{name})
+    <select id="getClubByName" resultType="soccerfriend.dto.Club">
+        SELECT id, name, leader, address_id, point, created_at, updated_at
+        FROM club
+        WHERE name = #{name}
     </select>
+
+    <select id="isNameExist" resultType="boolean">
+        SELECT EXISTS(SELECT * FROM club WHERE name = #{name})
+    </select>
+
+    <select id="isIdExist" resultType="boolean">
+        SELECT EXISTS(SELECT * FROM club WHERE id = #{id})
+    </select>
+
 </mapper>

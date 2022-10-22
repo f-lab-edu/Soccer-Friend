@@ -1,14 +1,14 @@
-package soccerfriend.exception.member;
+package soccerfriend.exception.exception;
 
 import lombok.Getter;
 import soccerfriend.exception.ExceptionCode;
 
 @Getter
-public class NotMatchException extends RuntimeException {
+public class NotExistException extends RuntimeException {
 
     private ExceptionCode exceptionCode;
 
-    public NotMatchException(ExceptionCode exceptionCode) {
+    public NotExistException(ExceptionCode exceptionCode) {
         this.exceptionCode = exceptionCode;
     }
 }

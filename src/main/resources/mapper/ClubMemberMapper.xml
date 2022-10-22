@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.ClubMemberMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.ClubMember">
+        INSERT
+        INTO club_member(club_id, member_id, grade, approved, created_at, updated_at)
+        VALUES (#{clubId}, #{memberId}, #{grade}, #{approved}, now(), now())
+    </insert>
+
+    <select id="isClubStaffOrLeader" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT *
+                       FROM club_member
+                       WHERE club_id = #{clubId}
+                         AND member_id = #{memberId}
+                         AND (grade = 'LEADER' OR grade = 'STAFF')
+                   )
+
+    </select>
+
+    <select id="isClubMember" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT *
+                       FROM club_member
+                       WHERE club_id = #{clubId}
+                         AND member_id = #{memberId}
+                         AND approved = 1
+                   )
+    </select>
+
+    <select id="getClubMembers" resultType="soccerfriend.dto.ClubMember">
+        SELECT id, club_id, member_id, grade, approved, created_at, updated_at
+        FROM club_member
+        WHERE club_id = #{clubId}
+          AND approved = 1
+    </select>
+
+    <select id="getNotApprovedClubMembers" resultType="soccerfriend.dto.ClubMember">
+        SELECT id, club_id, member_id, grade, approved, created_at, updated_at
+        FROM club_member
+        WHERE club_id = #{clubId}
+          AND approved = 0
+    </select>
+
+    <select id="isClubMemberExist" resultType="boolean">
+        SELECT EXISTS(SELECT * FROM club_member WHERE club_id = #{clubId} AND member_id = #{memberId})
+    </select>
+
+    <update id="setApprovedTrue">
+        UPDATE club_member
+        SET approved = 1, updated_at = now()
+        WHERE id = #{id}
+    </update>
+
+</mapper>

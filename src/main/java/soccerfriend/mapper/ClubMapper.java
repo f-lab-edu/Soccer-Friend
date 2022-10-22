@@ -11,5 +11,9 @@ public interface ClubMapper {
 
     public void insert(Club club);
 
+    public Club getClubByName(String name);
+
     public boolean isNameExist(String name);
+
+    public boolean isIdExist(int id);
 }

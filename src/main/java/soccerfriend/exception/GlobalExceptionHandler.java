@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import soccerfriend.exception.member.*;
+import soccerfriend.exception.exception.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -29,6 +29,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({BadRequestException.class})
     protected ResponseEntity handleBadRequestException(BadRequestException ex) {
+        return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
+                HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
+    }
+
+    @ExceptionHandler({NoPermissionException.class})
+    protected ResponseEntity handleNoPermissionException(BadRequestException ex) {
         return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }
