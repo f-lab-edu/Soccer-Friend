@@ -34,8 +34,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({NoPermissionException.class})
-    protected ResponseEntity handleNoPermissionException(BadRequestException ex) {
+    protected ResponseEntity handleNoPermissionException(NoPermissionException ex) {
         return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }
+
 }
