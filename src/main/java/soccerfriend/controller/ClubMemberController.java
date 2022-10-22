@@ -2,12 +2,10 @@ package soccerfriend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import soccerfriend.dto.ClubMember;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.service.AuthorizeService;
 import soccerfriend.service.ClubMemberService;
 
-import java.util.List;
 
 import static soccerfriend.exception.ExceptionCode.*;
 

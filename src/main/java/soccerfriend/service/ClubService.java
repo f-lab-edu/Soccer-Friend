@@ -3,12 +3,10 @@ package soccerfriend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.Club;
-import soccerfriend.dto.ClubMember;
 import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.exception.exception.NotExistException;
 import soccerfriend.mapper.ClubMapper;
 
-import static soccerfriend.dto.ClubMember.ClubMemberGrade.MEMBER;
 import static soccerfriend.exception.ExceptionCode.*;
 
 @Service
