@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.Member;
-import soccerfriend.exception.member.DuplicatedException;
-import soccerfriend.exception.member.NotMatchException;
+import soccerfriend.exception.exception.DuplicatedException;
+import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.mapper.MemberMapper;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
