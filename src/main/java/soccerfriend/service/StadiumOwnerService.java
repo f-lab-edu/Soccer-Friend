@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.StadiumOwner;
-import soccerfriend.exception.member.DuplicatedException;
+import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.mapper.StadiumOwnerMapper;
 
 import java.util.Optional;

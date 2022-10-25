@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import soccerfriend.exception.member.*;
+import soccerfriend.exception.exception.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
