@@ -22,6 +22,20 @@ public class StadiumOwnerService {
     private final StadiumOwnerMapper mapper;
 
     /**
+     * stadiumOwnerRequest의 정보가 완전한지 확인합니다.
+     *
+     * @param stadiumOwnerRequest
+     * @return stadiumOwner의 정보가 완전하면 true 불완전하면 false
+     */
+    private boolean isValidStadiumOwnerRequest(UpdateStadiumOwnerRequest stadiumOwnerRequest) {
+        return stadiumOwnerRequest.getRepresentative() == null
+                || stadiumOwnerRequest.getCompanyName() == null
+                || stadiumOwnerRequest.getAddress() == null
+                || stadiumOwnerRequest.getTaxpayerId() == null
+                || stadiumOwnerRequest.getAccountNumber() == null;
+    }
+
+    /**
      * 회원가입을 수행합니다.
      *
      * @param stadiumOwner stadiumOwnerId, password, representative, companyName, address, taxpayerId, accountBankId, accountNumber를 가진 StadiumOwner 객체
@@ -90,11 +104,7 @@ public class StadiumOwnerService {
      * @param stadiumOwnerRequest
      */
     public void updateStadiumOwner(int id, UpdateStadiumOwnerRequest stadiumOwnerRequest) {
-        if (stadiumOwnerRequest.getRepresentative() == null
-                || stadiumOwnerRequest.getCompanyName() == null
-                || stadiumOwnerRequest.getAddress() == null
-                || stadiumOwnerRequest.getTaxpayerId() == null
-                || stadiumOwnerRequest.getAccountNumber() == null) {
+        if (!isValidStadiumOwnerRequest(stadiumOwnerRequest)) {
             throw new BadRequestException(FORM_NOT_FULL);
         }
 

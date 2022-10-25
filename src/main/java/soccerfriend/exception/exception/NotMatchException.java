@@ -4,7 +4,7 @@ import lombok.Getter;
 import soccerfriend.exception.ExceptionCode;
 
 @Getter
-public class NotMatchException extends RuntimeException {
+public class NotMatchException extends IllegalArgumentException {
 
     private ExceptionCode exceptionCode;
 
