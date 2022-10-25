@@ -1,4 +1,4 @@
-package soccerfriend.exception.member;
+package soccerfriend.exception.exception;
 
 import lombok.Getter;
 import soccerfriend.exception.ExceptionCode;

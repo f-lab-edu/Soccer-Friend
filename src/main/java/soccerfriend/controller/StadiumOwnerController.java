@@ -83,7 +83,6 @@ public class StadiumOwnerController {
     public void updateStadiumOwner(@RequestBody UpdateStadiumOwnerRequest stadiumOwnerRequest) {
         String stadiumOwnerId = authorizeService.getStadiumOwnerId();
         stadiumOwnerService.updateStadiumOwner(stadiumOwnerId, stadiumOwnerRequest);
-        authorizeService.logout();
     }
 
     /**
