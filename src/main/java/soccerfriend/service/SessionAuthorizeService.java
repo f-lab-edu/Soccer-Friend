@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.Member;
 import soccerfriend.dto.StadiumOwner;
-import soccerfriend.exception.member.NotExistException;
-import soccerfriend.exception.member.NotMatchException;
+import soccerfriend.exception.exception.NotExistException;
+import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.utility.InputForm.LoginRequest;
 
 import javax.servlet.http.HttpSession;
