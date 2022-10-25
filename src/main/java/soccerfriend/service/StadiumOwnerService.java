@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.StadiumOwner;
-import soccerfriend.exception.member.BadRequestException;
+
+import soccerfriend.exception.exception.BadRequestException;
+import soccerfriend.exception.exception.DuplicatedException;
+import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.exception.member.DuplicatedException;
-import soccerfriend.exception.member.NotMatchException;
 import soccerfriend.mapper.StadiumOwnerMapper;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 import soccerfriend.utility.InputForm.UpdateStadiumOwnerRequest;
@@ -20,6 +22,20 @@ import static soccerfriend.exception.ExceptionCode.*;
 public class StadiumOwnerService {
 
     private final StadiumOwnerMapper mapper;
+
+    /**
+     * stadiumOwnerRequest의 정보가 완전한지 확인합니다.
+     *
+     * @param stadiumOwnerRequest
+     * @return stadiumOwner의 정보가 완전하면 true 불완전하면 false
+     */
+    private boolean isValidStadiumOwnerRequest(UpdateStadiumOwnerRequest stadiumOwnerRequest) {
+        return stadiumOwnerRequest.getRepresentative() == null
+                || stadiumOwnerRequest.getCompanyName() == null
+                || stadiumOwnerRequest.getAddress() == null
+                || stadiumOwnerRequest.getTaxpayerId() == null
+                || stadiumOwnerRequest.getAccountNumber() == null;
+    }
 
     /**
      * 회원가입을 수행합니다.
@@ -90,11 +106,7 @@ public class StadiumOwnerService {
      * @param stadiumOwnerRequest
      */
     public void updateStadiumOwner(int id, UpdateStadiumOwnerRequest stadiumOwnerRequest) {
-        if (stadiumOwnerRequest.getRepresentative() == null
-                || stadiumOwnerRequest.getCompanyName() == null
-                || stadiumOwnerRequest.getAddress() == null
-                || stadiumOwnerRequest.getTaxpayerId() == null
-                || stadiumOwnerRequest.getAccountNumber() == null) {
+        if (!isValidStadiumOwnerRequest(stadiumOwnerRequest)) {
             throw new BadRequestException(FORM_NOT_FULL);
         }
 
