@@ -8,6 +8,7 @@ import soccerfriend.dto.StadiumOwner;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.exception.exception.NotMatchException;
+import soccerfriend.exception.member.DuplicatedException;
 import soccerfriend.mapper.StadiumOwnerMapper;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 import soccerfriend.utility.InputForm.UpdateStadiumOwnerRequest;
@@ -64,8 +65,8 @@ public class StadiumOwnerService {
     /**
      * StadiumOwner 정보를 삭제합니다.
      */
-    public void deleteAccount(String stadiumOwnerId) {
-        mapper.delete(stadiumOwnerId);
+    public void deleteAccount(int id) {
+        mapper.delete(id);
     }
 
     /**
@@ -90,7 +91,7 @@ public class StadiumOwnerService {
         if (!isStadiumOwnerExist(stadiumOwnerId)) return Optional.empty();
 
         Optional<StadiumOwner> stadiumOwner =
-                Optional.ofNullable(mapper.getStadiumOwner(stadiumOwnerId));
+                Optional.ofNullable(mapper.getStadiumOwnerByStadiumOwnerId(stadiumOwnerId));
 
         if (BCrypt.checkpw(password, stadiumOwner.get().getPassword())) {
             return stadiumOwner;
@@ -104,12 +105,12 @@ public class StadiumOwnerService {
      *
      * @param stadiumOwnerRequest
      */
-    public void updateStadiumOwner(String stadiumOwnerId, UpdateStadiumOwnerRequest stadiumOwnerRequest) {
+    public void updateStadiumOwner(int id, UpdateStadiumOwnerRequest stadiumOwnerRequest) {
         if (!isValidStadiumOwnerRequest(stadiumOwnerRequest)) {
             throw new BadRequestException(FORM_NOT_FULL);
         }
 
-        mapper.updateStadiumOwner(stadiumOwnerId, stadiumOwnerRequest);
+        mapper.updateStadiumOwner(id, stadiumOwnerRequest);
     }
 
     /**
@@ -117,16 +118,16 @@ public class StadiumOwnerService {
      *
      * @param passwordRequest before(현재 password), after(새로운 password)를 가지는 객체
      */
-    public void updatePassword(String stadiumOwnerId, UpdatePasswordRequest passwordRequest) {
+    public void updatePassword(int id, UpdatePasswordRequest passwordRequest) {
         String before = passwordRequest.getBefore();
         String after = passwordRequest.getAfter();
-        String encryptedCurrent = mapper.getStadiumOwner(stadiumOwnerId).getPassword();
+        String encryptedCurrent = mapper.getStadiumOwnerById(id).getPassword();
 
         if (BCrypt.checkpw(after, encryptedCurrent)) {
             throw new NotMatchException(PASSWORD_SAME);
         }
 
         after = BCrypt.hashpw(after, BCrypt.gensalt());
-        mapper.updatePassword(stadiumOwnerId, after);
+        mapper.updatePassword(id, after);
     }
 }

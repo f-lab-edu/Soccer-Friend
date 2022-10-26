@@ -7,17 +7,19 @@ import soccerfriend.dto.Member;
 @Mapper
 public interface MemberMapper {
 
-    public int insert(Member member);
+    public void insert(Member member);
 
-    public void delete(String memberId);
+    public void delete(int id);
 
-    public Member getMember(String memberId);
+    public Member getMemberByMemberId(String memberId);
+
+    public Member getMemberById(int id);
 
     public boolean isMemberIdExist(String memberId);
 
     public boolean isNicknameExist(String nickname);
 
-    public void updateNickname(@Param("memberId") String memberId, @Param("nickname") String nickname);
+    public void updateNickname(@Param("id") int id, @Param("nickname") String nickname);
 
-    public void updatePassword(@Param("memberId") String memberId, @Param("password") String password);
+    public void updatePassword(@Param("id") int id, @Param("password") String password);
 }

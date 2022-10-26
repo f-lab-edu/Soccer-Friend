@@ -13,6 +13,7 @@ public enum ExceptionCode {
     FORM_NOT_FULL(404, "필수 입력사항이 모두 입력되지 않았습니다."),
 
     NICKNAME_DUPLICATED(409, "이미 존재하는 닉네임입니다"),
+    CLUB_NAME_DUPLICATED(409, "이미 존재하는 클럽 이름입니다"),
     ID_DUPLICATED(409, "이미 존재하는 아이디입니다."),
     PASSWORD_SAME(409, "새로운 비밀번호가 현재 비밀번호와 같습니다.");
 

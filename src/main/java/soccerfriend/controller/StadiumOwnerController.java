@@ -54,8 +54,8 @@ public class StadiumOwnerController {
      */
     @DeleteMapping
     public void deleteAccount() {
-        String stadiumOwnerId = authorizeService.getStadiumOwnerId();
-        stadiumOwnerService.deleteAccount(stadiumOwnerId);
+        int id = authorizeService.getStadiumOwnerId();
+        stadiumOwnerService.deleteAccount(id);
     }
 
     /**
@@ -81,8 +81,9 @@ public class StadiumOwnerController {
      */
     @PatchMapping
     public void updateStadiumOwner(@RequestBody UpdateStadiumOwnerRequest stadiumOwnerRequest) {
-        String stadiumOwnerId = authorizeService.getStadiumOwnerId();
-        stadiumOwnerService.updateStadiumOwner(stadiumOwnerId, stadiumOwnerRequest);
+        int id = authorizeService.getStadiumOwnerId();
+        stadiumOwnerService.updateStadiumOwner(id, stadiumOwnerRequest);
+        authorizeService.logout();
     }
 
     /**
@@ -92,8 +93,8 @@ public class StadiumOwnerController {
      */
     @PatchMapping("/password")
     public void updatePassword(@RequestBody UpdatePasswordRequest passwordRequest) {
-        String stadiumOwnerId = authorizeService.getStadiumOwnerId();
-        stadiumOwnerService.updatePassword(stadiumOwnerId, passwordRequest);
+        int id = authorizeService.getStadiumOwnerId();
+        stadiumOwnerService.updatePassword(id, passwordRequest);
         authorizeService.logout();
     }
 }

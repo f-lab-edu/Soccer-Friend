@@ -4,16 +4,16 @@
 
 <mapper namespace="soccerfriend.mapper.MemberMapper">
 
-    <insert id="insert" parameterType="soccerfriend.dto.Member" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="soccerfriend.dto.Member">
         INSERT
         INTO member(member_id, password, nickname, point, positions_id, address_id)
         VALUES (#{memberId}, #{password}, #{nickname}, #{point}, #{positionsId}, #{addressId})
     </insert>
 
-    <delete id="delete" parameterType="String">
+    <delete id="delete" parameterType="int">
         DELETE
         FROM member
-        WHERE member_id = #{memberId}
+        WHERE id = #{id}
     </delete>
 
     <select id="isMemberIdExist" resultType="boolean">
@@ -24,24 +24,30 @@
         SELECT EXISTS (SELECT * FROM member WHERE nickname = #{nickname})
     </select>
 
-    <select id="getMember" resultType="soccerfriend.dto.Member">
+    <select id="getMemberByMemberId" resultType="soccerfriend.dto.Member">
         SELECT id, member_id, password, nickname, point, positions_id, address_id, created_at, updated_at
         FROM member
         WHERE member_id = #{memberId}
+    </select>
+
+    <select id="getMemberById" resultType="soccerfriend.dto.Member">
+        SELECT id, member_id, password, nickname, point, positions_id, address_id, created_at, updated_at
+        FROM member
+        WHERE id = #{id}
     </select>
 
     <update id="updateNickname">
         UPDATE member
         SET nickname  = #{nickname},
             updated_at=now()
-        WHERE member_id = #{memberId}
+        WHERE id = #{id}
     </update>
 
     <update id="updatePassword">
         UPDATE member
         SET password  = #{password},
             updated_at=now()
-        WHERE member_id = #{memberId}
+        WHERE id = #{id}
     </update>
 
 </mapper>
