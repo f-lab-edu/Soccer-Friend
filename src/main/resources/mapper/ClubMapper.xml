@@ -47,4 +47,16 @@
         SET monthly_fee = #{monthlyFee}, updated_at = now()
         WHERE id = #{id}
     </update>
+
+    <update id="increasePoint">
+        UPDATE club
+        SET point = point + #{point}, updated_at = now()
+        WHERE id = #{id}
+    </update>
+
+    <update id="decreasePoint">
+        UPDATE club
+        SET point = point - #{point}, updated_at = now()
+        WHERE id = #{id}
+    </update>
 </mapper>

@@ -16,6 +16,7 @@ import static soccerfriend.exception.ExceptionCode.*;
 public class ClubMemberService {
 
     private final ClubMemberMapper mapper;
+    private final MemberService memberService;
 
     /**
      * clubMember를 추가합니다.
@@ -136,6 +137,7 @@ public class ClubMemberService {
      * @param id clubMember의 id
      */
     public void approve(int id) {
+
         mapper.setApprovedTrue(id);
     }
 

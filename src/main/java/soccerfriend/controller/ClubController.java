@@ -138,4 +138,21 @@ public class ClubController {
 
         clubService.updateMonthlyFee(clubId, monthlyFee);
     }
+
+    /**
+     * club에 신청한 member를 승인합니다.
+     *
+     * @param clubMemberId clubMember의 id
+     */
+    @PatchMapping("/clubMember/{clubMemberId}/approve")
+    public void approve( @PathVariable int clubMemberId) {
+        int memberId = authorizeService.getMemberId();
+        ClubMember clubMember = clubMemberService.getClubMemberById(clubMemberId);
+        int clubId = clubMember.getClubId();
+        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
+            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        }
+
+        clubService.approveClubMember(clubMemberId);
+    }
 }

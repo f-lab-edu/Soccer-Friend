@@ -2,7 +2,9 @@ package soccerfriend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import soccerfriend.dto.Club;
+import soccerfriend.dto.ClubMember;
 import soccerfriend.dto.Member;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
@@ -127,5 +129,42 @@ public class ClubService {
      */
     public void updateMonthlyFee(int id, int monthlyFee) {
         clubMapper.updateMonthlyFee(id, monthlyFee);
+    }
+
+    /**
+     * club의 point를 증가시킵니다.
+     *
+     * @param id club의 id
+     * @param point 증가시키고자 하는 point의 양
+     */
+    public void increasePont(int id, int point){
+        clubMapper.increasePoint(id, point);
+    }
+
+    /**
+     * club의 point를 감소시킵니다.
+     *
+     * @param id club의 id
+     * @param point 감소시키고자 하는 point의 양
+     */
+    public void decreasePoint(int id, int point){
+        clubMapper.decreasePoint(id, point);
+    }
+
+    @Transactional
+    public void approveClubMember(int clubMemberId){
+        ClubMember clubMember = clubMemberService.getClubMemberById(clubMemberId);
+        Club club = getClubById(clubMember.getClubId());
+        Member member = memberService.getMemberById(clubMember.getMemberId());
+        int monthlyFee = club.getMonthlyFee();
+
+        if(member.getPoint()< club.getMonthlyFee()){
+            throw new BadRequestException(NOT_ENOUGH_POINT);
+        }
+
+        memberService.decreasePoint(member.getId(), monthlyFee);
+        increasePont(club.getId(), monthlyFee);
+
+        clubMemberService.approve(clubMemberId);
     }
 }
