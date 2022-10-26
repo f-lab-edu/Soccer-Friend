@@ -39,7 +39,7 @@ public class ClubController {
      *
      * @param clubId club의 id
      */
-    @PostMapping("/join/{clubId}")
+    @PostMapping("/{clubId}/join")
     public void join(@PathVariable int clubId) {
         int memberId = authorizeService.getMemberId();
         clubService.join(clubId, memberId);
@@ -51,7 +51,7 @@ public class ClubController {
      * @param clubId
      * @return club에 가입한 member들의 목록
      */
-    @PostMapping("/all/{clubId}")
+    @PostMapping("/{clubId}/club-members")
     public List<ClubMember> clubMember(@PathVariable int clubId) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubMember(clubId, memberId)) {
@@ -67,7 +67,7 @@ public class ClubController {
      * @param clubId
      * @return club에 신청하고 승인 대기중인 member들의 목록
      */
-    @PostMapping("/approve/{clubId}")
+    @PostMapping("/{clubId}/club-members/not-approved")
     public List<ClubMember> notAcceptedClubMembers(@PathVariable int clubId) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {

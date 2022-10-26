@@ -15,11 +15,11 @@ public interface ClubMemberMapper {
 
     public boolean isClubMember(@Param("clubId") int clubId, @Param("memberId") int memberId);
 
+    public ClubMember getClubMemberById(int id);
+
     public List<ClubMember> getClubMembers(int clubId);
 
     public List<ClubMember> getNotApprovedClubMembers(int clubId);
-
-    public boolean isClubMemberExist(@Param("clubId") int clubId, @Param("memberId") int memberId);
 
     public void setApprovedTrue(int id);
 }

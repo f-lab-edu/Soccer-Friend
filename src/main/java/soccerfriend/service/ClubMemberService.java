@@ -79,6 +79,16 @@ public class ClubMemberService {
     }
 
     /**
+     * 특정 id의 clubMember를 반환합니다.
+     *
+     * @param id clubMember의 id
+     * @return 해당 id의 clubMember 객체
+     */
+    public ClubMember getClubMemberById(int id) {
+        return mapper.getClubMemberById(id);
+    }
+
+    /**
      * 승인된 clubMember의 목록을 반환합니다.
      *
      * @param clubId
