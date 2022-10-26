@@ -10,6 +10,12 @@
         VALUES (#{name}, #{leader}, #{addressId}, #{point}, #{monthlyFee}, now(), now())
     </insert>
 
+    <select id="getClubById" resultType="soccerfriend.dto.Club">
+        SELECT id, name, leader, address_id, point, monthly_fee, created_at, updated_at
+        FROM club
+        WHERE id = #{id}
+    </select>
+
     <select id="getClubByName" resultType="soccerfriend.dto.Club">
         SELECT id, name, leader, address_id, point, monthly_fee, created_at, updated_at
         FROM club

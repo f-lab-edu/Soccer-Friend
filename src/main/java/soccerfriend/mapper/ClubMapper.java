@@ -10,6 +10,8 @@ public interface ClubMapper {
 
     public void insert(Club club);
 
+    public Club getClubById(int id);
+
     public Club getClubByName(String name);
 
     public boolean isNameExist(String name);
