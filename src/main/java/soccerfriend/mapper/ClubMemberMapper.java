@@ -11,6 +11,8 @@ public interface ClubMemberMapper {
 
     public void insert(ClubMember clubMember);
 
+    public boolean isClubLeader(@Param("clubId") int clubId, @Param("memberId") int memberId);
+
     public boolean isClubStaffOrLeader(@Param("clubId") int clubId, @Param("memberId") int memberId);
 
     public boolean isClubMember(@Param("clubId") int clubId, @Param("memberId") int memberId);
@@ -22,4 +24,6 @@ public interface ClubMemberMapper {
     public boolean isClubMemberExist(@Param("clubId") int clubId, @Param("memberId") int memberId);
 
     public void setApprovedTrue(int id);
+
+    public void delete(@Param("clubId") int clubId, @Param("memberId") int memberId);
 }

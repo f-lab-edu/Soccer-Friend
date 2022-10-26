@@ -26,7 +26,6 @@ public class ClubMemberController {
     public void approve(@PathVariable int clubId, @PathVariable int id) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
-            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 

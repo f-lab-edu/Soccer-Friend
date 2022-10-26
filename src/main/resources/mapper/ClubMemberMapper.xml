@@ -10,6 +10,17 @@
         VALUES (#{clubId}, #{memberId}, #{grade}, #{approved}, now(), now())
     </insert>
 
+    <select id="isClubLeader" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT *
+                       FROM club_member
+                       WHERE club_id = #{clubId}
+                         AND member_id = #{memberId}
+                         AND grade = 'LEADER'
+                   )
+
+    </select>
+
     <select id="isClubStaffOrLeader" resultType="boolean">
         SELECT EXISTS(
                        SELECT *
@@ -51,8 +62,16 @@
 
     <update id="setApprovedTrue">
         UPDATE club_member
-        SET approved = 1, updated_at = now()
+        SET approved   = 1,
+            updated_at = now()
         WHERE id = #{id}
     </update>
+
+    <delete id="delete">
+        DELETE
+        FROM club_member
+        WHERE club_id = #{clubId}
+          AND member_id = #{memberId}
+    </delete>
 
 </mapper>

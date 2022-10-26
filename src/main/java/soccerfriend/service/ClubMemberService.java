@@ -68,6 +68,17 @@ public class ClubMemberService {
     }
 
     /**
+     * 해당 member가 해당 클럽의 Leade인지 확인합니다.
+     *
+     * @param clubId
+     * @param memberId
+     * @return club의 Leader 혹은 Staff인지 여부
+     */
+    public boolean isClubLeader(int clubId, int memberId) {
+        return mapper.isClubLeader(clubId, memberId);
+    }
+
+    /**
      * 해당 member가 해당 클럽의 Leader 혹은 Staff인지 확인합니다.
      *
      * @param clubId
@@ -116,5 +127,9 @@ public class ClubMemberService {
      */
     public void approve(int id) {
         mapper.setApprovedTrue(id);
+    }
+
+    public void deleteClubMember(int clubId, int memberId){
+        mapper.delete(clubId, memberId);
     }
 }
