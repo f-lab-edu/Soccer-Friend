@@ -4,20 +4,51 @@
 
 <mapper namespace="soccerfriend.mapper.StadiumOwnerMapper">
 
-    <insert id="insert" parameterType="soccerfriend.dto.StadiumOwner" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="soccerfriend.dto.StadiumOwner">
         INSERT
         INTO stadium_owner(stadium_owner_id, password, representative, company_name, address, taxpayer_id, account_bank_id, account_number, point)
         VALUES (#{stadiumOwnerId}, #{password}, #{representative}, #{companyName}, #{address}, #{taxpayerId}, #{accountBankId}, #{accountNumber}, #{point})
     </insert>
 
+    <delete id="delete" parameterType="int">
+        DELETE
+        FROM stadium_owner
+        WHERE id = #{id}
+    </delete>
+
     <select id="isStadiumOwnerIdExist" resultType="boolean">
         SELECT EXISTS (SELECT * FROM stadium_owner WHERE stadium_owner_id = #{stadiumOwnerId})
     </select>
 
-    <select id="getStadiumOwner" resultType="soccerfriend.dto.StadiumOwner">
+    <select id="getStadiumOwnerByStadiumOwnerId" resultType="soccerfriend.dto.StadiumOwner">
         SELECT id, stadium_owner_id, password, representative, company_name, address, taxpayer_id, account_bank_id, account_number, point, created_at, updated_at
         FROM stadium_owner
         WHERE stadium_owner_id = #{stadiumOwnerId}
     </select>
 
+    <select id="getStadiumOwnerById" resultType="soccerfriend.dto.StadiumOwner">
+        SELECT id, stadium_owner_id, password, representative, company_name, address, taxpayer_id, account_bank_id, account_number, point, created_at, updated_at
+        FROM stadium_owner
+        WHERE id = #{id}
+    </select>
+
+    <update id="updateStadiumOwner">
+        UPDATE stadium_owner
+        SET
+            representative = #{request.representative},
+            company_name = #{request.companyName},
+            address = #{request.address},
+            taxpayer_id = #{request.taxpayerId},
+            account_bank_id = #{request.accountBankId},
+            account_number = #{request.accountNumber},
+            updated_at=now()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updatePassword">
+        UPDATE stadium_owner
+        SET password  = #{password},
+            updated_at=now()
+        WHERE id = #{id}
+    </update>
 </mapper>

@@ -7,7 +7,7 @@ import soccerfriend.dto.Member;
 import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.mapper.MemberMapper;
-import utility.InputForm.UpdatePasswordRequest;
+import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
 import java.util.Optional;
 
@@ -47,8 +47,8 @@ public class MemberService {
     /**
      * 회원정보를 삭제합니다.
      */
-    public void deleteAccount(String memberId) {
-        mapper.delete(memberId);
+    public void deleteAccount(int id) {
+        mapper.delete(id);
     }
 
     /**
@@ -78,12 +78,12 @@ public class MemberService {
      * @param password
      * @return member의 Optional 객체
      */
-    public Optional<Member> getMemberByLoginIdAndPassword(String memberId, String password) {
+    public Optional<Member> getMemberByMemberIdAndPassword(String memberId, String password) {
 
         if (!isMemberIdExist(memberId)) return Optional.empty();
 
         Optional<Member> member =
-                Optional.ofNullable(mapper.getMember(memberId));
+                Optional.ofNullable(mapper.getMemberByMemberId(memberId));
 
         if (BCrypt.checkpw(password, member.get().getPassword())) {
             return member;
@@ -97,28 +97,28 @@ public class MemberService {
      *
      * @param nickname 새로 수정하려는 nickname
      */
-    public void updateNickname(String memberId, String nickname) {
+    public void updateNickname(int id, String nickname) {
         if (isNicknameExist(nickname)) {
             throw new DuplicatedException(NICKNAME_DUPLICATED);
         }
-        mapper.updateNickname(memberId, nickname);
+        mapper.updateNickname(id, nickname);
     }
 
     /**
      * member의 password를 변경합니다.
      *
-     * @param passwordForm before(현재 password), after(새로운 password)를 가지는 객체
+     * @param passwordRequest before(현재 password), after(새로운 password)를 가지는 객체
      */
-    public void updatePassword(String memberId, UpdatePasswordRequest passwordForm) {
-        String before = passwordForm.getBefore();
-        String after = passwordForm.getAfter();
-        String encryptedCurrent = mapper.getMember(memberId).getPassword();
+    public void updatePassword(int id, UpdatePasswordRequest passwordRequest) {
+        String before = passwordRequest.getBefore();
+        String after = passwordRequest.getAfter();
+        String encryptedCurrent = mapper.getMemberById(id).getPassword();
 
         if (BCrypt.checkpw(after, encryptedCurrent)) {
             throw new NotMatchException(PASSWORD_SAME);
         }
 
         after = BCrypt.hashpw(after, BCrypt.gensalt());
-        mapper.updatePassword(memberId, after);
+        mapper.updatePassword(id, after);
     }
 }

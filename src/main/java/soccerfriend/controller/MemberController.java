@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Member;
 import soccerfriend.service.AuthorizeService;
 import soccerfriend.service.MemberService;
-import utility.InputForm;
-import utility.InputForm.LoginRequest;
+import soccerfriend.utility.InputForm.LoginRequest;
+import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
-import static utility.HttpStatusCode.*;
+import static soccerfriend.utility.HttpStatusCode.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,8 +52,8 @@ public class MemberController {
      */
     @DeleteMapping
     public void deleteAccount() {
-        String memberId = authorizeService.getMemberId();
-        memberService.deleteAccount(memberId);
+        int id = authorizeService.getMemberId();
+        memberService.deleteAccount(id);
     }
 
     /**
@@ -79,19 +79,19 @@ public class MemberController {
      */
     @PatchMapping("/nickname")
     public void updateNickname(@RequestParam String nickname) {
-        String memberId = authorizeService.getMemberId();
+        int memberId = authorizeService.getMemberId();
         memberService.updateNickname(memberId, nickname);
     }
 
     /**
      * member의 pasword를 수정합니다.
      *
-     * @param passwordForm 기존 password, 새로운 password
+     * @param passwordRequest 기존 password, 새로운 password
      */
     @PatchMapping("/password")
-    public void updatePassword(@RequestBody InputForm.UpdatePasswordRequest passwordForm) {
-        String memberId = authorizeService.getMemberId();
-        memberService.updatePassword(memberId, passwordForm);
+    public void updatePassword(@RequestBody UpdatePasswordRequest passwordRequest) {
+        int memberId = authorizeService.getMemberId();
+        memberService.updatePassword(memberId, passwordRequest);
         authorizeService.logout();
     }
 }

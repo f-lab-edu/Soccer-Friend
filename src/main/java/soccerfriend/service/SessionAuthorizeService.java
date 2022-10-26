@@ -6,7 +6,7 @@ import soccerfriend.dto.Member;
 import soccerfriend.dto.StadiumOwner;
 import soccerfriend.exception.exception.NotExistException;
 import soccerfriend.exception.exception.NotMatchException;
-import utility.InputForm.LoginRequest;
+import soccerfriend.utility.InputForm.LoginRequest;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,8 +14,8 @@ import java.util.Optional;
 
 import static soccerfriend.exception.ExceptionCode.LOGIN_FORM_INCORRECT;
 import static soccerfriend.exception.ExceptionCode.LOGIN_INFO_NOT_EXIST;
-import static utility.SessionKey.SESSION_LOGIN_MEMBER;
-import static utility.SessionKey.SESSION_LOGIN_STADIUM_OWNER;
+import static soccerfriend.utility.SessionKey.SESSION_LOGIN_MEMBER;
+import static soccerfriend.utility.SessionKey.SESSION_LOGIN_STADIUM_OWNER;
 
 @RequiredArgsConstructor
 @Service
@@ -25,18 +25,27 @@ public class SessionAuthorizeService implements AuthorizeService {
     private final MemberService memberService;
     private final StadiumOwnerService stadiumOwnerService;
 
+    /**
+     * 현재 세션에 존재하는 Member의 id를 반환합니다.
+     * @return Member의 id
+     */
     @Override
-    public String getMemberId() {
-        String id = (String) httpSession.getAttribute(SESSION_LOGIN_MEMBER);
+    public int getMemberId() {
+        Integer id = (Integer) httpSession.getAttribute(SESSION_LOGIN_MEMBER);
         if (id == null) {
             throw new NotExistException(LOGIN_INFO_NOT_EXIST);
         }
         return id;
     }
 
+    /**
+     * 현재 세션에 존재하는 StadiumOwner의 id를 반환합니다.
+     *
+     * @return StadiumOwner의 id
+     */
     @Override
-    public String getStadiumOwnerId() {
-        String id = (String) httpSession.getAttribute(SESSION_LOGIN_STADIUM_OWNER);
+    public int getStadiumOwnerId() {
+        Integer id = (Integer) httpSession.getAttribute(SESSION_LOGIN_STADIUM_OWNER);
         if (id == null) {
             throw new NotExistException(LOGIN_INFO_NOT_EXIST);
         }
@@ -51,13 +60,13 @@ public class SessionAuthorizeService implements AuthorizeService {
      */
     @Override
     public void memberLogin(LoginRequest loginRequest) {
-        Optional<Member> member = memberService.getMemberByLoginIdAndPassword(loginRequest.getId(), loginRequest.getPassword());
+        Optional<Member> member = memberService.getMemberByMemberIdAndPassword(loginRequest.getId(), loginRequest.getPassword());
 
         if (!member.isPresent()) {
             throw new NotMatchException(LOGIN_FORM_INCORRECT);
         }
 
-        httpSession.setAttribute(SESSION_LOGIN_MEMBER, loginRequest.getId());
+        httpSession.setAttribute(SESSION_LOGIN_MEMBER, member.get().getId());
         httpSession.setMaxInactiveInterval(30 * 60);
     }
 
@@ -75,7 +84,7 @@ public class SessionAuthorizeService implements AuthorizeService {
             throw new NotMatchException(LOGIN_FORM_INCORRECT);
         }
 
-        httpSession.setAttribute(SESSION_LOGIN_STADIUM_OWNER, loginRequest.getId());
+        httpSession.setAttribute(SESSION_LOGIN_STADIUM_OWNER, stadiumOwner.get().getId());
         httpSession.setMaxInactiveInterval(30 * 60);
     }
 
