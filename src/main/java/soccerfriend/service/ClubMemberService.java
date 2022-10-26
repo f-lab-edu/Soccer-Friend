@@ -43,7 +43,7 @@ public class ClubMemberService {
      */
     public void add(int clubId, int memberId) {
 
-        if (isMemberExist(clubId, memberId)) {
+        if (isClubMember(clubId, memberId)) {
             throw new DuplicatedException(CLUB_MEMBER_DUPLICATED);
         }
 
@@ -54,17 +54,6 @@ public class ClubMemberService {
                                              .approved(false)
                                              .build();
         mapper.insert(newClubMember);
-    }
-
-    /**
-     * 해당 club에 특정 member가 있는지 확인합니다.
-     *
-     * @param memberId
-     * @param clubId
-     * @return 존재 유무(true: 있음, false: 없음)
-     */
-    public boolean isMemberExist(int clubId, int memberId) {
-        return mapper.isClubMemberExist(clubId, memberId);
     }
 
     /**
