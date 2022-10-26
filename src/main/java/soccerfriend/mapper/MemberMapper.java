@@ -22,4 +22,8 @@ public interface MemberMapper {
     public void updateNickname(@Param("id") int id, @Param("nickname") String nickname);
 
     public void updatePassword(@Param("id") int id, @Param("password") String password);
+
+    public void increasePoint(@Param("id") int id, @Param("point") int point);
+
+    public void decreasePoint(@Param("id") int id, @Param("point") int point);
 }
