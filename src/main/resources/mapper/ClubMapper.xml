@@ -6,12 +6,12 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.Club">
         INSERT
-        INTO club(name, leader, address_id, point, created_at, updated_at)
-        VALUES (#{name}, #{leader}, #{addressId}, #{point}, now(), now())
+        INTO club(name, leader, address_id, point, monthly_fee, created_at, updated_at)
+        VALUES (#{name}, #{leader}, #{addressId}, #{point}, #{monthlyFee}, now(), now())
     </insert>
 
     <select id="getClubByName" resultType="soccerfriend.dto.Club">
-        SELECT id, name, leader, address_id, point, created_at, updated_at
+        SELECT id, name, leader, address_id, point, monthly_fee, created_at, updated_at
         FROM club
         WHERE name = #{name}
     </select>
@@ -36,4 +36,9 @@
         WHERE id = #{id}
     </update>
 
+    <update id="updateMonthlyFee">
+        UPDATE club
+        SET monthly_fee = #{monthlyFee}, updated_at = now()
+        WHERE id = #{id}
+    </update>
 </mapper>

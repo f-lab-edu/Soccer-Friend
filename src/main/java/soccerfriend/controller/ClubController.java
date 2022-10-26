@@ -123,4 +123,19 @@ public class ClubController {
 
         clubService.updateAddressId(clubId, addressId);
     }
+
+    /**
+     * club의 monthlyFee를 변경합니다.
+     * @param clubId
+     * @param monthlyFee 새로 변경하고자 하는 monthlyFee
+     */
+    @PatchMapping("/{clubId}/monthly-fee")
+    public void updateMontlyFee(@PathVariable int clubId, @RequestParam int monthlyFee){
+        int memberId = authorizeService.getMemberId();
+        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
+            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        }
+
+        clubService.updateMonthlyFee(clubId, monthlyFee);
+    }
 }

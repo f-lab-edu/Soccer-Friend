@@ -33,6 +33,7 @@ public class ClubService {
                            .leader(memberId)
                            .addressId(club.getAddressId())
                            .point(0)
+                           .monthlyFee(club.getMonthlyFee())
                            .build();
 
         clubMapper.insert(oldClub);
@@ -79,10 +80,11 @@ public class ClubService {
 
     /**
      * club의 name을 변경합니다.
-     * @param id 변경하고자 하는 club의 id
+     *
+     * @param id   변경하고자 하는 club의 id
      * @param name 새로 변경할 name
      */
-    public void updateName(int id, String name){
+    public void updateName(int id, String name) {
         if (isNameExist(name)) {
             throw new DuplicatedException(CLUB_NAME_DUPLICATED);
         }
@@ -92,10 +94,21 @@ public class ClubService {
 
     /**
      * club의 addressId를 변경합니다.
-     * @param id 변경하고자 하는 club의 id
+     *
+     * @param id        변경하고자 하는 club의 id
      * @param addressId 새로 변경할 addressId
      */
-    public void updateAddressId(int id, int addressId){
+    public void updateAddressId(int id, int addressId) {
         clubMapper.updateAddressId(id, addressId);
+    }
+
+    /**
+     * club의 monthlyFee를 변경합니다.
+     *
+     * @param id        변경하고자 하는 club의 id
+     * @param monthlyFee 새로 변경할 monthlyFee
+     */
+    public void updateMonthlyFee(int id, int monthlyFee) {
+        clubMapper.updateMonthlyFee(id, monthlyFee);
     }
 }

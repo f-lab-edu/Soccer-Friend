@@ -19,4 +19,6 @@ public interface ClubMapper {
     public void updateName(@Param("id") int id, @Param("name") String name);
 
     public void updateAddressId(@Param("id") int id, @Param("addressId") int addressId);
+
+    public void updateMonthlyFee(@Param("id") int id, @Param("monthlyFee") int monthlyFee);
 }
