@@ -42,6 +42,12 @@
                    )
     </select>
 
+    <select id="getClubMemberById" resultType="soccerfriend.dto.ClubMember">
+        SELECT id, club_id, member_id, grade, approved, created_at, updated_at
+        FROM club_member
+        WHERE id = #{id}
+    </select>
+
     <select id="getClubMembers" resultType="soccerfriend.dto.ClubMember">
         SELECT id, club_id, member_id, grade, approved, created_at, updated_at
         FROM club_member
@@ -54,10 +60,6 @@
         FROM club_member
         WHERE club_id = #{clubId}
           AND approved = 0
-    </select>
-
-    <select id="isClubMemberExist" resultType="boolean">
-        SELECT EXISTS(SELECT * FROM club_member WHERE club_id = #{clubId} AND member_id = #{memberId})
     </select>
 
     <update id="setApprovedTrue">
@@ -73,5 +75,4 @@
         WHERE club_id = #{clubId}
           AND member_id = #{memberId}
     </delete>
-
 </mapper>
