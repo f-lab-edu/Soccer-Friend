@@ -1,6 +1,7 @@
 package soccerfriend.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import soccerfriend.dto.Club;
 
 
@@ -14,4 +15,8 @@ public interface ClubMapper {
     public boolean isNameExist(String name);
 
     public boolean isIdExist(int id);
+
+    public void updateName(@Param("id") int id, @Param("name") String name);
+
+    public void updateAddressId(@Param("id") int id, @Param("addressId") int addressId);
 }
