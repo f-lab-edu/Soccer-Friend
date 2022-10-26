@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Member;
 import soccerfriend.service.AuthorizeService;
 import soccerfriend.service.MemberService;
+import soccerfriend.utility.InputForm.LoginRequest;
+import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
-import static utility.HttpStatusCode.*;
+import static soccerfriend.utility.HttpStatusCode.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,21 +23,20 @@ public class MemberController {
      * member 회원가입을 수행합니다.
      *
      * @param member memberId, password, nickname, positionsId, addressId를 가진 member 객체
-     * @return member의 id
      */
     @PostMapping
-    public int signUp(@RequestBody Member member) {
-        return memberService.signUp(member);
+    public void signUp(@RequestBody Member member) {
+        memberService.signUp(member);
     }
 
     /**
      * member의 로그인을 수행합니다.
      *
-     * @param loginForm memberId, password
+     * @param loginRequest id, password
      */
     @PostMapping("/login")
-    public void login(@RequestBody LoginRequest loginForm) {
-        authorizeService.login(loginForm);
+    public void login(@RequestBody LoginRequest loginRequest) {
+        authorizeService.memberLogin(loginRequest);
     }
 
     /**
@@ -51,8 +52,8 @@ public class MemberController {
      */
     @DeleteMapping
     public void deleteAccount() {
-        String memberId = authorizeService.getMemberId();
-        memberService.delete(memberId);
+        int id = authorizeService.getMemberId();
+        memberService.deleteAccount(id);
     }
 
     /**
@@ -78,39 +79,19 @@ public class MemberController {
      */
     @PatchMapping("/nickname")
     public void updateNickname(@RequestParam String nickname) {
-        String memberId = authorizeService.getMemberId();
+        int memberId = authorizeService.getMemberId();
         memberService.updateNickname(memberId, nickname);
     }
 
     /**
      * member의 pasword를 수정합니다.
      *
-     * @param passwordForm 기존 password, 새로운 password
+     * @param passwordRequest 기존 password, 새로운 password
      */
     @PatchMapping("/password")
-    public void updatePassword(@RequestBody UpdatePasswordRequest passwordForm) {
-        String memberId = authorizeService.getMemberId();
-        memberService.updatePassword(memberId, passwordForm);
+    public void updatePassword(@RequestBody UpdatePasswordRequest passwordRequest) {
+        int memberId = authorizeService.getMemberId();
+        memberService.updatePassword(memberId, passwordRequest);
         authorizeService.logout();
-    }
-
-    /**
-     * password를 변경하기 위해 입력해야 하는 값들
-     */
-    @Getter
-    @Setter
-    public static class UpdatePasswordRequest {
-        private String before;
-        private String after;
-    }
-
-    /**
-     * login 하기위해 입력해야 하는 값들
-     */
-    @Getter
-    @Setter
-    public static class LoginRequest {
-        String memberId;
-        String password;
     }
 }

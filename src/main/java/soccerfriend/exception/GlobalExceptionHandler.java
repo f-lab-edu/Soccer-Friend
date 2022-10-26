@@ -4,37 +4,31 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import soccerfriend.exception.member.*;
+import soccerfriend.exception.exception.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({IdDuplicatedException.class})
-    protected ResponseEntity handleIdDuplicatedException(IdDuplicatedException ex) {
+    @ExceptionHandler({DuplicatedException.class})
+    protected ResponseEntity handleIdDuplicatedException(DuplicatedException ex) {
         return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }
 
-    @ExceptionHandler({IdNotExistException.class})
-    protected ResponseEntity handleIdNotExistException(IdNotExistException ex) {
+    @ExceptionHandler({NotExistException.class})
+    protected ResponseEntity handleIdNotExistException(NotExistException ex) {
         return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }
 
-    @ExceptionHandler({NicknameDuplicatedException.class})
-    protected ResponseEntity handleNicknameDuplicatedException(NicknameDuplicatedException ex) {
+    @ExceptionHandler({NotMatchException.class})
+    protected ResponseEntity handleNotMatchException(NotMatchException ex) {
         return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }
 
-    @ExceptionHandler({PasswordIncorrectException.class})
-    protected ResponseEntity handlePasswordIncorrectException(PasswordIncorrectException ex) {
-        return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
-                HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
-    }
-
-    @ExceptionHandler({PasswordSameException.class})
-    protected ResponseEntity handlePasswordSameException(PasswordSameException ex) {
+    @ExceptionHandler({BadRequestException.class})
+    protected ResponseEntity handleBadRequestException(BadRequestException ex) {
         return new ResponseEntity(new ExceptionResponse(ex.getExceptionCode()),
                 HttpStatus.valueOf(ex.getExceptionCode().getStatus()));
     }

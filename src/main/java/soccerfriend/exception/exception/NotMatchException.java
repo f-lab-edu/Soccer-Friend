@@ -1,14 +1,14 @@
-package soccerfriend.exception.member;
+package soccerfriend.exception.exception;
 
 import lombok.Getter;
 import soccerfriend.exception.ExceptionCode;
 
 @Getter
-public class IdDuplicatedException extends RuntimeException {
+public class NotMatchException extends IllegalArgumentException {
 
     private ExceptionCode exceptionCode;
 
-    public IdDuplicatedException(ExceptionCode exceptionCode) {
+    public NotMatchException(ExceptionCode exceptionCode) {
         this.exceptionCode = exceptionCode;
     }
 }

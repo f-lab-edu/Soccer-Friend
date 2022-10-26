@@ -1,24 +1,37 @@
 package soccerfriend.service;
 
-import soccerfriend.controller.MemberController;
+import static soccerfriend.utility.InputForm.*;
 
 public interface AuthorizeService {
 
-    public static final String LOGIN_MEMBER = "loginMember";
 
     /**
-     * 로그인 되어 있는 member의 memberId를 반환합니다.
+     * 로그인 되어 있는 member의 id를 반환합니다.
      *
-     * @return 로그인 되어 있는 member의 memberId
+     * @return 로그인 되어 있는 member의 id
      */
-    public String getMemberId();
+    public int getMemberId();
 
     /**
-     * 로그인을 수행합니다.
+     * 로그인 되어 있는 stadiumOwner의 id를 반환합니다.
      *
-     * @param loginForm loginId, password를 포함하는 객체
+     * @return 로그인 되어 있는 stadiumOwner의 id
      */
-    public void login(MemberController.LoginRequest loginForm);
+    public int getStadiumOwnerId();
+
+    /**
+     * member의 로그인을 수행합니다.
+     *
+     * @param loginForm id, password를 포함하는 객체
+     */
+    public void memberLogin(LoginRequest loginForm);
+
+    /**
+     * stadiumOwner의 로그인을 수행합니다.
+     *
+     * @param loginRequest id, password를 포함하는 객체
+     */
+    void stadiumOwnerLogin(LoginRequest loginRequest);
 
     /**
      * 로그아웃을 수행합니다.
