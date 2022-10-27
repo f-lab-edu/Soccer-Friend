@@ -130,7 +130,7 @@ public class ClubController {
      * @param monthlyFee 새로 변경하고자 하는 monthlyFee
      */
     @PatchMapping("/{clubId}/monthly-fee")
-    public void updateMontlyFee(@PathVariable int clubId, @RequestParam int monthlyFee){
+    public void updateMonthlyFee(@PathVariable int clubId, @RequestParam int monthlyFee){
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
