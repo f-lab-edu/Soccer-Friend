@@ -6,8 +6,8 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.ClubMember">
         INSERT
-        INTO club_member(club_id, member_id, grade, approved, created_at, updated_at)
-        VALUES (#{clubId}, #{memberId}, #{grade}, #{approved}, now(), now())
+        INTO club_member(club_id, member_id, grade, approved, payment_status, created_at, updated_at)
+        VALUES (#{clubId}, #{memberId}, #{grade}, #{approved}, #{payment_status}, now(), now())
     </insert>
 
     <select id="isClubLeader" resultType="boolean">
@@ -52,13 +52,13 @@
     </select>
 
     <select id="getClubMemberById" resultType="soccerfriend.dto.ClubMember">
-        SELECT id, club_id, member_id, grade, approved, created_at, updated_at
+        SELECT id, club_id, member_id, grade, approved, payment_status, paid_at, created_at, updated_at
         FROM club_member
         WHERE id = #{id}
     </select>
 
     <select id="getClubMembers" resultType="soccerfriend.dto.ClubMember">
-        SELECT id, club_id, member_id, grade, approved, created_at, updated_at
+        SELECT id, club_id, member_id, grade, approved, payment_status, paid_at, created_at, updated_at
         FROM club_member
         WHERE club_id = #{clubId}
           AND approved = 1

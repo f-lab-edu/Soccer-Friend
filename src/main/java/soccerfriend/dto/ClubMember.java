@@ -20,6 +20,10 @@ public class ClubMember {
 
     private boolean approved;
 
+    private boolean paymentStatus;
+
+    private LocalDateTime paidAt;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

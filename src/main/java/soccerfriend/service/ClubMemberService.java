@@ -31,6 +31,7 @@ public class ClubMemberService {
                                           .memberId(memberId)
                                           .grade(LEADER)
                                           .approved(true)
+                                          .paymentStatus(false)
                                           .build();
 
         mapper.insert(clubMember);
@@ -53,6 +54,7 @@ public class ClubMemberService {
                                              .memberId(memberId)
                                              .grade(MEMBER)
                                              .approved(false)
+                                             .paymentStatus(false)
                                              .build();
         mapper.insert(newClubMember);
     }
@@ -141,7 +143,7 @@ public class ClubMemberService {
         mapper.setApprovedTrue(id);
     }
 
-    public void deleteClubMember(int clubId, int memberId){
+    public void deleteClubMember(int clubId, int memberId) {
         mapper.delete(clubId, memberId);
     }
 }
