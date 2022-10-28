@@ -69,7 +69,7 @@ public class ClubController {
      * @param clubId
      * @return club에 가입한 member들의 목록
      */
-    @PostMapping("/{clubId}/club-members")
+    @GetMapping("/{clubId}/club-members")
     public List<ClubMember> clubMember(@PathVariable int clubId) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubMember(clubId, memberId)) {
@@ -173,5 +173,25 @@ public class ClubController {
         }
 
         clubService.payMonthlyFee(clubId, memberId);
+    }
+
+    @GetMapping("/{clubId}/club-members/paid")
+    public List<ClubMember> getPaidClubMembers(@PathVariable int clubId) {
+        int memberId = authorizeService.getMemberId();
+        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
+            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        }
+
+        return clubMemberService.getPaidClubMembers(clubId);
+    }
+
+    @GetMapping("/{clubId}/club-members/not-paid")
+    public List<ClubMember> getNotPaidClubMembers(@PathVariable int clubId) {
+        int memberId = authorizeService.getMemberId();
+        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
+            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        }
+
+        return clubMemberService.getNotPaidClubMembers(clubId);
     }
 }

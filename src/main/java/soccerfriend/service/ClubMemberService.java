@@ -137,6 +137,28 @@ public class ClubMemberService {
     }
 
     /**
+     * 해당 club에 가입한 clubMember 중 월회비를 납부한 회원들의 목록을 반환합니다.
+     *
+     * @param clubId
+     * @return 월회비를 납부한 회원들의 목록
+     */
+    public List<ClubMember> getNotPaidClubMembers(int clubId) {
+        return mapper.getNotPaidClubMembers(clubId);
+    }
+
+    /**
+     * 해당 club에 가입한 clubMember 중 월회비를 납부하지 않은 회원들의 목록을 반환합니다.
+     *
+     * @param clubId
+     * @return 월회비를 납부한 회원들의 목록
+     */
+    public List<ClubMember> getPaidClubMembers(int clubId) {
+        return mapper.getPaidClubMembers(clubId);
+    }
+
+
+
+    /**
      * club에 신청한 member를 승인합니다.
      *
      * @param id clubMember의 id

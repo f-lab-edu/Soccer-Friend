@@ -81,10 +81,47 @@
     </select>
 
     <select id="getNotApprovedClubMembers" resultType="soccerfriend.dto.ClubMember">
-        SELECT id, club_id, member_id, grade, approved, created_at, updated_at
+        SELECT id,
+               club_id,
+               member_id,
+               grade,
+               approved,
+               payment_status,
+               paid_at created_at,
+               updated_at
         FROM club_member
         WHERE club_id = #{clubId}
           AND approved = 0
+    </select>
+
+    <select id="getPaidClubMembers" resultType="soccerfriend.dto.ClubMember">
+        SELECT id,
+               club_id,
+               member_id,
+               grade,
+               approved,
+               payment_status,
+               paid_at,
+               created_at,
+               updated_at
+        FROM club_member
+        WHERE club_id = #{clubId}
+          AND payment_status = 1
+    </select>
+
+    <select id="getNotPaidClubMembers" resultType="soccerfriend.dto.ClubMember">
+        SELECT id,
+               club_id,
+               member_id,
+               grade,
+               approved,
+               payment_status,
+               paid_at,
+               created_at,
+               updated_at
+        FROM club_member
+        WHERE club_id = #{clubId}
+          AND payment_status = 0
     </select>
 
     <update id="setApprovedTrue">

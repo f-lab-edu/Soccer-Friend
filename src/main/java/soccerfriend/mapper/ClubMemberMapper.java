@@ -25,6 +25,10 @@ public interface ClubMemberMapper {
 
     public List<ClubMember> getNotApprovedClubMembers(int clubId);
 
+    public List<ClubMember> getPaidClubMembers(int clubId);
+
+    public List<ClubMember> getNotPaidClubMembers(int clubId);
+
     public void setApprovedTrue(int id);
 
     public void delete(@Param("clubId") int clubId, @Param("memberId") int memberId);
