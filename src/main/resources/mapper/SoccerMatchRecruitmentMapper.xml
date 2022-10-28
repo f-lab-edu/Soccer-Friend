@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.SoccerMatchRecruitmentMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.SoccerMatchRecruitment">
+        INSERT
+        INTO soccer_match_recruitment(start_time, end_time, set_number, set_time, stadium_id, club1_id, club2_id,
+                                      created_at, updated_at)
+        VALUES (#{startTime}, #{endTime}, #{setNumber}, #{setTime}, #{stadiumId}, #{club1Id}, #{club2Id}, now(), now())
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        DELETE
+        FROM soccer_match_recruitment
+        WHERE id = #{id}
+    </delete>
+
+    <select id="getSoccerMatchRecruitmentById" resultType="soccerfriend.dto.SoccerMatchRecruitment">
+        SELECT start_time,
+               end_time,
+               set_number,
+               set_time,
+               stadium_id,
+               club1_id,
+               club2_id,
+               created_at,
+               updated_at
+        FROM soccer_match_recruitment
+        WHERE id = #{id}
+    </select>
+
+    <select id="getSoccerMatchRecruitmentByClubId" resultType="soccerfriend.dto.SoccerMatchRecruitment">
+        SELECT start_time,
+               end_time,
+               set_number,
+               set_time,
+               stadium_id,
+               club1_id,
+               club2_id,
+               created_at,
+               updated_at
+        FROM soccer_match_recruitment
+        WHERE clu1_id = #{clubId}
+           OR club2_id = #{clubId}
+    </select>
+
+    <update id="update">
+        UPDATE soccer_match_recruitment
+        SET start_time = #{startTime},
+            end_time   = #{endTime},
+            set_number = #{setNumber},
+            set_time   = #{setTime},
+            stadium_id = #{stadiumId},
+            updated_at=now()
+        WHERE id = #{id}
+    </update>
+
+    <update id="setClub2Id">
+        UPDATE soccer_match_recruitment
+        SET club2_id  = #{club2Id},
+            updated_at=now()
+        WHERE id = #{id}
+    </update>
+
+</mapper>
