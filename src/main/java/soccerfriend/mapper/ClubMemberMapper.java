@@ -28,4 +28,6 @@ public interface ClubMemberMapper {
     public void setApprovedTrue(int id);
 
     public void delete(@Param("clubId") int clubId, @Param("memberId") int memberId);
+
+    public void payMonthlyFee(@Param("clubId") int clubId, @Param("memberId") int memberId);
 }

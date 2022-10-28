@@ -8,6 +8,7 @@ import soccerfriend.dto.ClubMember;
 import soccerfriend.dto.Member;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
+import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.exception.exception.NotExistException;
 import soccerfriend.mapper.ClubMapper;
 
@@ -134,37 +135,41 @@ public class ClubService {
     /**
      * club의 point를 증가시킵니다.
      *
-     * @param id club의 id
+     * @param id    club의 id
      * @param point 증가시키고자 하는 point의 양
      */
-    public void increasePont(int id, int point){
+    public void increasePont(int id, int point) {
         clubMapper.increasePoint(id, point);
     }
 
     /**
      * club의 point를 감소시킵니다.
      *
-     * @param id club의 id
+     * @param id    club의 id
      * @param point 감소시키고자 하는 point의 양
      */
-    public void decreasePoint(int id, int point){
+    public void decreasePoint(int id, int point) {
         clubMapper.decreasePoint(id, point);
     }
 
+    /**
+     * club에 가입한 member가 월회비를 납부합니다.
+     *
+     * @param clubId   월회비를 납부하려는 club의 id
+     * @param memberId 납부하는 member의 id
+     */
     @Transactional
-    public void approveClubMember(int clubMemberId){
-        ClubMember clubMember = clubMemberService.getClubMemberById(clubMemberId);
-        Club club = getClubById(clubMember.getClubId());
-        Member member = memberService.getMemberById(clubMember.getMemberId());
-        int monthlyFee = club.getMonthlyFee();
+    public void payMonthlyFee(int clubId, int memberId) {
 
-        if(member.getPoint()< club.getMonthlyFee()){
+        Member member = memberService.getMemberById(memberId);
+        Club club = getClubById(clubId);
+        int fee = club.getMonthlyFee();
+        if (member.getPoint() < fee) {
             throw new BadRequestException(NOT_ENOUGH_POINT);
         }
 
-        memberService.decreasePoint(member.getId(), monthlyFee);
-        increasePont(club.getId(), monthlyFee);
-
-        clubMemberService.approve(clubMemberId);
+        memberService.decreasePoint(memberId, fee);
+        increasePont(clubId, fee);
+        clubMemberService.payMonthlyFee(clubId, memberId);
     }
 }

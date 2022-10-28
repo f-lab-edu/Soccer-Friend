@@ -3,7 +3,10 @@ package soccerfriend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.ClubMember;
+import soccerfriend.dto.Member;
+import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
+import soccerfriend.mapper.ClubMapper;
 import soccerfriend.mapper.ClubMemberMapper;
 
 import java.util.List;
@@ -143,7 +146,20 @@ public class ClubMemberService {
         mapper.setApprovedTrue(id);
     }
 
+    /**
+     * clubMember의 가입신청을 승인합니다.
+     *
+     * @param clubMemberId
+     */
+    public void approveClubMember(int clubMemberId) {
+        approve(clubMemberId);
+    }
+
     public void deleteClubMember(int clubId, int memberId) {
         mapper.delete(clubId, memberId);
+    }
+
+    public void payMonthlyFee(int clubId, int memberID) {
+        mapper.payMonthlyFee(clubId, memberID);
     }
 }

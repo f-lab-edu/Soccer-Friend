@@ -47,15 +47,16 @@ public class ClubController {
 
     /**
      * club을 탈퇴합니다.
+     *
      * @param clubId club의 id
      */
     @DeleteMapping("/{clubId}/member-delete")
-    public void memberDelete(@PathVariable int clubId){
+    public void memberDelete(@PathVariable int clubId) {
         int memberId = authorizeService.getMemberId();
-        if(!clubMemberService.isClubMember(clubId, memberId)){
+        if (!clubMemberService.isClubMember(clubId, memberId)) {
             throw new NoPermissionException(NOT_CLUB_MEMBER);
         }
-        if(clubMemberService.isClubLeader(clubId, memberId)){
+        if (clubMemberService.isClubLeader(clubId, memberId)) {
             throw new NoPermissionException(IS_CLUB_LEADER);
         }
 
@@ -96,11 +97,12 @@ public class ClubController {
 
     /**
      * club의 name을 변경합니다.
+     *
      * @param clubId
-     * @param name 새로 변경하고자하는 name
+     * @param name   새로 변경하고자하는 name
      */
     @PatchMapping("/{clubId}/name")
-    public void updateName(@PathVariable int clubId, @RequestParam String name){
+    public void updateName(@PathVariable int clubId, @RequestParam String name) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
@@ -111,11 +113,12 @@ public class ClubController {
 
     /**
      * club의 name을 변경합니다.
+     *
      * @param clubId
      * @param addressId 새로 변경하고자 하는 addressId
      */
     @PatchMapping("/{clubId}/address-id")
-    public void updateAddressId(@PathVariable int clubId, @RequestParam int addressId){
+    public void updateAddressId(@PathVariable int clubId, @RequestParam int addressId) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
@@ -126,11 +129,12 @@ public class ClubController {
 
     /**
      * club의 monthlyFee를 변경합니다.
+     *
      * @param clubId
      * @param monthlyFee 새로 변경하고자 하는 monthlyFee
      */
     @PatchMapping("/{clubId}/monthly-fee")
-    public void updateMonthlyFee(@PathVariable int clubId, @RequestParam int monthlyFee){
+    public void updateMonthlyFee(@PathVariable int clubId, @RequestParam int monthlyFee) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
@@ -144,8 +148,8 @@ public class ClubController {
      *
      * @param clubMemberId clubMember의 id
      */
-    @PatchMapping("/clubMember/{clubMemberId}/approve")
-    public void approve( @PathVariable int clubMemberId) {
+    @PatchMapping("/club-member/{clubMemberId}/approve")
+    public void approve(@PathVariable int clubMemberId) {
         int memberId = authorizeService.getMemberId();
         ClubMember clubMember = clubMemberService.getClubMemberById(clubMemberId);
         int clubId = clubMember.getClubId();
@@ -153,6 +157,21 @@ public class ClubController {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
-        clubService.approveClubMember(clubMemberId);
+        clubMemberService.approveClubMember(clubMemberId);
+    }
+
+    /**
+     * club에 가입한 member가 월회비를 납부합니다.
+     *
+     * @param clubId 월회비를 납부하려는 club의 id
+     */
+    @PatchMapping("/{clubId}/pay/monthly-fee")
+    public void payMonthlyFee(@PathVariable int clubId) {
+        int memberId = authorizeService.getMemberId();
+        if (!clubMemberService.isClubMember(clubId, memberId)) {
+            throw new NoPermissionException(NOT_CLUB_MEMBER);
+        }
+
+        clubService.payMonthlyFee(clubId, memberId);
     }
 }

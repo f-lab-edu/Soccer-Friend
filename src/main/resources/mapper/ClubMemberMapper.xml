@@ -7,7 +7,7 @@
     <insert id="insert" parameterType="soccerfriend.dto.ClubMember">
         INSERT
         INTO club_member(club_id, member_id, grade, approved, payment_status, created_at, updated_at)
-        VALUES (#{clubId}, #{memberId}, #{grade}, #{approved}, #{payment_status}, now(), now())
+        VALUES (#{clubId}, #{memberId}, #{grade}, #{approved}, #{paymentStatus}, now(), now())
     </insert>
 
     <select id="isClubLeader" resultType="boolean">
@@ -52,13 +52,29 @@
     </select>
 
     <select id="getClubMemberById" resultType="soccerfriend.dto.ClubMember">
-        SELECT id, club_id, member_id, grade, approved, payment_status, paid_at, created_at, updated_at
+        SELECT id,
+               club_id,
+               member_id,
+               grade,
+               approved,
+               payment_status,
+               paid_at,
+               created_at,
+               updated_at
         FROM club_member
         WHERE id = #{id}
     </select>
 
     <select id="getClubMembers" resultType="soccerfriend.dto.ClubMember">
-        SELECT id, club_id, member_id, grade, approved, payment_status, paid_at, created_at, updated_at
+        SELECT id,
+               club_id,
+               member_id,
+               grade,
+               approved,
+               payment_status,
+               paid_at,
+               created_at,
+               updated_at
         FROM club_member
         WHERE club_id = #{clubId}
           AND approved = 1
@@ -84,4 +100,13 @@
         WHERE club_id = #{clubId}
           AND member_id = #{memberId}
     </delete>
+
+    <update id="payMonthlyFee">
+        UPDATE club_member
+        SET payment_status = 1,
+            paid_at        = now(),
+            updated_at     = now()
+        WHERE club_id = #{clubId}
+          AND member_id = #{memberId}
+    </update>
 </mapper>
