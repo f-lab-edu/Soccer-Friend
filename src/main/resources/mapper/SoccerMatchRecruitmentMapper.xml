@@ -11,12 +11,6 @@
         VALUES (#{startTime}, #{endTime}, #{setNumber}, #{setTime}, #{stadiumId}, #{club1Id}, #{club2Id}, now(), now())
     </insert>
 
-    <delete id="delete" parameterType="int">
-        DELETE
-        FROM soccer_match_recruitment
-        WHERE id = #{id}
-    </delete>
-
     <select id="getSoccerMatchRecruitmentById" resultType="soccerfriend.dto.SoccerMatchRecruitment">
         SELECT start_time,
                end_time,
@@ -42,17 +36,17 @@
                created_at,
                updated_at
         FROM soccer_match_recruitment
-        WHERE clu1_id = #{clubId}
+        WHERE club1_id = #{clubId}
            OR club2_id = #{clubId}
     </select>
 
     <update id="update">
         UPDATE soccer_match_recruitment
-        SET start_time = #{startTime},
-            end_time   = #{endTime},
-            set_number = #{setNumber},
-            set_time   = #{setTime},
-            stadium_id = #{stadiumId},
+        SET start_time = #{request.startTime},
+            end_time   = #{request.endTime},
+            set_number = #{request.setNumber},
+            set_time   = #{request.setTime},
+            stadium_id = #{request.stadiumId},
             updated_at=now()
         WHERE id = #{id}
     </update>
@@ -63,5 +57,9 @@
             updated_at=now()
         WHERE id = #{id}
     </update>
+
+    <select id="isNoClub2Id" resultType="boolean">
+        SELECT EXISTS (SELECT * FROM soccer_match_recruitment WHERE id = #{id} AND club2_id = 0)
+    </select>
 
 </mapper>
