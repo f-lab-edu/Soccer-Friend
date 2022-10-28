@@ -6,8 +6,10 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.StadiumOwner">
         INSERT
-        INTO stadium_owner(stadium_owner_id, password, representative, company_name, address, taxpayer_id, account_bank_id, account_number, point, created_at, updated_at)
-        VALUES (#{stadiumOwnerId}, #{password}, #{representative}, #{companyName}, #{address}, #{taxpayerId}, #{accountBankId}, #{accountNumber}, #{point}, now(), now())
+        INTO stadium_owner(stadium_owner_id, password, representative, company_name, address, taxpayer_id,
+                           account_bank_id, account_number, point, created_at, updated_at)
+        VALUES (#{stadiumOwnerId}, #{password}, #{representative}, #{companyName}, #{address}, #{taxpayerId},
+                #{accountBankId}, #{accountNumber}, #{point}, now(), now())
     </insert>
 
     <delete id="delete" parameterType="int">
@@ -17,30 +19,51 @@
     </delete>
 
     <select id="isStadiumOwnerIdExist" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM stadium_owner WHERE stadium_owner_id = #{stadiumOwnerId})
+        SELECT EXISTS(SELECT * FROM stadium_owner WHERE stadium_owner_id = #{stadiumOwnerId})
     </select>
 
     <select id="getStadiumOwnerByStadiumOwnerId" resultType="soccerfriend.dto.StadiumOwner">
-        SELEC회T id, stadium_owner_id, password, representative, company_name, address, taxpayer_id, account_bank_id, account_number, point, created_at, updated_at
+        SELECT id,
+               stadium_owner_id,
+               password,
+               representative,
+               company_name,
+               address,
+               taxpayer_id,
+               account_bank_id,
+               account_number,
+               point,
+               created_at,
+               updated_at
         FROM stadium_owner
         WHERE stadium_owner_id = #{stadiumOwnerId}
     </select>
 
     <select id="getStadiumOwnerById" resultType="soccerfriend.dto.StadiumOwner">
-        SELECT id, stadium_owner_id, password, representative, company_name, address, taxpayer_id, account_bank_id, account_number, point, created_at, updated_at
+        SELECT id,
+               stadium_owner_id,
+               password,
+               representative,
+               company_name,
+               address,
+               taxpayer_id,
+               account_bank_id,
+               account_number,
+               point,
+               created_at,
+               updated_at
         FROM stadium_owner
         WHERE id = #{id}
     </select>
 
     <update id="updateStadiumOwner">
         UPDATE stadium_owner
-        SET
-            representative = #{request.representative},
-            company_name = #{request.companyName},
-            address = #{request.address},
-            taxpayer_id = #{request.taxpayerId},
+        SET representative  = #{request.representative},
+            company_name    = #{request.companyName},
+            address         = #{request.address},
+            taxpayer_id     = #{request.taxpayerId},
             account_bank_id = #{request.accountBankId},
-            account_number = #{request.accountNumber},
+            account_number  = #{request.accountNumber},
             updated_at=now()
         WHERE id = #{id}
     </update>

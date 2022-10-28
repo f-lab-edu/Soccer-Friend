@@ -38,4 +38,18 @@ public class InputForm {
         int accountBankId;
         String accountNumber;
     }
+
+    /**
+     * stadium의 정보를 변경하기 위해 입력해야 하는 값들
+     */
+    @Getter
+    @NoArgsConstructor
+    public static class UpdateStadiumRequest{
+        String name;
+        String address;
+        String phoneNumber;
+        int priceDay;
+        int priceNight;
+        int priceWeekend;
+    }
 }

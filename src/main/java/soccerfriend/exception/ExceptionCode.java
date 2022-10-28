@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum ExceptionCode {
 
+    NOT_STADIUM_OWNER(401, "경기장의 사업자가 아닙니다."),
     NO_CLUB_PERMISSION(401, "클럽 내에서 권한이 없습니다."),
     NOT_CLUB_MEMBER(401, "해당 club의 member가 아닙니다."),
     IS_CLUB_LEADER(401, "해당 club의 leader는 탈퇴할 수 없습니다."),

@@ -21,5 +21,4 @@ public interface SoccerMatchRecruitmentMapper {
     public void update(int id);
 
     public void setClub2Id(@Param("id") int id, @Param("club2Id") int club2Id);
-
 }
