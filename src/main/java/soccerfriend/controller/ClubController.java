@@ -63,34 +63,21 @@ public class ClubController {
     }
 
     /**
-     * club에 가입한 member들의 목록을 반환합니다.
+     * club에 가입신청한 member들의 목록을 반환합니다. approve가 true이면 승인된 맴버, false이면 승인되지 않은 맴버를 반환합니다.
      *
      * @param clubId
      * @return club에 가입한 member들의 목록
      */
-    @PostMapping("/{clubId}/club-members")
-    public List<ClubMember> clubMember(@PathVariable int clubId) {
+    @GetMapping("/{clubId}/club-members")
+    public List<ClubMember> clubMember(@PathVariable int clubId, @RequestParam boolean approve) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubMember(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
-        return clubMemberService.getClubMembers(clubId);
-    }
-
-    /**
-     * club에 신청하고 승인 대기중인 member들의 목록을 반환합니다.
-     *
-     * @param clubId
-     * @return club에 신청하고 승인 대기중인 member들의 목록
-     */
-    @PostMapping("/{clubId}/club-members?approved=false")
-    public List<ClubMember> notAcceptedClubMembers(@PathVariable int clubId) {
-        int memberId = authorizeService.getMemberId();
-        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
-            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        if(approve){
+            return clubMemberService.getClubMembers(clubId);
         }
-
         return clubMemberService.getNotAcceptedClubMembers(clubId);
     }
 
