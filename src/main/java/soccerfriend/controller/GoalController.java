@@ -23,6 +23,11 @@ public class GoalController {
     private final soccerfriend.service.GoalService goalService;
 
 
+    /**
+     * club의 운영진이 골에 대한 정보를 추가합니다.
+     *
+     * @param goal 골에 대한 정보
+     */
     @PostMapping
     public void addGoal(@RequestBody Goal goal) {
         int memberId = authorizeService.getMemberId();
@@ -35,11 +40,23 @@ public class GoalController {
         goalService.add(goal);
     }
 
+    /**
+     * 특정 id의 골을 조회합니다.
+     *
+     * @param id goal의 id
+     * @return
+     */
     @GetMapping("/{id}")
     public Goal getGoalById(@PathVariable int id) {
         return goalService.getGoalById(id);
     }
 
+    /**
+     * 특정 member가 현재까지 넣은 모든 골에 대한 정보를 조회합니다.
+     *
+     * @param memberId member의 id
+     * @return member가 지금까지 넣은 골
+     */
     @GetMapping("/member/{memberId}")
     public List<Goal> getGoalByMemberId(@PathVariable int memberId) {
         return goalService.getGoalByMemberId(memberId);

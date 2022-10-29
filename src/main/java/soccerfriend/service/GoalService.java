@@ -7,7 +7,6 @@ import soccerfriend.dto.Goal;
 import soccerfriend.dto.SoccerMatch;
 import soccerfriend.dto.SoccerMatchMember;
 import soccerfriend.dto.SoccerMatchRecruitment;
-import soccerfriend.exception.ExceptionInfo;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.mapper.GoalMapper;
 
