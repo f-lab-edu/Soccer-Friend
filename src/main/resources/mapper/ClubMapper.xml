@@ -7,7 +7,7 @@
     <insert id="insert" parameterType="soccerfriend.dto.Club">
         INSERT
         INTO club(name, leader, address_id, point, monthly_fee, payment_day, created_at, updated_at)
-        VALUES (#{name}, #{leader}, #{addressId}, #{point}, #{monthlyFee}, #{paymentDay} now(), now())
+        VALUES (#{name}, #{leader}, #{addressId}, #{point}, #{monthlyFee}, #{paymentDay}, now(), now())
     </insert>
 
     <select id="getClubById" resultType="soccerfriend.dto.Club">
