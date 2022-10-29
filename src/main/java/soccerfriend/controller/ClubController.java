@@ -162,23 +162,22 @@ public class ClubController {
         clubService.payMonthlyFee(clubId, memberId);
     }
 
-    @GetMapping("/{clubId}/club-members/paid")
-    public List<ClubMember> getPaidClubMembers(@PathVariable int clubId) {
+    /**
+     * paid가 true일 경우 회비를 납부한 회원들을, false일 경우 회비를 납부하지 않은 회원들을 반환합니다.
+     * @param clubId club의 id
+     * @param payment 회비 납부 여부
+     * @return 회비 납부여부에 관한 회원들
+     */
+    @GetMapping("/{clubId}/club-members")
+    public List<ClubMember> getClubMembersByPayment(@PathVariable int clubId, @RequestParam boolean payment) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
-        return clubMemberService.getPaidClubMembers(clubId);
-    }
-
-    @GetMapping("/{clubId}/club-members/not-paid")
-    public List<ClubMember> getNotPaidClubMembers(@PathVariable int clubId) {
-        int memberId = authorizeService.getMemberId();
-        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
-            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        if(payment){
+            return clubMemberService.getPaidClubMembers(clubId);
         }
-
         return clubMemberService.getNotPaidClubMembers(clubId);
     }
 }
