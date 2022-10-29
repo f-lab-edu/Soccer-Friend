@@ -27,15 +27,12 @@ public interface ClubMemberMapper {
 
     public List<ClubMember> getNotApprovedClubMembers(int clubId);
 
-    public List<ClubMember> getPaidClubMembers(int clubId);
-
-    public List<ClubMember> getNotPaidClubMembers(int clubId);
-
     public void setApprovedTrue(int id);
 
     public void delete(@Param("clubId") int clubId, @Param("memberId") int memberId);
 
-    public void setPaymentStatusTrue(@Param("clubId") int clubId, @Param("memberId") int memberId);
+    public List<ClubMember> getPaidClubMembers(@Param("clubId") int clubId, @Param("year") int year, @Param("month") int month);
 
-    public void setPaymentStatusFalse(@Param("clubId") int clubId, @Param("memberId") int memberId);
+    public List<ClubMember> getNotPaidClubMembers(@Param("clubId") int clubId, @Param("year") int year, @Param("month") int month);
 }
+

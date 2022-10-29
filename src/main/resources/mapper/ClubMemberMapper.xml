@@ -6,8 +6,8 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.ClubMember">
         INSERT
-        INTO club_member(club_id, member_id, grade, approved, payment_status, created_at, updated_at)
-        VALUES (#{clubId}, #{memberId}, #{grade}, #{approved}, #{paymentStatus}, now(), now())
+        INTO club_member(club_id, member_id, grade, approved, created_at, updated_at)
+        VALUES (#{clubId}, #{memberId}, #{grade}, #{approved}, now(), now())
     </insert>
 
     <select id="isClubLeader" resultType="boolean">
@@ -57,8 +57,6 @@
                member_id,
                grade,
                approved,
-               payment_status,
-               paid_at,
                created_at,
                updated_at
         FROM club_member
@@ -71,8 +69,6 @@
                member_id,
                grade,
                approved,
-               payment_status,
-               paid_at,
                created_at,
                updated_at
         FROM club_member
@@ -86,8 +82,6 @@
                member_id,
                grade,
                approved,
-               payment_status,
-               paid_at,
                created_at,
                updated_at
         FROM club_member
@@ -101,42 +95,11 @@
                member_id,
                grade,
                approved,
-               payment_status,
-               paid_at created_at,
+               created_at,
                updated_at
         FROM club_member
         WHERE club_id = #{clubId}
           AND approved = 0
-    </select>
-
-    <select id="getPaidClubMembers" resultType="soccerfriend.dto.ClubMember">
-        SELECT id,
-               club_id,
-               member_id,
-               grade,
-               approved,
-               payment_status,
-               paid_at,
-               created_at,
-               updated_at
-        FROM club_member
-        WHERE club_id = #{clubId}
-          AND payment_status = 1
-    </select>
-
-    <select id="getNotPaidClubMembers" resultType="soccerfriend.dto.ClubMember">
-        SELECT id,
-               club_id,
-               member_id,
-               grade,
-               approved,
-               payment_status,
-               paid_at,
-               created_at,
-               updated_at
-        FROM club_member
-        WHERE club_id = #{clubId}
-          AND payment_status = 0
     </select>
 
     <update id="setApprovedTrue">
@@ -153,21 +116,32 @@
           AND member_id = #{memberId}
     </delete>
 
-    <update id="setPaymentStatusTrue">
-        UPDATE club_member
-        SET payment_status = 1,
-            paid_at        = now(),
-            updated_at     = now()
-        WHERE club_id = #{clubId}
-          AND member_id = #{memberId}
-    </update>
+    <select id="getPaidClubMembers" resultType="soccerfriend.dto.ClubMember">
+        SELECT a.id,
+               a.club_id,
+               a.member_id,
+               a.grade,
+               a.approved,
+               a.created_at,
+               a.updated_at
+        FROM club_member a
+                 INNER JOIN club_monthly_fee b
+                            ON a.id = b.club_member_id
+        WHERE a.club_id = #{clubId}
+          AND b.month = #{month}
+          AND b.year = #{year}
+    </select>
 
-    <update id="setPaymentStatusFalse">
-        UPDATE club_member
-        SET payment_status = 0,
-            paid_at        = now(),
-            updated_at     = now()
-        WHERE club_id = #{clubId}
-          AND member_id = #{memberId}
-    </update>
+    <select id="getNotPaidClubMembers" resultType="soccerfriend.dto.ClubMember">
+        SELECT a.id,
+               a.club_id,
+               a.member_id,
+               a.grade,
+               a.approved,
+               a.created_at,
+               a.updated_at
+        FROM club_member a
+                 LEFT OUTER JOIN club_monthly_fee b
+        WHERE a.club_id = #{clubId}
+    </select>
 </mapper>

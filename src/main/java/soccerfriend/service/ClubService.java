@@ -10,6 +10,8 @@ import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.mapper.ClubMapper;
 
+import java.util.List;
+
 import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
@@ -173,6 +175,5 @@ public class ClubService {
         memberService.decreasePoint(memberId, fee);
         increasePont(clubId, fee);
         clubMonthlyFeeService.add(clubId, memberId, fee, year, month);
-        clubMemberService.setPaymentStatusTrue(clubId, memberId);
     }
 }
