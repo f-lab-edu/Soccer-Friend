@@ -26,9 +26,9 @@
         SELECT a.id, a.club1_score, a.club2_score, a.soccer_match_recruitment_id, a.created_at, a.updated_at
         FROM soccer_match a
                  INNER JOIN soccer_match_recruitment b
-                            ON a.soccer_match_recruitmnet_id = b.id
-        WHERE (b.club2_id =! null)
-          AND (b.club1_id = {clubId} OR b.club2_id = {clubId})
+                            ON a.soccer_match_recruitment_id = b.id
+        WHERE (b.club2_id is not null)
+          AND (b.club1_id = #{clubId} OR b.club2_id = #{clubId})
     </select>
 
     <update id="increaseClub1Score">

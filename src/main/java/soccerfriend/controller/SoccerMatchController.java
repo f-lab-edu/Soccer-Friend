@@ -2,6 +2,7 @@ package soccerfriend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import soccerfriend.dto.SoccerMatch;
 import soccerfriend.dto.SoccerMatchRecruitment;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
@@ -110,5 +111,15 @@ public class SoccerMatchController {
         }
 
         soccerMatchService.create(soccerMatchRecruitmentId);
+    }
+
+    @GetMapping("/{id}")
+    public SoccerMatch getSoccerMatchById(@PathVariable int id) {
+        return soccerMatchService.getSoccerMatchById(id);
+    }
+
+    @GetMapping("/club/{clubId}")
+    public List<SoccerMatch> getSoccerMatchByClubId(@PathVariable int clubId) {
+        return soccerMatchService.getSoccerMatchByClubId(clubId);
     }
 }
