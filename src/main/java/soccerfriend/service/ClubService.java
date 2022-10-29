@@ -76,4 +76,26 @@ public class ClubService {
     public boolean isIdExist(int id) {
         return clubMapper.isIdExist(id);
     }
+
+    /**
+     * club의 name을 변경합니다.
+     * @param id 변경하고자 하는 club의 id
+     * @param name 새로 변경할 name
+     */
+    public void updateName(int id, String name){
+        if (isNameExist(name)) {
+            throw new DuplicatedException(CLUB_NAME_DUPLICATED);
+        }
+
+        clubMapper.updateName(id, name);
+    }
+
+    /**
+     * club의 addressId를 변경합니다.
+     * @param id 변경하고자 하는 club의 id
+     * @param addressId 새로 변경할 addressId
+     */
+    public void updateAddressId(int id, int addressId){
+        clubMapper.updateAddressId(id, addressId);
+    }
 }

@@ -24,4 +24,16 @@
         SELECT EXISTS(SELECT * FROM club WHERE id = #{id})
     </select>
 
+    <update id="updateName">
+        UPDATE club
+        SET name = #{name}, updated_at = now()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateAddressId">
+        UPDATE club
+        SET address_id = #{addressId}, updated_at = now()
+        WHERE id = #{id}
+    </update>
+
 </mapper>
