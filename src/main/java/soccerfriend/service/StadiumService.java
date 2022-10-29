@@ -2,19 +2,13 @@ package soccerfriend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import soccerfriend.dto.ClubMember;
 import soccerfriend.dto.Stadium;
-import soccerfriend.exception.exception.DuplicatedException;
-import soccerfriend.mapper.ClubMemberMapper;
 import soccerfriend.mapper.StadiumMapper;
-import soccerfriend.utility.InputForm;
 import soccerfriend.utility.InputForm.UpdateStadiumRequest;
 
 import java.util.List;
 
-import static soccerfriend.dto.ClubMember.ClubMemberGrade.LEADER;
-import static soccerfriend.dto.ClubMember.ClubMemberGrade.MEMBER;
-import static soccerfriend.exception.ExceptionCode.CLUB_MEMBER_DUPLICATED;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 @RequiredArgsConstructor

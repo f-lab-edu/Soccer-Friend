@@ -3,16 +3,14 @@ package soccerfriend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Stadium;
-import soccerfriend.exception.ExceptionCode;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.service.AuthorizeService;
 import soccerfriend.service.StadiumService;
-import soccerfriend.utility.InputForm;
 import soccerfriend.utility.InputForm.UpdateStadiumRequest;
 
 import java.util.List;
 
-import static soccerfriend.exception.ExceptionCode.NOT_STADIUM_OWNER;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @RestController
 @RequiredArgsConstructor

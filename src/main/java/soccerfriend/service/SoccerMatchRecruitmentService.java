@@ -9,8 +9,7 @@ import soccerfriend.utility.InputForm.UpdateSoccerMatchRecruitmentRequest;
 
 import java.util.List;
 
-import static soccerfriend.exception.ExceptionCode.ALREADY_MATCH_APPROVED;
-import static soccerfriend.exception.ExceptionCode.SAME_AS_CLUB1;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 @RequiredArgsConstructor
