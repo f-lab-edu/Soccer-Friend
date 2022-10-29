@@ -42,4 +42,31 @@
         SET club2_score = club2_score + 1
         WHERE id = #{id}
     </update>
+
+    <select id="getClub1Id" resultType="int">
+        SELECT b.club1_id
+        FROM soccer_match a
+                 INNER JOIN soccer_match_recruitment b
+                            ON a.soccer_match_recruitment_id = b.id
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="getClub12d" resultType="int">
+        SELECT b.club2_id
+        FROM soccer_match a
+                 INNER JOIN soccer_match_recruitment b
+                            ON a.soccer_match_recruitment_id = b.id
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="isClubExist" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT *
+                       FROM soccer_match a
+                                INNER JOIN soccer_match_recruitment b
+                                           ON a.soccer_match_recruitment_id = b.id
+                       WHERE a.id = #{id}
+                         AND (b.club1_id = #{clubId} OR b.club2_id = #{clubId})
+                   )
+    </select>
 </mapper>

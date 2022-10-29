@@ -88,4 +88,16 @@ public class SoccerMatchService {
     public void increaseClub2Score(int id) {
         mapper.increaseClub2Score(id);
     }
+
+    public boolean isClubExist(int id, int clubId) {
+        return mapper.isClubExist(id, clubId);
+    }
+
+    public int getClub1Id(int id) {
+        return mapper.getClub1Id(id);
+    }
+
+    public int getClub2Id(int id) {
+        return mapper.getClub2Id(id);
+    }
 }

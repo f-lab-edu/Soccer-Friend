@@ -1,6 +1,7 @@
 package soccerfriend.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import soccerfriend.dto.SoccerMatch;
 import soccerfriend.dto.SoccerMatchRecruitment;
 
@@ -22,5 +23,10 @@ public interface SoccerMatchMapper {
 
     public void increaseClub2Score(int id);
 
+    public int getClub1Id(int id);
+
+    public int getClub2Id(int id);
+
+    public boolean isClubExist(@Param("id") int id, @Param("clubId") int clubId);
 
 }
