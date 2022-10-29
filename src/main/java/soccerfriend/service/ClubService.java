@@ -8,8 +8,6 @@ import soccerfriend.dto.ClubMember;
 import soccerfriend.dto.Member;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
-import soccerfriend.exception.exception.NoPermissionException;
-import soccerfriend.exception.exception.NotExistException;
 import soccerfriend.mapper.ClubMapper;
 
 import static soccerfriend.exception.ExceptionInfo.*;
@@ -21,6 +19,7 @@ public class ClubService {
     private final ClubMapper clubMapper;
     private final ClubMemberService clubMemberService;
     private final MemberService memberService;
+    private final ClubMonthlyFeeService clubMonthlyFeeService;
 
     /**
      * 클럽을 생성합니다.
@@ -159,17 +158,21 @@ public class ClubService {
      * @param memberId 납부하는 member의 id
      */
     @Transactional
-    public void payMonthlyFee(int clubId, int memberId) {
-
+    public void payMonthlyFee(int clubId, int memberId, int year, int month) {
         Member member = memberService.getMemberById(memberId);
+        ClubMember clubMember = clubMemberService.getClubMemberByClubIdAndMemberId(clubId, memberId);
         Club club = getClubById(clubId);
         int fee = club.getMonthlyFee();
         if (member.getPoint() < fee) {
             throw new BadRequestException(NOT_ENOUGH_POINT);
         }
+        if (clubMonthlyFeeService.isAlreadyPaid(clubId, memberId, year, month)) {
+            throw new BadRequestException(ALREADY_PAID_CLUB_MONTHLY_FEE);
+        }
 
         memberService.decreasePoint(memberId, fee);
         increasePont(clubId, fee);
-        clubMemberService.payMonthlyFee(clubId, memberId);
+        clubMonthlyFeeService.add(clubId, memberId, fee, year, month);
+        clubMemberService.setPaymentStatusTrue(clubId, memberId);
     }
 }

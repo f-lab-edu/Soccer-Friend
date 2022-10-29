@@ -24,6 +24,7 @@ public enum ExceptionInfo {
 
 
     NOT_ENOUGH_POINT(409, "포인트가 부족합니다."),
+    ALREADY_PAID_CLUB_MONTHLY_FEE(409, "이미 클럽에 월회비를 납부했습니다."),
     ALREADY_JOINED_CLUB(409, "이미 해당 클럽에 가입신청했습니다."),
     NICKNAME_DUPLICATED(409, "이미 존재하는 닉네임입니다"),
     CLUB_NAME_DUPLICATED(409, "이미 존재하는 클럽 이름입니다"),

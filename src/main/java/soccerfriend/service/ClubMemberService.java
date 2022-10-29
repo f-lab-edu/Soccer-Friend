@@ -111,7 +111,23 @@ public class ClubMemberService {
      */
     public ClubMember getClubMemberById(int id) {
         ClubMember clubMember = mapper.getClubMemberById(id);
-        if(clubMember == null){
+        if (clubMember == null) {
+            throw new BadRequestException(CLUB_MEMBER_NOT_EXIST);
+        }
+
+        return clubMember;
+    }
+
+    /**
+     * 특정 club에 속한 member의 clubMember를 반환합니다.
+     *
+     * @param clubId   club의 id
+     * @param memberId member의 id
+     * @return 특정 club에 속한 member의 clubMember 객체
+     */
+    public ClubMember getClubMemberByClubIdAndMemberId(int clubId, int memberId) {
+        ClubMember clubMember = mapper.getClubMemberByClubIdAndMemberId(clubId, memberId);
+        if (clubMember == null) {
             throw new BadRequestException(CLUB_MEMBER_NOT_EXIST);
         }
 
@@ -126,7 +142,7 @@ public class ClubMemberService {
      */
     public List<ClubMember> getClubMembers(int clubId) {
         List<ClubMember> clubMembers = mapper.getClubMembers(clubId);
-        if(clubMembers.isEmpty()){
+        if (clubMembers.isEmpty()) {
             throw new BadRequestException(CLUB_MEMBER_NOT_EXIST);
         }
 
@@ -141,7 +157,7 @@ public class ClubMemberService {
      */
     public List<ClubMember> getNotAcceptedClubMembers(int clubId) {
         List<ClubMember> notApprovedClubMembers = mapper.getNotApprovedClubMembers(clubId);
-        if(notApprovedClubMembers.isEmpty()){
+        if (notApprovedClubMembers.isEmpty()) {
             throw new BadRequestException(CLUB_MEMBER_NOT_EXIST);
         }
 
@@ -169,7 +185,6 @@ public class ClubMemberService {
     }
 
 
-
     /**
      * club에 신청한 member를 승인합니다.
      *
@@ -189,11 +204,33 @@ public class ClubMemberService {
         approve(clubMemberId);
     }
 
+    /**
+     * clubMember를 삭제합니다.
+     *
+     * @param clubId
+     * @param memberId
+     */
     public void deleteClubMember(int clubId, int memberId) {
         mapper.delete(clubId, memberId);
     }
 
-    public void payMonthlyFee(int clubId, int memberID) {
-        mapper.payMonthlyFee(clubId, memberID);
+    /**
+     * 월회비를 납부여부를 참으로 변경합니다.
+     *
+     * @param clubId
+     * @param memberID
+     */
+    public void setPaymentStatusTrue(int clubId, int memberID) {
+        mapper.setPaymentStatusTrue(clubId, memberID);
+    }
+
+    /**
+     * 월회비를 납부여부를 거짓으로 변경합니다.
+     *
+     * @param clubId
+     * @param memberID
+     */
+    public void setPaymentStatusFalse(int clubId, int memberID) {
+        mapper.setPaymentStatusFalse(clubId, memberID);
     }
 }

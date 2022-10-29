@@ -65,6 +65,21 @@
         WHERE id = #{id}
     </select>
 
+    <select id="getClubMemberByClubIdAndMemberId" resultType="soccerfriend.dto.ClubMember">
+        SELECT id,
+               club_id,
+               member_id,
+               grade,
+               approved,
+               payment_status,
+               paid_at,
+               created_at,
+               updated_at
+        FROM club_member
+        WHERE club_id = #{clubId}
+          AND member_id = #{memberId}
+    </select>
+
     <select id="getClubMembers" resultType="soccerfriend.dto.ClubMember">
         SELECT id,
                club_id,
@@ -138,9 +153,18 @@
           AND member_id = #{memberId}
     </delete>
 
-    <update id="payMonthlyFee">
+    <update id="setPaymentStatusTrue">
         UPDATE club_member
         SET payment_status = 1,
+            paid_at        = now(),
+            updated_at     = now()
+        WHERE club_id = #{clubId}
+          AND member_id = #{memberId}
+    </update>
+
+    <update id="setPaymentStatusFalse">
+        UPDATE club_member
+        SET payment_status = 0,
             paid_at        = now(),
             updated_at     = now()
         WHERE club_id = #{clubId}

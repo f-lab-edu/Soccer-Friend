@@ -159,7 +159,7 @@ public class ClubController {
             throw new NoPermissionException(NOT_CLUB_MEMBER);
         }
 
-        clubService.payMonthlyFee(clubId, memberId);
+        clubService.payMonthlyFee(clubId, memberId, year, month);
     }
 
     /**
