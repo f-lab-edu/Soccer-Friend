@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.SoccerMatchMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.SoccerMatch">
+        INSERT
+        INTO soccer_match(club1_score, club2_score, soccer_match_recruitment_id, created_at, updated_at)
+        VALUES (0, 0, #{soccerMatchRecruitmentId}, now(), now())
+    </insert>
+
+    <select id="getSoccerMatchById" resultType="soccerfriend.dto.SoccerMatch">
+        SELECT id, club1_score, club2_score, soccer_match_recruitment_id, created_at, updated_at
+        FROM soccer_match
+        WHERE id = #{id}
+    </select>
+
+    <select id="getSoccerMatchBySoccerMatchRecruitmentId" resultType="soccerfriend.dto.SoccerMatch">
+        SELECT id, club1_score, club2_score, soccer_match_recruitment_id, created_at, updated_at
+        FROM soccer_match
+        WHERE soccer_match_recruitment_id = #{soccerMatchRecruitmentId}
+    </select>
+
+    <select id="getSoccerMatchByClubId" resultType="soccerfriend.dto.SoccerMatch">
+        SELECT a.id, a.club1_score, a.club2_score, a.soccer_match_recruitment_id, a.created_at, a.updated_at
+        FROM soccer_match a
+                 INNER JOIN soccer_match_recruitment b
+                            ON a.soccer_match_recruitmnet_id = b.id
+        WHERE (b.club2_id =! null)
+          AND (b.club1_id = {clubId} OR b.club2_id = {clubId})
+    </select>
+
+    <update id="increaseClub1Score">
+        UPDATE soccer_match
+        SET club1_score = club1_score + 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="increaseClub2Score">
+        UPDATE soccer_match
+        SET club2_score = club2_score + 1
+        WHERE id = #{id}
+    </update>
+</mapper>

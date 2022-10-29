@@ -27,7 +27,7 @@ public class SoccerMatchRecruitment {
 
     int club1Id;
 
-    int club2Id;
+    Integer club2Id;
 
     LocalDateTime createdAt;
 

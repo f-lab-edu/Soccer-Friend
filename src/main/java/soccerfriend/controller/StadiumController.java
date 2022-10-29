@@ -3,16 +3,16 @@ package soccerfriend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Stadium;
-import soccerfriend.exception.ExceptionCode;
+
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.service.AuthorizeService;
 import soccerfriend.service.StadiumService;
-import soccerfriend.utility.InputForm;
 import soccerfriend.utility.InputForm.UpdateStadiumRequest;
 
 import java.util.List;
 
-import static soccerfriend.exception.ExceptionCode.NOT_STADIUM_OWNER;
+import static soccerfriend.exception.ExceptionInfo.NOT_STADIUM_OWNER;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -40,9 +40,9 @@ public class StadiumController {
     }
 
     @PatchMapping("{id}")
-    public void updateStadium(@PathVariable int id, @RequestBody UpdateStadiumRequest stadium){
+    public void updateStadium(@PathVariable int id, @RequestBody UpdateStadiumRequest stadium) {
         int stadiumOwnerId = authorizeService.getStadiumOwnerId();
-        if(!stadiumService.isStadiumOwner(id, stadiumOwnerId)){
+        if (!stadiumService.isStadiumOwner(id, stadiumOwnerId)) {
             throw new NoPermissionException(NOT_STADIUM_OWNER);
         }
 

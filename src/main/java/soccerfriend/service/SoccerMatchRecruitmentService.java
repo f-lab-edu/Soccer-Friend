@@ -9,8 +9,7 @@ import soccerfriend.utility.InputForm.UpdateSoccerMatchRecruitmentRequest;
 
 import java.util.List;
 
-import static soccerfriend.exception.ExceptionCode.ALREADY_MATCH_APPROVED;
-import static soccerfriend.exception.ExceptionCode.SAME_AS_CLUB1;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +44,11 @@ public class SoccerMatchRecruitmentService {
      * @return 특정 id의 soccerMatchRecruitment 객체
      */
     public SoccerMatchRecruitment getSoccerMatchRecruitmentById(int id) {
-        return mapper.getSoccerMatchRecruitmentById(id);
+        SoccerMatchRecruitment soccerMatchRecruitment = mapper.getSoccerMatchRecruitmentById(id);
+        if (soccerMatchRecruitment == null) {
+            throw new BadRequestException(SOCCER_MATCH_RECRUITMENT_NOT_EXIST);
+        }
+        return soccerMatchRecruitment;
     }
 
     /**
@@ -55,7 +58,11 @@ public class SoccerMatchRecruitmentService {
      * @return 특정 club이 참여한 모든 soccerMatchRecruitment
      */
     public List<SoccerMatchRecruitment> getSoccerMatchRecruitmentByClubId(int clubId) {
-        return mapper.getSoccerMatchRecruitmentByClubId(clubId);
+        List<SoccerMatchRecruitment> soccerMatchRecruitment = mapper.getSoccerMatchRecruitmentByClubId(clubId);
+        if (soccerMatchRecruitment.isEmpty()) {
+            throw new BadRequestException(SOCCER_MATCH_RECRUITMENT_NOT_EXIST);
+        }
+        return soccerMatchRecruitment;
     }
 
     /**
@@ -76,7 +83,7 @@ public class SoccerMatchRecruitmentService {
      */
     public void setClub2Id(int id, int club2Id) {
         SoccerMatchRecruitment soccerMatchRecruitment = getSoccerMatchRecruitmentById(id);
-        if (!isNoClub2Id(id)) {
+        if (!isNotClub2IdExist(id)) {
             throw new BadRequestException(ALREADY_MATCH_APPROVED);
         }
         if (soccerMatchRecruitment.getClub1Id() == club2Id) {
@@ -92,7 +99,7 @@ public class SoccerMatchRecruitmentService {
      * @param id soccerMatchRecruitment의 id
      * @return soccerMatchRecruitment의 상대 club이 정해졌는지 여부
      */
-    public boolean isNoClub2Id(int id) {
-        return mapper.isNoClub2Id(id);
+    public boolean isNotClub2IdExist(int id) {
+        return mapper.isNotClub2IdExist(id);
     }
 }

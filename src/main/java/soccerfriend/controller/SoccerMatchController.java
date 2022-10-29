@@ -3,16 +3,16 @@ package soccerfriend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.SoccerMatchRecruitment;
-import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.service.AuthorizeService;
 import soccerfriend.service.ClubMemberService;
 import soccerfriend.service.SoccerMatchRecruitmentService;
+import soccerfriend.service.SoccerMatchService;
 import soccerfriend.utility.InputForm;
 
 import java.util.List;
 
-import static soccerfriend.exception.ExceptionCode.*;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 
 @RestController
@@ -21,6 +21,7 @@ import static soccerfriend.exception.ExceptionCode.*;
 public class SoccerMatchController {
 
     private final ClubMemberService clubMemberService;
+    private final SoccerMatchService soccerMatchService;
     private final SoccerMatchRecruitmentService soccerMatchRecruitmentService;
     private final AuthorizeService authorizeService;
 
@@ -83,7 +84,7 @@ public class SoccerMatchController {
     /**
      * soccerMatchRecruitment를 보고 다른 클럽이 이를 승낙합니다. 즉 결투를 신청합니다.
      *
-     * @param id soccerMatchRecruitment의 id
+     * @param id     soccerMatchRecruitment의 id
      * @param clubId 신청하려는 club의 id
      */
     @PatchMapping("/{id}/club/{clubId}/approve")
@@ -94,5 +95,19 @@ public class SoccerMatchController {
         }
 
         soccerMatchRecruitmentService.setClub2Id(id, clubId);
+    }
+
+    @PostMapping("/soccer-match-recruitment/{soccerMatchRecruitmentId}/start")
+    public void startMatch(@PathVariable int soccerMatchRecruitmentId) {
+        int memberId = authorizeService.getMemberId();
+        SoccerMatchRecruitment soccerMatchRecruitment = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId);
+        int club1Id = soccerMatchRecruitment.getClub1Id();
+        int club2Id = soccerMatchRecruitment.getClub2Id();
+
+        if (!clubMemberService.isClubLeaderOrStaff(club1Id, memberId) && !clubMemberService.isClubLeaderOrStaff(club2Id, memberId)) {
+            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        }
+
+        soccerMatchService.create(soccerMatchRecruitmentId);
     }
 }

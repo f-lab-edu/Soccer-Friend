@@ -12,6 +12,8 @@ public enum ExceptionInfo {
     NOT_CLUB_MEMBER(401, "해당 클럽의 회원이 아닙니다."),
     IS_CLUB_LEADER(401, "해당 클럽의 leader는 탈퇴할 수 없습니다."),
 
+    SOCCER_MATCH_RECRUITMENT_NOT_EXIST(404, "존재하지 않은 경기모집공고입니다."),
+    SOCCER_MATCH_NOT_EXIST(404, "존재하지 않은 경기입니다."),
     POSITIONS_NOT_EXIST(404, "존재하지 않은 포지션입니다."),
     ADDRESS_NOT_EXIST(404, "존재하지 않은 주소입니다."),
     ID_NOT_EXIST(404, "존재하지 않은 아이디입니다."),
