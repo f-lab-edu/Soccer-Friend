@@ -111,7 +111,23 @@ public class ClubMemberService {
      */
     public ClubMember getClubMemberById(int id) {
         ClubMember clubMember = mapper.getClubMemberById(id);
-        if(clubMember == null){
+        if (clubMember == null) {
+            throw new BadRequestException(CLUB_MEMBER_NOT_EXIST);
+        }
+
+        return clubMember;
+    }
+
+    /**
+     * 특정 club에 속한 member의 clubMember를 반환합니다.
+     *
+     * @param clubId   club의 id
+     * @param memberId member의 id
+     * @return 특정 club에 속한 member의 clubMember 객체
+     */
+    public ClubMember getClubMemberByClubIdAndMemberId(int clubId, int memberId) {
+        ClubMember clubMember = mapper.getClubMemberByClubIdAndMemberId(clubId, memberId);
+        if (clubMember == null) {
             throw new BadRequestException(CLUB_MEMBER_NOT_EXIST);
         }
 
@@ -126,7 +142,7 @@ public class ClubMemberService {
      */
     public List<ClubMember> getClubMembers(int clubId) {
         List<ClubMember> clubMembers = mapper.getClubMembers(clubId);
-        if(clubMembers.isEmpty()){
+        if (clubMembers.isEmpty()) {
             throw new BadRequestException(CLUB_MEMBER_NOT_EXIST);
         }
 
@@ -141,34 +157,12 @@ public class ClubMemberService {
      */
     public List<ClubMember> getNotAcceptedClubMembers(int clubId) {
         List<ClubMember> notApprovedClubMembers = mapper.getNotApprovedClubMembers(clubId);
-        if(notApprovedClubMembers.isEmpty()){
+        if (notApprovedClubMembers.isEmpty()) {
             throw new BadRequestException(CLUB_MEMBER_NOT_EXIST);
         }
 
         return notApprovedClubMembers;
     }
-
-    /**
-     * 해당 club에 가입한 clubMember 중 월회비를 납부한 회원들의 목록을 반환합니다.
-     *
-     * @param clubId
-     * @return 월회비를 납부한 회원들의 목록
-     */
-    public List<ClubMember> getNotPaidClubMembers(int clubId) {
-        return mapper.getNotPaidClubMembers(clubId);
-    }
-
-    /**
-     * 해당 club에 가입한 clubMember 중 월회비를 납부하지 않은 회원들의 목록을 반환합니다.
-     *
-     * @param clubId
-     * @return 월회비를 납부한 회원들의 목록
-     */
-    public List<ClubMember> getPaidClubMembers(int clubId) {
-        return mapper.getPaidClubMembers(clubId);
-    }
-
-
 
     /**
      * club에 신청한 member를 승인합니다.
@@ -189,11 +183,37 @@ public class ClubMemberService {
         approve(clubMemberId);
     }
 
+    /**
+     * clubMember를 삭제합니다.
+     *
+     * @param clubId
+     * @param memberId
+     */
     public void deleteClubMember(int clubId, int memberId) {
         mapper.delete(clubId, memberId);
     }
 
-    public void payMonthlyFee(int clubId, int memberID) {
-        mapper.payMonthlyFee(clubId, memberID);
+    /**
+     * 특정 월에 회비를 납부한 회원들의 목록을 반환합니다.
+     *
+     * @param clubId
+     * @param year
+     * @param month
+     * @return
+     */
+    public List<ClubMember> getPaidClubMembers(int clubId, int year, int month) {
+        return mapper.getPaidClubMembers(clubId, year, month);
+    }
+
+    /**
+     * 특정 월에 회비를 납부하지 않은 회원들의 목록을 반환합니다.
+     *
+     * @param clubId
+     * @param year
+     * @param month
+     * @return
+     */
+    public List<ClubMember> getNotPaidClubMembers(int clubId, int year, int month) {
+        return mapper.getNotPaidClubMembers(clubId, year, month);
     }
 }

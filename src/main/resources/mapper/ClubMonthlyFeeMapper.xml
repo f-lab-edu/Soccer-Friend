@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.ClubMonthlyFeeMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.ClubMonthlyFee">
+        INSERT
+        INTO club_monthly_fee(club_id, club_member_id, price, year, month, paid_at, created_at, updated_at)
+        VALUES (#{clubId}, #{clubMemberId}, #{price}, #{year}, #{month}, now(), now(), now())
+    </insert>
+
+    <select id="isClubMonthlyFeeExist" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT id
+                       FROM club_monthly_fee
+                       WHERE club_id = #{clubId}
+                                 AND club_member_id = #{clubMemberId}
+                                 AND year = #{year}
+                                 AND month = #{month}
+                   )
+    </select>
+</mapper>

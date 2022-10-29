@@ -22,14 +22,17 @@ public class Club {
 
     private int monthlyFee;
 
+    private int paymentDay;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
     @Builder
-    public Club(String name, int addressId, int monthlyFee) {
+    public Club(String name, int addressId, int monthlyFee, int paymentDay) {
         this.name = name;
         this.addressId = addressId;
         this.monthlyFee = monthlyFee;
+        this.paymentDay = paymentDay;
     }
 }

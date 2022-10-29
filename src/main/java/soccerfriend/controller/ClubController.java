@@ -76,7 +76,7 @@ public class ClubController {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
-        if(approve){
+        if (approve) {
             return clubMemberService.getClubMembers(clubId);
         }
         return clubMemberService.getNotAcceptedClubMembers(clubId);
@@ -86,7 +86,7 @@ public class ClubController {
      * club의 name을 변경합니다.
      *
      * @param clubId
-     * @param name 새로 변경하고자하는 name
+     * @param name   새로 변경하고자하는 name
      */
     @PatchMapping("/{clubId}/name")
     public void updateName(@PathVariable int clubId, @RequestParam String name) {
@@ -152,33 +152,33 @@ public class ClubController {
      *
      * @param clubId 월회비를 납부하려는 club의 id
      */
-    @PatchMapping("/{clubId}/pay/monthly-fee")
-    public void payMonthlyFee(@PathVariable int clubId) {
+    @PostMapping("/{clubId}/pay/monthly-fee/{year}/{month}")
+    public void payMonthlyFee(@PathVariable int clubId, @PathVariable int year, @PathVariable int month) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubMember(clubId, memberId)) {
             throw new NoPermissionException(NOT_CLUB_MEMBER);
         }
 
-        clubService.payMonthlyFee(clubId, memberId);
+        clubService.payMonthlyFee(clubId, memberId, year, month);
     }
 
-    @GetMapping("/{clubId}/club-members/paid")
-    public List<ClubMember> getPaidClubMembers(@PathVariable int clubId) {
+    /**
+     * payment가 true일 경우 회비를 납부한 회원들을, false일 경우 회비를 납부하지 않은 회원들을 반환합니다.
+     *
+     * @param clubId  club의 id
+     * @param payment 회비 납부 여부
+     * @return 회비 납부여부에 관한 회원들
+     */
+    @GetMapping("/{clubId}/{year}/{month}/club-members")
+    public List<ClubMember> getClubMembersByPayment(@PathVariable int clubId, @PathVariable int year, @PathVariable int month, @RequestParam boolean payment) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
-        return clubMemberService.getPaidClubMembers(clubId);
-    }
-
-    @GetMapping("/{clubId}/club-members/not-paid")
-    public List<ClubMember> getNotPaidClubMembers(@PathVariable int clubId) {
-        int memberId = authorizeService.getMemberId();
-        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
-            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        if (payment) {
+            return clubMemberService.getPaidClubMembers(clubId, year, month);
         }
-
-        return clubMemberService.getNotPaidClubMembers(clubId);
+        return clubMemberService.getNotPaidClubMembers(clubId, year, month);
     }
 }
