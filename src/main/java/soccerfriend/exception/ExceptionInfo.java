@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum ExceptionCode {
+public enum ExceptionInfo {
 
     NOT_STADIUM_OWNER(401, "경기장의 사업자가 아닙니다."),
     NO_CLUB_PERMISSION(401, "클럽 내에서 권한이 없습니다."),

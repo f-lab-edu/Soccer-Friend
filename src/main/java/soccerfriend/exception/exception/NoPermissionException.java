@@ -1,14 +1,14 @@
 package soccerfriend.exception.exception;
 
 import lombok.Getter;
-import soccerfriend.exception.ExceptionCode;
+import soccerfriend.exception.ExceptionInfo;
 
 @Getter
 public class NoPermissionException extends RuntimeException {
 
-    private ExceptionCode exceptionCode;
+    private ExceptionInfo exceptionInfo;
 
-    public NoPermissionException(ExceptionCode exceptionCode) {
-        this.exceptionCode = exceptionCode;
+    public NoPermissionException(ExceptionInfo exceptionInfo) {
+        this.exceptionInfo = exceptionInfo;
     }
 }
