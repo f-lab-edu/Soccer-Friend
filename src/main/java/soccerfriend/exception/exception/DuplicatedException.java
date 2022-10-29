@@ -1,14 +1,14 @@
 package soccerfriend.exception.exception;
 
 import lombok.Getter;
-import soccerfriend.exception.ExceptionCode;
+import soccerfriend.exception.ExceptionInfo;
 
 @Getter
 public class DuplicatedException extends RuntimeException {
 
-    private ExceptionCode exceptionCode;
+    private ExceptionInfo exceptionInfo;
 
-    public DuplicatedException(ExceptionCode exceptionCode) {
-        this.exceptionCode = exceptionCode;
+    public DuplicatedException(ExceptionInfo exceptionInfo) {
+        this.exceptionInfo = exceptionInfo;
     }
 }

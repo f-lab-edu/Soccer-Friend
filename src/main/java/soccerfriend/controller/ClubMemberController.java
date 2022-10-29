@@ -8,7 +8,7 @@ import soccerfriend.service.AuthorizeService;
 import soccerfriend.service.ClubMemberService;
 
 
-import static soccerfriend.exception.ExceptionCode.*;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @RestController
 @RequiredArgsConstructor

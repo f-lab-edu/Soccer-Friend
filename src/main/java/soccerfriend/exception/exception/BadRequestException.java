@@ -1,14 +1,14 @@
 package soccerfriend.exception.exception;
 
 import lombok.Getter;
-import soccerfriend.exception.ExceptionCode;
+import soccerfriend.exception.ExceptionInfo;
 
 @Getter
 public class BadRequestException extends RuntimeException {
 
-    private ExceptionCode exceptionCode;
+    private ExceptionInfo exceptionInfo;
 
-    public BadRequestException(ExceptionCode exceptionCode) {
-        this.exceptionCode = exceptionCode;
+    public BadRequestException(ExceptionInfo exceptionInfo) {
+        this.exceptionInfo = exceptionInfo;
     }
 }
