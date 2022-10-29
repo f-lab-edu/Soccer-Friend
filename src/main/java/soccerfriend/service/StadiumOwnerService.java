@@ -13,7 +13,7 @@ import soccerfriend.utility.InputForm.UpdateStadiumOwnerRequest;
 
 import java.util.Optional;
 
-import static soccerfriend.exception.ExceptionCode.*;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 @RequiredArgsConstructor

@@ -12,7 +12,7 @@ import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
 import java.util.Optional;
 
-import static soccerfriend.exception.ExceptionCode.*;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 @RequiredArgsConstructor

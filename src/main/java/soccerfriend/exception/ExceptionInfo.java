@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum ExceptionCode {
+public enum ExceptionInfo {
 
     NO_CLUB_PERMISSION(401, "클럽 내에서 권한이 없습니다."),
     NOT_CLUB_MEMBER(401, "해당 club의 member가 아닙니다."),
