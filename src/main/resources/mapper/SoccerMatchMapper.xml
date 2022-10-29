@@ -33,13 +33,15 @@
 
     <update id="increaseClub1Score">
         UPDATE soccer_match
-        SET club1_score = club1_score + 1
+        SET club1_score = club1_score + 1,
+            updated_at  = now()
         WHERE id = #{id}
     </update>
 
     <update id="increaseClub2Score">
         UPDATE soccer_match
-        SET club2_score = club2_score + 1
+        SET club2_score = club2_score + 1,
+            updated_at  = now()
         WHERE id = #{id}
     </update>
 
