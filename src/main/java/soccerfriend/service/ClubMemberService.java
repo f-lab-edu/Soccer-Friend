@@ -3,13 +3,8 @@ package soccerfriend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.ClubMember;
-import soccerfriend.exception.ExceptionInfo;
-import soccerfriend.exception.exception.BadRequestException;
-import soccerfriend.dto.Member;
-import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
-import soccerfriend.mapper.ClubMapper;
 import soccerfriend.mapper.ClubMemberMapper;
 
 import java.util.List;
@@ -22,7 +17,6 @@ import static soccerfriend.exception.ExceptionInfo.*;
 public class ClubMemberService {
 
     private final ClubMemberMapper mapper;
-    private final MemberService memberService;
 
     /**
      * clubMember를 추가합니다.
