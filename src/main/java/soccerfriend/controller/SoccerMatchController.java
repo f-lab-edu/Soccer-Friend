@@ -47,12 +47,12 @@ public class SoccerMatchController {
     /**
      * 특정 id의 soccerMatchRecruitment를 조회합니다.
      *
-     * @param id soccerMatchRecruitment의 id
+     * @param soccerMatchRecruitmentId soccerMatchRecruitment의 id
      * @return 특정 id의 soccerMatchRecruitment 객체
      */
-    @GetMapping("/soccer-match-recruitment/{id}")
-    public SoccerMatchRecruitment getSoccerMatchRecruitmentById(@PathVariable int id) {
-        return soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(id);
+    @GetMapping("/soccer-match-recruitment/{soccerMatchRecruitmentId}")
+    public SoccerMatchRecruitment getSoccerMatchRecruitmentById(@PathVariable int soccerMatchRecruitmentId) {
+        return soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId);
     }
 
     /**
@@ -69,34 +69,34 @@ public class SoccerMatchController {
     /**
      * soccerMatchRecruitment의 정보를 수정합니다.
      *
-     * @param id      soccerMatchRecruitment의 id
-     * @param request 수정하고자 하는 값들
+     * @param soccerMatchRecruitmentId soccerMatchRecruitment의 id
+     * @param request                  수정하고자 하는 값들
      */
-    @PatchMapping("/{id}")
-    public void update(@PathVariable("id") int id, InputForm.UpdateSoccerMatchRecruitmentRequest request) {
+    @PatchMapping("/soccer-match-recruitment/{soccerMatchRecruitmentId}")
+    public void update(@PathVariable int soccerMatchRecruitmentId, InputForm.UpdateSoccerMatchRecruitmentRequest request) {
         int memberId = authorizeService.getMemberId();
-        int clubId = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(id).getClub1Id();
+        int clubId = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId).getClub1Id();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
-        soccerMatchRecruitmentService.update(id, request);
+        soccerMatchRecruitmentService.update(soccerMatchRecruitmentId, request);
     }
 
     /**
      * soccerMatchRecruitment를 보고 다른 클럽이 이를 승낙합니다. 즉 결투를 신청합니다.
      *
-     * @param id     soccerMatchRecruitment의 id
-     * @param clubId 신청하려는 club의 id
+     * @param soccerMatchRecruitmentId soccerMatchRecruitment의 id
+     * @param clubId                   신청하려는 club의 id
      */
-    @PatchMapping("/soccer-match-recruitment/{id}//approve")
-    public void approve(@PathVariable("id") int id, @RequestParam("clubId") int clubId) {
+    @PatchMapping("/soccer-match-recruitment/{soccerMatchRecruitmentId}//approve")
+    public void approve(@PathVariable int soccerMatchRecruitmentId, @RequestParam("clubId") int clubId) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
-        soccerMatchRecruitmentService.setClub2Id(id, clubId);
+        soccerMatchRecruitmentService.setClub2Id(soccerMatchRecruitmentId, clubId);
     }
 
     /**
@@ -121,12 +121,12 @@ public class SoccerMatchController {
     /**
      * 특정 id의 soccerMatch를 반환합니다.
      *
-     * @param id soccerMatch의 id
+     * @param soccerMatchId soccerMatch의 id
      * @return 특정 id의 soccerMatch
      */
-    @GetMapping("/{id}")
-    public SoccerMatch getSoccerMatchById(@PathVariable int id) {
-        return soccerMatchService.getSoccerMatchById(id);
+    @GetMapping("/{soccerMatchId}")
+    public SoccerMatch getSoccerMatchById(@PathVariable int soccerMatchId) {
+        return soccerMatchService.getSoccerMatchById(soccerMatchId);
     }
 
     /**
