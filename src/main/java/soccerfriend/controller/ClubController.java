@@ -11,7 +11,7 @@ import soccerfriend.service.ClubService;
 
 import java.util.List;
 
-import static soccerfriend.exception.ExceptionCode.*;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 
 @RestController

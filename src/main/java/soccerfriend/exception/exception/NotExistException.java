@@ -1,14 +1,14 @@
 package soccerfriend.exception.exception;
 
 import lombok.Getter;
-import soccerfriend.exception.ExceptionCode;
+import soccerfriend.exception.ExceptionInfo;
 
 @Getter
 public class NotExistException extends RuntimeException {
 
-    private ExceptionCode exceptionCode;
+    private ExceptionInfo exceptionInfo;
 
-    public NotExistException(ExceptionCode exceptionCode) {
-        this.exceptionCode = exceptionCode;
+    public NotExistException(ExceptionInfo exceptionInfo) {
+        this.exceptionInfo = exceptionInfo;
     }
 }
