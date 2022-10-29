@@ -76,4 +76,34 @@ public class ClubController {
 
         return clubMemberService.getNotAcceptedClubMembers(clubId);
     }
+
+    /**
+     * club의 name을 변경합니다.
+     * @param clubId
+     * @param name 새로 변경하고자하는 name
+     */
+    @PatchMapping("/{clubId}/name")
+    public void updateName(@PathVariable int clubId, @RequestParam String name){
+        int memberId = authorizeService.getMemberId();
+        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
+            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        }
+
+        clubService.updateName(clubId, name);
+    }
+
+    /**
+     * club의 name을 변경합니다.
+     * @param clubId
+     * @param addressId 새로 변경하고자 하는 addressId
+     */
+    @PatchMapping("/{clubId}/address-id")
+    public void updateAddressId(@PathVariable int clubId, @RequestParam int addressId){
+        int memberId = authorizeService.getMemberId();
+        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
+            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        }
+
+        clubService.updateAddressId(clubId, addressId);
+    }
 }
