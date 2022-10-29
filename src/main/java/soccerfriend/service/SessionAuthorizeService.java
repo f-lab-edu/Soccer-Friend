@@ -12,8 +12,8 @@ import javax.servlet.http.HttpSession;
 
 import java.util.Optional;
 
-import static soccerfriend.exception.ExceptionCode.LOGIN_FORM_INCORRECT;
-import static soccerfriend.exception.ExceptionCode.LOGIN_INFO_NOT_EXIST;
+import static soccerfriend.exception.ExceptionInfo.LOGIN_FORM_INCORRECT;
+import static soccerfriend.exception.ExceptionInfo.LOGIN_INFO_NOT_EXIST;
 import static soccerfriend.utility.SessionKey.SESSION_LOGIN_MEMBER;
 import static soccerfriend.utility.SessionKey.SESSION_LOGIN_STADIUM_OWNER;
 

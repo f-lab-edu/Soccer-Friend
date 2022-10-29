@@ -9,7 +9,7 @@ import soccerfriend.mapper.ClubMemberMapper;
 import java.util.List;
 
 import static soccerfriend.dto.ClubMember.ClubMemberGrade.*;
-import static soccerfriend.exception.ExceptionCode.*;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 @RequiredArgsConstructor

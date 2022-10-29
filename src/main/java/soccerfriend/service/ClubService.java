@@ -11,7 +11,7 @@ import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.exception.exception.NotExistException;
 import soccerfriend.mapper.ClubMapper;
 
-import static soccerfriend.exception.ExceptionCode.*;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 @RequiredArgsConstructor
