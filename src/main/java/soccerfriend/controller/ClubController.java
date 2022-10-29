@@ -67,7 +67,7 @@ public class ClubController {
      * @param clubId
      * @return club에 신청하고 승인 대기중인 member들의 목록
      */
-    @PostMapping("/{clubId}/club-members/not-approved")
+    @PostMapping("/{clubId}/club-members?approved=false")
     public List<ClubMember> notAcceptedClubMembers(@PathVariable int clubId) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
