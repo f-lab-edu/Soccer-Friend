@@ -3,6 +3,7 @@ package soccerfriend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.SoccerMatchRecruitment;
+import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.service.AuthorizeService;
 import soccerfriend.service.ClubMemberService;
@@ -32,8 +33,8 @@ public class SoccerMatchController {
      * @param clubId                 경기모집 공고를 게시한 club의 id
      * @param soccerMatchRecruitment 경기에 관한 기본정보
      */
-    @PostMapping("/club/{clubId}/create")
-    public void create(@PathVariable int clubId, @RequestBody SoccerMatchRecruitment soccerMatchRecruitment) {
+    @PostMapping("/soccer-match-recruitment")
+    public void create(@RequestParam int clubId, @RequestBody SoccerMatchRecruitment soccerMatchRecruitment) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
@@ -48,7 +49,7 @@ public class SoccerMatchController {
      * @param id soccerMatchRecruitment의 id
      * @return 특정 id의 soccerMatchRecruitment 객체
      */
-    @GetMapping("/{id}")
+    @GetMapping("/soccer-match-recruitment/{id}")
     public SoccerMatchRecruitment getSoccerMatchRecruitmentById(@PathVariable int id) {
         return soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(id);
     }
@@ -59,7 +60,7 @@ public class SoccerMatchController {
      * @param clubId club의 id
      * @return 특정 club이 참여한 모든 soccerMatchRecruitment
      */
-    @GetMapping("/club/{clubId}/all")
+    @GetMapping("/club/{clubId}/soccer-match-recruitments")
     public List<SoccerMatchRecruitment> getSoccerMatchRecruitmentByClubId(@PathVariable int clubId) {
         return soccerMatchRecruitmentService.getSoccerMatchRecruitmentByClubId(clubId);
     }
@@ -87,8 +88,8 @@ public class SoccerMatchController {
      * @param id     soccerMatchRecruitment의 id
      * @param clubId 신청하려는 club의 id
      */
-    @PatchMapping("/{id}/club/{clubId}/approve")
-    public void approve(@PathVariable("id") int id, @PathVariable("clubId") int clubId) {
+    @PatchMapping("/soccer-match-recruitment/{id}//approve")
+    public void approve(@PathVariable("id") int id, @RequestParam("clubId") int clubId) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);

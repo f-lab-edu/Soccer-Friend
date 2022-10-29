@@ -8,6 +8,7 @@ import soccerfriend.utility.InputForm.UpdateStadiumRequest;
 
 import java.util.List;
 
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 @RequiredArgsConstructor
