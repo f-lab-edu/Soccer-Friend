@@ -11,7 +11,7 @@ import soccerfriend.service.ClubService;
 
 import java.util.List;
 
-import static soccerfriend.exception.ExceptionCode.NO_CLUB_PERMISSION;
+import static soccerfriend.exception.ExceptionCode.*;
 
 
 @RestController
@@ -43,6 +43,23 @@ public class ClubController {
     public void join(@PathVariable int clubId) {
         int memberId = authorizeService.getMemberId();
         clubService.join(clubId, memberId);
+    }
+
+    /**
+     * club을 탈퇴합니다.
+     * @param clubId club의 id
+     */
+    @DeleteMapping("/{clubId}/member-delete")
+    public void memberDelete(@PathVariable int clubId){
+        int memberId = authorizeService.getMemberId();
+        if(!clubMemberService.isClubMember(clubId, memberId)){
+            throw new NoPermissionException(NOT_CLUB_MEMBER);
+        }
+        if(clubMemberService.isClubLeader(clubId, memberId)){
+            throw new NoPermissionException(IS_CLUB_LEADER);
+        }
+
+        clubMemberService.deleteClubMember(clubId, memberId);
     }
 
     /**
