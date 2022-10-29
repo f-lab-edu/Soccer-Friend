@@ -152,8 +152,8 @@ public class ClubController {
      *
      * @param clubId 월회비를 납부하려는 club의 id
      */
-    @PatchMapping("/{clubId}/pay/monthly-fee")
-    public void payMonthlyFee(@PathVariable int clubId) {
+    @PatchMapping("/{clubId}/pay/monthly-fee/{year}/{month}")
+    public void payMonthlyFee(@PathVariable int clubId, @PathVariable int year, @PathVariable int month) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubMember(clubId, memberId)) {
             throw new NoPermissionException(NOT_CLUB_MEMBER);
@@ -163,7 +163,8 @@ public class ClubController {
     }
 
     /**
-     * paid가 true일 경우 회비를 납부한 회원들을, false일 경우 회비를 납부하지 않은 회원들을 반환합니다.
+     * payment가 true일 경우 회비를 납부한 회원들을, false일 경우 회비를 납부하지 않은 회원들을 반환합니다.
+     *
      * @param clubId club의 id
      * @param payment 회비 납부 여부
      * @return 회비 납부여부에 관한 회원들
