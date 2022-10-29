@@ -27,7 +27,8 @@
 
     <update id="approve">
         UPDATE soccer_match_member
-        SET approved = true
+        SET approved   = true,
+            updated_at = now()
         WHERE id = #{id}
     </update>
 
