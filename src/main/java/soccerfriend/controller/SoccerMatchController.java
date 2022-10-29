@@ -99,6 +99,11 @@ public class SoccerMatchController {
         soccerMatchRecruitmentService.setClub2Id(id, clubId);
     }
 
+    /**
+     * 경기모집공고를 통해 예정된 경기를 시작합니다. 이 때 soccerMatch가 생성됩니다.
+     *
+     * @param soccerMatchRecruitmentId 경기모집공고의 id
+     */
     @PostMapping("/soccer-match-recruitment/{soccerMatchRecruitmentId}/start")
     public void startMatch(@PathVariable int soccerMatchRecruitmentId) {
         int memberId = authorizeService.getMemberId();
@@ -113,11 +118,23 @@ public class SoccerMatchController {
         soccerMatchService.create(soccerMatchRecruitmentId);
     }
 
+    /**
+     * 특정 id의 soccerMatch를 반환합니다.
+     *
+     * @param id soccerMatch의 id
+     * @return 특정 id의 soccerMatch
+     */
     @GetMapping("/{id}")
     public SoccerMatch getSoccerMatchById(@PathVariable int id) {
         return soccerMatchService.getSoccerMatchById(id);
     }
 
+    /**
+     * 특정 club이 참여한 모든 soccerMatch를 반환합니다.
+     *
+     * @param clubId club의 id
+     * @return 특정 club이 참여한 모든 soccerMatch
+     */
     @GetMapping("/club/{clubId}")
     public List<SoccerMatch> getSoccerMatchByClubId(@PathVariable int clubId) {
         return soccerMatchService.getSoccerMatchByClubId(clubId);
