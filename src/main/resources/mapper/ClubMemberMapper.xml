@@ -142,6 +142,7 @@
                a.updated_at
         FROM club_member a
                  LEFT OUTER JOIN club_monthly_fee b
+                                 ON a.id = b.club_member_id
         WHERE a.club_id = #{clubId}
     </select>
 </mapper>

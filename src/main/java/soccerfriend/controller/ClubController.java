@@ -152,7 +152,7 @@ public class ClubController {
      *
      * @param clubId 월회비를 납부하려는 club의 id
      */
-    @PatchMapping("/{clubId}/pay/monthly-fee/{year}/{month}")
+    @PostMapping("/{clubId}/pay/monthly-fee/{year}/{month}")
     public void payMonthlyFee(@PathVariable int clubId, @PathVariable int year, @PathVariable int month) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubMember(clubId, memberId)) {

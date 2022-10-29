@@ -174,6 +174,6 @@ public class ClubService {
 
         memberService.decreasePoint(memberId, fee);
         increasePont(clubId, fee);
-        clubMonthlyFeeService.add(clubId, memberId, fee, year, month);
+        clubMonthlyFeeService.add(clubId, clubMember.getId(), fee, year, month);
     }
 }
