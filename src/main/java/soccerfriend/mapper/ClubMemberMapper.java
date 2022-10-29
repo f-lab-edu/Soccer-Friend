@@ -17,6 +17,8 @@ public interface ClubMemberMapper {
 
     public boolean isClubMember(@Param("clubId") int clubId, @Param("memberId") int memberId);
 
+    public boolean isApplied(@Param("clubId") int clubId, @Param("memberId") int memberId);
+
     public ClubMember getClubMemberById(int id);
 
     public List<ClubMember> getClubMembers(int clubId);

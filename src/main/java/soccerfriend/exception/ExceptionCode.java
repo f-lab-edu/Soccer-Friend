@@ -18,6 +18,8 @@ public enum ExceptionCode {
     CLUB_ID_NOT_EXIST(404, "해당 club id가 존재하지 않습니다"),
 
 
+    NOT_ENOUGH_POINT(409, "포인트가 부족합니다."),
+    ALREADY_JOINED_CLUB(409, "이미 해당 클럽에 가입신청했습니다."),
     NICKNAME_DUPLICATED(409, "이미 존재하는 닉네임입니다"),
     CLUB_NAME_DUPLICATED(409, "이미 존재하는 클럽 이름입니다"),
     CLUB_MEMBER_DUPLICATED(409, "이미 존재하는 클럽 회원입니다"),

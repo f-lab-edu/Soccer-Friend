@@ -50,4 +50,24 @@
         WHERE id = #{id}
     </update>
 
+    <update id="addPoint">
+        UPDATE member
+        SET point  = point + #{point},
+            updated_at=now()
+        WHERE id = #{id}
+    </update>
+
+    <update id="increasePoint">
+        UPDATE member
+        SET point  = point + #{point},
+            updated_at=now()
+        WHERE id = #{id}
+    </update>
+
+    <update id="decreasePoint">
+        UPDATE member
+        SET point  = point - #{point},
+            updated_at=now()
+        WHERE id = #{id}
+    </update>
 </mapper>
