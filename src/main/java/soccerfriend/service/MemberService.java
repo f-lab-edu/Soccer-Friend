@@ -58,7 +58,12 @@ public class MemberService {
      * @return 특정 id의 member 객체
      */
     public Member getMemberById(int id) {
-        return mapper.getMemberById(id);
+        Member member = mapper.getMemberById(id);
+        if(member == null){
+            throw new BadRequestException(MEMBER_NOT_EXIST);
+        }
+
+        return member;
     }
 
     /**
