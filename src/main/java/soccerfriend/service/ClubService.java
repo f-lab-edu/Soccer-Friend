@@ -22,6 +22,7 @@ public class ClubService {
     private final ClubMemberService clubMemberService;
     private final MemberService memberService;
     private final ClubMonthlyFeeService clubMonthlyFeeService;
+    private final ClubSoccerMatchRecordService clubSoccerMatchRecordService;
 
     /**
      * 클럽을 생성합니다.
@@ -29,6 +30,7 @@ public class ClubService {
      * @param memberId 클럽을 생성하는 member의 id
      * @param club     생성하려는 club의 기본정보
      */
+    @Transactional
     public void create(int memberId, Club club) {
 
         if (isNameExist(club.getName())) {
@@ -44,9 +46,7 @@ public class ClubService {
                            .build();
 
         clubMapper.insert(oldClub);
-
         Club newClub = clubMapper.getClubByName(club.getName());
-
         clubMemberService.addLeader(newClub.getId(), memberId);
     }
 

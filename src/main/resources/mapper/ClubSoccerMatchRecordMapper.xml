@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.ClubSoccerMatchRecordMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.ClubSoccerMatchRecord">
+        INSERT
+        INTO club_soccer_match_record(club_id, win, draw, lose, created_at, updated_at)
+        VALUES (#{clubId}, #{win}, #{draw}, #{lose}, now(), now())
+    </insert>
+
+    <update id="increaseWin">
+        UPDATE club_soccer_match_record
+        VALUES win = win + 1
+        WHERE club_id = #{clubId}
+    </update>
+
+    <update id="increaseDraw">
+        UPDATE club_soccer_match_record
+        VALUES draw = draw + 1
+        WHERE club_id = #{clubId}
+    </update>
+
+    <update id="increaseLose">
+        UPDATE club_soccer_match_record
+        VALUES lose = lose + 1
+        WHERE club_id = #{clubId}
+    </update>
+
+    <select id="isClubIdExist" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT *
+                       FROM club_soccer_match_record
+                       WHERE club_id = #{clubId}
+                   )
+    </select>
+</mapper>

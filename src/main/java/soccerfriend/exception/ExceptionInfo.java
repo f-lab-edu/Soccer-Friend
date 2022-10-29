@@ -13,6 +13,7 @@ public enum ExceptionInfo {
     NOT_CLUB_MEMBER(401, "해당 클럽의 회원이 아닙니다."),
     IS_CLUB_LEADER(401, "해당 클럽의 leader는 탈퇴할 수 없습니다."),
 
+    CLUB_HAS_NO_RECORD(404, "해당 클럽은 기록을 저장하고 있지 않습니다."),
     NOT_PROPER_GOAL(404, "골에 대한 정보가 정확하지 않습니다. 세트와 시간을 다시 확인해주세요."),
     GOAL_NOT_EXIST(404, "존재하지 않은 골입니다."),
     SOCCER_MATCH_MEMBER_NOT_EXIST(404, "존재하지 않은 경기참가선수입니다."),
@@ -31,6 +32,7 @@ public enum ExceptionInfo {
     CLUB_NOT_EXIST(404, "해당 클럽이 존재하지 않습니다"),
 
 
+    ALREADY_CLUB_HAS_RECORD(409, "해당클럽은 이미 기록을 저장하고 있습니다."),
     NOT_ENOUGH_POINT(409, "포인트가 부족합니다."),
     SAME_AS_CLUB1(409, "경기 주최클럽과 동일한 클럽은 상대가 될 수 없습니다."),
     ALREADY_MATCH_APPROVED(409, "이미 성사된 경기입니다."),
