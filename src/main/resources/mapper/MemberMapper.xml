@@ -10,11 +10,12 @@
         VALUES (#{memberId}, #{password}, #{nickname}, #{point}, #{positionsId}, #{addressId}, now(), now())
     </insert>
 
-    <delete id="delete" parameterType="int">
-        DELETE
-        FROM member
+    <update id="delete">
+        UPDATE member
+        SET deleted    = true,
+            updated_at = now()
         WHERE id = #{id}
-    </delete>
+    </update>
 
     <select id="isMemberIdExist" resultType="boolean">
         SELECT EXISTS (SELECT * FROM member WHERE member_id = #{memberId})

@@ -50,7 +50,7 @@ public class MemberController {
     /**
      * member의 탈퇴를 수행합니다.
      */
-    @DeleteMapping
+    @PatchMapping("/delete")
     public void deleteAccount() {
         int id = authorizeService.getMemberId();
         memberService.deleteAccount(id);
