@@ -53,7 +53,7 @@
         WHERE a.id = #{id}
     </select>
 
-    <select id="getClub12d" resultType="int">
+    <select id="getClub2Id" resultType="int">
         SELECT b.club2_id
         FROM soccer_match a
                  INNER JOIN soccer_match_recruitment b
@@ -70,5 +70,17 @@
                        WHERE a.id = #{id}
                          AND (b.club1_id = #{clubId} OR b.club2_id = #{clubId})
                    )
+    </select>
+
+    <select id="getClub1Score" resultType="int">
+        SELECT club1_score
+        FROM soccer_match
+        WHERE id = #{id}
+    </select>
+
+    <select id="getClub2Score" resultType="int">
+        SELECT club2_score
+        FROM soccer_match
+        WHERE id = #{id}
     </select>
 </mapper>

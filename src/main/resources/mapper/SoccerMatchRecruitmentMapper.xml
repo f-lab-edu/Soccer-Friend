@@ -58,7 +58,7 @@
         WHERE id = #{id}
     </update>
 
-    <select id="isNotClub2IdExist" resultType="boolean">
+    <select id="isClub2IdExist" resultType="boolean">
         SELECT EXISTS(SELECT * FROM soccer_match_recruitment WHERE id = #{id} AND club2_id = 0)
     </select>
 

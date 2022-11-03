@@ -12,19 +12,22 @@
 
     <update id="increaseWin">
         UPDATE club_soccer_match_record
-        VALUES win = win + 1
+        SET win        = win + 1,
+            updated_at = now()
         WHERE club_id = #{clubId}
     </update>
 
     <update id="increaseDraw">
         UPDATE club_soccer_match_record
-        VALUES draw = draw + 1
+        SET draw       = draw + 1,
+            updated_at = now()
         WHERE club_id = #{clubId}
     </update>
 
     <update id="increaseLose">
         UPDATE club_soccer_match_record
-        VALUES lose = lose + 1
+        SET lose       = lose + 1,
+            updated_at = now()
         WHERE club_id = #{clubId}
     </update>
 

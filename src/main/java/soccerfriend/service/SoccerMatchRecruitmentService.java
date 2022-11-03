@@ -83,7 +83,7 @@ public class SoccerMatchRecruitmentService {
      */
     public void setClub2Id(int id, int club2Id) {
         SoccerMatchRecruitment soccerMatchRecruitment = getSoccerMatchRecruitmentById(id);
-        if (!isNotClub2IdExist(id)) {
+        if (isClub2IdExist(id)) {
             throw new BadRequestException(ALREADY_MATCH_APPROVED);
         }
         if (soccerMatchRecruitment.getClub1Id() == club2Id) {
@@ -99,7 +99,7 @@ public class SoccerMatchRecruitmentService {
      * @param id soccerMatchRecruitment의 id
      * @return soccerMatchRecruitment의 상대 club이 정해졌는지 여부
      */
-    public boolean isNotClub2IdExist(int id) {
-        return mapper.isNotClub2IdExist(id);
+    public boolean isClub2IdExist(int id) {
+        return mapper.isClub2IdExist(id);
     }
 }

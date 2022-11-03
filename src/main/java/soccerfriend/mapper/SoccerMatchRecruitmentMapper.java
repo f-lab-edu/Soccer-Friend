@@ -20,5 +20,5 @@ public interface SoccerMatchRecruitmentMapper {
 
     public void setClub2Id(@Param("id") int id, @Param("club2Id") int club2Id);
 
-    public boolean isNotClub2IdExist(int id);
+    public boolean isClub2IdExist(int id);
 }

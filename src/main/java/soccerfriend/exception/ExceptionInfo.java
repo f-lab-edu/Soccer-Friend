@@ -10,6 +10,7 @@ public enum ExceptionInfo {
     NOT_CLUB_OF_SOCCER_MATCH(401, "경기에 참여하는 club이 아닙니다."),
     NOT_STADIUM_OWNER(401, "경기장의 사업자가 아닙니다."),
     NO_CLUB_PERMISSION(401, "클럽 내에서 권한이 없습니다."),
+    NO_SUBMIT_MATCH_PERMISSION(401, "클럽결과 제출은 주최클럽의 운영진만 가능합니다."),
     NOT_CLUB_MEMBER(401, "해당 클럽의 회원이 아닙니다."),
     IS_CLUB_LEADER(401, "해당 클럽의 leader는 탈퇴할 수 없습니다."),
 

@@ -16,6 +16,7 @@ import static soccerfriend.exception.ExceptionInfo.SOCCER_MATCH_NOT_EXIST;
 public class SoccerMatchService {
 
     private final SoccerMatchMapper mapper;
+    private final ClubSoccerMatchRecordService clubSoccerMatchRecordService;
 
     /**
      * soccerMatch를 생성합니다. 이 때 생성된 soccerMatch는 점수가 0대 0인 초기 상황의 상태입니다.
@@ -89,15 +90,70 @@ public class SoccerMatchService {
         mapper.increaseClub2Score(id);
     }
 
+    /**
+     * 해당 soccerMatch가 존재하는지 확인합니다.
+     *
+     * @param id     soccerMatch의 id
+     * @param clubId club의 id
+     * @return
+     */
     public boolean isClubExist(int id, int clubId) {
         return mapper.isClubExist(id, clubId);
     }
 
+    /**
+     * soccerMatch의 club1의 id를 반환합니다.
+     *
+     * @param id soccerMatch의 id
+     * @return club1의 id
+     */
     public int getClub1Id(int id) {
         return mapper.getClub1Id(id);
     }
 
+    /**
+     * soccerMatch의 club2의 id를 반환합니다.
+     *
+     * @param id soccerMatch의 id
+     * @return club2의 id
+     */
     public int getClub2Id(int id) {
         return mapper.getClub2Id(id);
+    }
+
+    public int getClub1Score(int id) {
+        return mapper.getClub1Score(id);
+    }
+
+    public int getClub2Score(int id) {
+        return mapper.getClub2Score(id);
+    }
+
+    /**
+     * 경기결과 기입을 완료하여 이를 제출하고 전적에 반영합니다.
+     *
+     * @param id soccerMatch의 id
+     */
+    public void submit(int id) {
+        int club1Score = getClub1Score(id);
+        int club2Score = getClub2Score(id);
+        int club1Id = getClub1Id(id);
+        int club2Id = getClub2Id(id);
+
+        if (club1Score > club2Score) {
+            clubSoccerMatchRecordService.increaseWin(club1Id);
+            clubSoccerMatchRecordService.increaseLose(club2Id);
+            return;
+        }
+        else if (club1Score == club2Score) {
+            clubSoccerMatchRecordService.increaseDraw(club1Id);
+            clubSoccerMatchRecordService.increaseDraw(club2Id);
+            return;
+        }
+        else {
+            clubSoccerMatchRecordService.increaseLose(club1Id);
+            clubSoccerMatchRecordService.increaseWin(club2Id);
+            return;
+        }
     }
 }
