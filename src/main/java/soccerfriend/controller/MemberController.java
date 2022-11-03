@@ -95,4 +95,26 @@ public class MemberController {
         memberService.updatePassword(memberId, passwordRequest);
         authorizeService.logout();
     }
+
+    /**
+     * member의 point를 증가시킵니다.
+     *
+     * @param point 증가시키고자 하는 point의 양
+     */
+    @PostMapping("/point/increase")
+    public void increasePoint(@RequestParam int point) {
+        int memberId = authorizeService.getMemberId();
+        memberService.increasePoint(memberId, point);
+    }
+
+    /**
+     * member의 point를 감소시킵니다.
+     *
+     * @param point 감소시키고자 하는 point의 양
+     */
+    @PostMapping("/point/decrease")
+    public void decreasePoint(@RequestParam int point) {
+        int memberId = authorizeService.getMemberId();
+        memberService.decreasePoint(memberId, point);
+    }
 }

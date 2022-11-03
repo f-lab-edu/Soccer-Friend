@@ -3,6 +3,7 @@ package soccerfriend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.ClubMember;
+import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.mapper.ClubMemberMapper;
 
@@ -96,7 +97,12 @@ public class ClubMemberService {
      * @return 해당 id의 clubMember 객체
      */
     public ClubMember getClubMemberById(int id) {
-        return mapper.getClubMemberById(id);
+        ClubMember clubMember = mapper.getClubMemberById(id);
+        if(clubMember == null){
+            throw new BadRequestException(CLUB_MEMBER_NOT_EXIST);
+        }
+
+        return clubMember;
     }
 
     /**
@@ -106,7 +112,12 @@ public class ClubMemberService {
      * @return 승인된 clubMember의 목록
      */
     public List<ClubMember> getClubMembers(int clubId) {
-        return mapper.getClubMembers(clubId);
+        List<ClubMember> clubMembers = mapper.getClubMembers(clubId);
+        if(clubMembers.isEmpty()){
+            throw new BadRequestException(CLUB_MEMBER_NOT_EXIST);
+        }
+
+        return clubMembers;
     }
 
     /**
@@ -116,7 +127,12 @@ public class ClubMemberService {
      * @return 신청했지만 아직 승인이 안된 clubMember의 목록
      */
     public List<ClubMember> getNotAcceptedClubMembers(int clubId) {
-        return mapper.getNotApprovedClubMembers(clubId);
+        List<ClubMember> notApprovedClubMembers = mapper.getNotApprovedClubMembers(clubId);
+        if(notApprovedClubMembers.isEmpty()){
+            throw new BadRequestException(CLUB_MEMBER_NOT_EXIST);
+        }
+
+        return notApprovedClubMembers;
     }
 
     /**

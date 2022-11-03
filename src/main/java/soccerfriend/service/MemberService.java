@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.Member;
+import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.mapper.MemberMapper;
@@ -48,6 +49,21 @@ public class MemberService {
      */
     public void deleteAccount(int id) {
         mapper.delete(id);
+    }
+
+    /**
+     * 특정 id의 member를 반환합니다.
+     *
+     * @param id member의 id
+     * @return 특정 id의 member 객체
+     */
+    public Member getMemberById(int id) {
+        Member member = mapper.getMemberById(id);
+        if(member == null){
+            throw new BadRequestException(MEMBER_NOT_EXIST);
+        }
+
+        return member;
     }
 
     /**
@@ -111,7 +127,7 @@ public class MemberService {
     public void updatePassword(int id, UpdatePasswordRequest passwordRequest) {
         String before = passwordRequest.getBefore();
         String after = passwordRequest.getAfter();
-        String encryptedCurrent = mapper.getMemberById(id).getPassword();
+        String encryptedCurrent = getMemberById(id).getPassword();
 
         if (BCrypt.checkpw(after, encryptedCurrent)) {
             throw new NotMatchException(PASSWORD_SAME);
@@ -119,5 +135,29 @@ public class MemberService {
 
         after = BCrypt.hashpw(after, BCrypt.gensalt());
         mapper.updatePassword(id, after);
+    }
+
+    /**
+     * member의 point를 증가시킵니다.
+     *
+     * @param id member의 id
+     * @param point 증가시키고자 하는 point의 양
+     */
+    public void increasePoint(int id, int point) {
+        mapper.increasePoint(id, point);
+    }
+
+    /**
+     * member의 point를 감소시킵니다.
+     *
+     * @param id member의 id
+     * @param point 감소시키고자 하는 point의 양
+     */
+    public void decreasePoint(int id, int point) {
+        Member member = getMemberById(id);
+        if (member.getPoint() < point) {
+            throw new BadRequestException(NOT_ENOUGH_POINT);
+        }
+        mapper.decreasePoint(id, point);
     }
 }
