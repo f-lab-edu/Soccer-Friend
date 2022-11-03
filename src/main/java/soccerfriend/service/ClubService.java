@@ -48,6 +48,7 @@ public class ClubService {
         clubMapper.insert(oldClub);
         Club newClub = clubMapper.getClubByName(club.getName());
         clubMemberService.addLeader(newClub.getId(), memberId);
+        clubSoccerMatchRecordService.create(newClub.getId());
     }
 
     /**

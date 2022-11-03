@@ -3,7 +3,6 @@ package soccerfriend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.ClubSoccerMatchRecord;
-import soccerfriend.exception.ExceptionInfo;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.mapper.ClubSoccerMatchRecordMapper;
 
