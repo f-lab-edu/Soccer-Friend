@@ -8,7 +8,7 @@ import soccerfriend.mapper.SoccerMatchMapper;
 
 import java.util.List;
 
-import static soccerfriend.exception.ExceptionInfo.SOCCER_MATCH_NOT_EXIST;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 
 @Service
@@ -135,6 +135,10 @@ public class SoccerMatchService {
      * @param id soccerMatch의 id
      */
     public void submit(int id) {
+        if (isSubmitted(id)) {
+            throw new BadRequestException(ALREADY_SUBMITTED_MATCH);
+        }
+
         int club1Score = getClub1Score(id);
         int club2Score = getClub2Score(id);
         int club1Id = getClub1Id(id);
@@ -143,17 +147,34 @@ public class SoccerMatchService {
         if (club1Score > club2Score) {
             clubSoccerMatchRecordService.increaseWin(club1Id);
             clubSoccerMatchRecordService.increaseLose(club2Id);
-            return;
         }
         else if (club1Score == club2Score) {
             clubSoccerMatchRecordService.increaseDraw(club1Id);
             clubSoccerMatchRecordService.increaseDraw(club2Id);
-            return;
         }
         else {
             clubSoccerMatchRecordService.increaseLose(club1Id);
             clubSoccerMatchRecordService.increaseWin(club2Id);
-            return;
         }
+
+        setSubmittedTrue(id);
+    }
+
+    /**
+     * 해당 soccerMatch의 성적 반영처리 여부인 submitted를 true로 바꿉니다.
+     *
+     * @param id soccerMatch의 id
+     */
+    public void setSubmittedTrue(int id) {
+        mapper.setSubmittedTrue(id);
+    }
+
+    /** 해당 soccerMatch의 성적반영처리 여부를 반환합니다.
+     *
+     * @param id soccerMatch의 id
+     * @return 성적반영처리 여부
+     */
+    public boolean isSubmitted(int id) {
+        return mapper.isSubmitted(id);
     }
 }

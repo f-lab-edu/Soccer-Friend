@@ -32,4 +32,8 @@ public interface SoccerMatchMapper {
     public int getClub1Score(int id);
 
     public int getClub2Score(int id);
+
+    public void setSubmittedTrue(int id);
+
+    public boolean isSubmitted(int id);
 }

@@ -6,8 +6,8 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.SoccerMatch">
         INSERT
-        INTO soccer_match(club1_score, club2_score, soccer_match_recruitment_id, created_at, updated_at)
-        VALUES (0, 0, #{soccerMatchRecruitmentId}, now(), now())
+        INTO soccer_match(club1_score, club2_score, soccer_match_recruitment_id, submitted, created_at, updated_at)
+        VALUES (0, 0, #{soccerMatchRecruitmentId}, 0, now(), now())
     </insert>
 
     <select id="getSoccerMatchById" resultType="soccerfriend.dto.SoccerMatch">
@@ -82,5 +82,17 @@
         SELECT club2_score
         FROM soccer_match
         WHERE id = #{id}
+    </select>
+
+    <update id="setSubmittedTrue">
+        UPDATE soccer_match
+        SET submitted = true
+        WHERE id = #{id}
+    </update>
+
+    <select id="isSubmitted" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT * FROM soccer_match WHERE id = #{id} AND submitted = true
+                   )
     </select>
 </mapper>
