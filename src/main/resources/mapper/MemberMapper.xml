@@ -28,7 +28,7 @@
         DELETE
         FROM member
         WHERE deleted = true
-          AND DATE_DIFF(updated_at, #{date}) > #{days}
+          AND DATE_DIFF(updated_at, now()) > #{days}
     </delete>
 
     <select id="isMemberIdExist" resultType="boolean">

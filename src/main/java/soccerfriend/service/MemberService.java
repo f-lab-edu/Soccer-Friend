@@ -66,10 +66,7 @@ public class MemberService {
      * @param days 영구삭제하고자 하는 계정삭제의 최소 일수
      */
     public void deletePermanentlyDaysBefore(int days) {
-        LocalDateTime now = LocalDateTime.now();
-        now.minusDays(days);
-
-        mapper.deletePermanentlyDaysBefore(now, days);
+        mapper.deletePermanentlyDaysBefore(days);
     }
 
     /**

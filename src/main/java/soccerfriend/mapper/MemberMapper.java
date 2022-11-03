@@ -15,7 +15,7 @@ public interface MemberMapper {
 
     public void deletePermanently(int id);
 
-    public void deletePermanentlyDaysBefore(LocalDateTime localDateTime, int days);
+    public void deletePermanentlyDaysBefore(int days);
 
     public Member getMemberByMemberId(String memberId);
 
