@@ -17,6 +17,20 @@
         WHERE id = #{id}
     </update>
 
+    <delete id="deletePermanently">
+        DELETE
+        FROM member
+        WHERE deleted = true
+          AND id = #{id}
+    </delete>
+
+    <delete id="deletePermanentlyDaysBefore">
+        DELETE
+        FROM member
+        WHERE deleted = true
+          AND DATE_DIFF(updated_at, #{date}) > #{days}
+    </delete>
+
     <select id="isMemberIdExist" resultType="boolean">
         SELECT EXISTS (SELECT * FROM member WHERE member_id = #{memberId})
     </select>

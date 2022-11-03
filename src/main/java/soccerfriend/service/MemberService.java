@@ -10,6 +10,8 @@ import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.mapper.MemberMapper;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static soccerfriend.exception.ExceptionInfo.*;
@@ -52,6 +54,25 @@ public class MemberService {
     }
 
     /**
+     * 회원정보를 영구삭제합니다. (관리자용)
+     */
+    public void deletePermanently(int id) {
+        mapper.deletePermanently(id);
+    }
+
+    /**
+     * 며칠 이전의 삭제된 계정들을 영구삭제합니다.
+     *
+     * @param days 영구삭제하고자 하는 계정삭제의 최소 일수
+     */
+    public void deletePermanentlyDaysBefore(int days) {
+        LocalDateTime now = LocalDateTime.now();
+        now.minusDays(days);
+
+        mapper.deletePermanentlyDaysBefore(now, days);
+    }
+
+    /**
      * 특정 id의 member를 반환합니다.
      *
      * @param id member의 id
@@ -59,7 +80,7 @@ public class MemberService {
      */
     public Member getMemberById(int id) {
         Member member = mapper.getMemberById(id);
-        if(member == null){
+        if (member == null) {
             throw new BadRequestException(MEMBER_NOT_EXIST);
         }
 
@@ -140,7 +161,7 @@ public class MemberService {
     /**
      * member의 point를 증가시킵니다.
      *
-     * @param id member의 id
+     * @param id    member의 id
      * @param point 증가시키고자 하는 point의 양
      */
     public void increasePoint(int id, int point) {
@@ -150,7 +171,7 @@ public class MemberService {
     /**
      * member의 point를 감소시킵니다.
      *
-     * @param id member의 id
+     * @param id    member의 id
      * @param point 감소시키고자 하는 point의 양
      */
     public void decreasePoint(int id, int point) {
