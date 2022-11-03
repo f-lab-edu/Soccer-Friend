@@ -4,11 +4,11 @@ import lombok.Getter;
 import soccerfriend.exception.ExceptionInfo;
 
 @Getter
-public class NotMatchException extends IllegalArgumentException {
+public class NoPermissionException extends RuntimeException {
 
     private ExceptionInfo exceptionInfo;
 
-    public NotMatchException(ExceptionInfo exceptionInfo) {
+    public NoPermissionException(ExceptionInfo exceptionInfo) {
         this.exceptionInfo = exceptionInfo;
     }
 }

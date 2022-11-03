@@ -11,7 +11,7 @@ import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
 import java.util.Optional;
 
-import static soccerfriend.exception.ExceptionCode.*;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +23,6 @@ public class MemberService {
      * 회원가입을 수행합니다.
      *
      * @param member memberId, password, nickname, positionsId, addressId를 포함하는 member 객체
-     * @return 회원가입한 member의 id
      */
     public void signUp(Member member) {
         if (isMemberIdExist(member.getMemberId())) {

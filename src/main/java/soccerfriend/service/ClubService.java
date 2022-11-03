@@ -3,37 +3,58 @@ package soccerfriend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.Club;
-import soccerfriend.exception.member.DuplicatedException;
+import soccerfriend.exception.exception.DuplicatedException;
+import soccerfriend.exception.exception.NotExistException;
 import soccerfriend.mapper.ClubMapper;
 
-import static soccerfriend.exception.ExceptionCode.*;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 @RequiredArgsConstructor
 public class ClubService {
 
-    private final ClubMapper mapper;
+    private final ClubMapper clubMapper;
+    private final ClubMemberService clubMemberService;
 
     /**
      * 클럽을 생성합니다.
      *
-     * @param id   클럽을 생성하는 member의 id
-     * @param club 생성하려는 club의 기본정보
+     * @param memberId 클럽을 생성하는 member의 id
+     * @param club     생성하려는 club의 기본정보
      */
-    public void create(int id, Club club) {
+    public void create(int memberId, Club club) {
 
         if (isNameExist(club.getName())) {
             throw new DuplicatedException(CLUB_NAME_DUPLICATED);
         }
 
-        Club newClub = Club.builder()
+        Club oldClub = Club.builder()
                            .name(club.getName())
-                           .leader(id)
+                           .leader(memberId)
                            .addressId(club.getAddressId())
                            .point(0)
                            .build();
 
-        mapper.insert(newClub);
+        clubMapper.insert(oldClub);
+
+        Club newClub = clubMapper.getClubByName(club.getName());
+
+        clubMemberService.addLeader(newClub.getId(), memberId);
+    }
+
+    /**
+     * 클럽에 가입합니다.
+     *
+     * @param clubId   가입하려는 club의 id
+     * @param memberId 클럽을 생성하는 member의 id
+     */
+    public void join(int clubId, int memberId) {
+
+        if (!isIdExist(clubId)) {
+            throw new NotExistException(CLUB_NAME_DUPLICATED);
+        }
+
+        clubMemberService.add(clubId, memberId);
     }
 
     /**
@@ -43,6 +64,38 @@ public class ClubService {
      * @return name 존재 유무(true: 있음, false: 없음)
      */
     public boolean isNameExist(String name) {
-        return mapper.isNameExist(name);
+        return clubMapper.isNameExist(name);
+    }
+
+    /**
+     * club의 id가 존재하는지 확인합니다.
+     *
+     * @param id 존재 유무를 확인하려는 id
+     * @return id 존재 유무(true: 있음, false: 없음)
+     */
+    public boolean isIdExist(int id) {
+        return clubMapper.isIdExist(id);
+    }
+
+    /**
+     * club의 name을 변경합니다.
+     * @param id 변경하고자 하는 club의 id
+     * @param name 새로 변경할 name
+     */
+    public void updateName(int id, String name){
+        if (isNameExist(name)) {
+            throw new DuplicatedException(CLUB_NAME_DUPLICATED);
+        }
+
+        clubMapper.updateName(id, name);
+    }
+
+    /**
+     * club의 addressId를 변경합니다.
+     * @param id 변경하고자 하는 club의 id
+     * @param addressId 새로 변경할 addressId
+     */
+    public void updateAddressId(int id, int addressId){
+        clubMapper.updateAddressId(id, addressId);
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Member;
 import soccerfriend.service.AuthorizeService;
+import soccerfriend.service.ClubService;
 import soccerfriend.service.MemberService;
 import soccerfriend.utility.InputForm.LoginRequest;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;

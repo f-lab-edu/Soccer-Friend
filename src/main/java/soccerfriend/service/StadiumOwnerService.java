@@ -4,18 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.StadiumOwner;
-
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.exception.exception.NotMatchException;
-import soccerfriend.exception.member.DuplicatedException;
 import soccerfriend.mapper.StadiumOwnerMapper;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 import soccerfriend.utility.InputForm.UpdateStadiumOwnerRequest;
 
 import java.util.Optional;
 
-import static soccerfriend.exception.ExceptionCode.*;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 @RequiredArgsConstructor
