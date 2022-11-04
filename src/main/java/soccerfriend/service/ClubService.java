@@ -134,31 +134,31 @@ public class ClubService {
     /**
      * club의 point를 증가시킵니다.
      *
-     * @param id club의 id
+     * @param id    club의 id
      * @param point 증가시키고자 하는 point의 양
      */
-    public void increasePont(int id, int point){
+    public void increasePont(int id, int point) {
         clubMapper.increasePoint(id, point);
     }
 
     /**
      * club의 point를 감소시킵니다.
      *
-     * @param id club의 id
+     * @param id    club의 id
      * @param point 감소시키고자 하는 point의 양
      */
-    public void decreasePoint(int id, int point){
+    public void decreasePoint(int id, int point) {
         clubMapper.decreasePoint(id, point);
     }
 
     @Transactional
-    public void approveClubMember(int clubMemberId){
+    public void approveClubMember(int clubMemberId) {
         ClubMember clubMember = clubMemberService.getClubMemberById(clubMemberId);
         Club club = getClubById(clubMember.getClubId());
         Member member = memberService.getMemberById(clubMember.getMemberId());
         int monthlyFee = club.getMonthlyFee();
 
-        if(member.getPoint()< club.getMonthlyFee()){
+        if (member.getPoint() < club.getMonthlyFee()) {
             throw new BadRequestException(NOT_ENOUGH_POINT);
         }
 

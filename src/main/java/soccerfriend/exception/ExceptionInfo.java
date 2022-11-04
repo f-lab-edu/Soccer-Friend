@@ -21,6 +21,7 @@ public enum ExceptionInfo {
     CLUB_ID_NOT_EXIST(404, "해당 클럽의 id가 존재하지 않습니다"),
     CLUB_MEMBER_NOT_EXIST(404, "해당 클럽회원이 존재하지 않습니다"),
     CLUB_NOT_EXIST(404, "해당 클럽이 존재하지 않습니다"),
+    PAYER_TYPE_NOT_EXIST(404, "결제 대상이 아닙니다."),
 
 
     NOT_ENOUGH_POINT(409, "포인트가 부족합니다."),
