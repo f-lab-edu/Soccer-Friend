@@ -3,6 +3,7 @@ package soccerfriend.service;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import soccerfriend.dto.Member;
 import soccerfriend.dto.StadiumOwner;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
@@ -98,6 +99,15 @@ public class StadiumOwnerService {
         return Optional.empty();
     }
 
+    public StadiumOwner getStadiumOwnerById(int id) {
+        StadiumOwner stadiumOwner = mapper.getStadiumOwnerById(id);
+        if (stadiumOwner == null) {
+            throw new BadRequestException(STADIUM_OWNER_NOT_EXIST);
+        }
+
+        return stadiumOwner;
+    }
+
     /**
      * stadiumOwner의 정보를 변경합니다.
      *
@@ -127,5 +137,29 @@ public class StadiumOwnerService {
 
         after = BCrypt.hashpw(after, BCrypt.gensalt());
         mapper.updatePassword(id, after);
+    }
+
+    /**
+     * stadiumOwner의 point를 증가시킵니다.
+     *
+     * @param id    stadiumOwner의 id
+     * @param point 증가시키고자 하는 point의 양
+     */
+    public void increasePoint(int id, int point) {
+        mapper.increasePoint(id, point);
+    }
+
+    /**
+     * stadiumOwner의 point를 감소시킵니다.
+     *
+     * @param id    stadiumOwner의 id
+     * @param point 감소시키고자 하는 point의 양
+     */
+    public void decreasePoint(int id, int point) {
+        StadiumOwner stadiumOwner = getStadiumOwnerById(id);
+        if (stadiumOwner.getPoint() < point) {
+            throw new BadRequestException(NOT_ENOUGH_POINT);
+        }
+        mapper.decreasePoint(id, point);
     }
 }

@@ -72,32 +72,32 @@ public class SoccerMatchService {
     }
 
     /**
-     * soccerMatch의 club1의 점수를 1 증가시킵니다.
+     * soccerMatch의 clubA의 점수를 1 증가시킵니다.
      *
      * @param id soccerMatch의 id
      */
-    public void increaseClub1Score(int id) {
-        mapper.increaseClub1Score(id);
+    public void increaseClubAScore(int id) {
+        mapper.increaseClubAScore(id);
     }
 
     /**
-     * soccerMatch의 club1의 점수를 1 감소시킵니다.
+     * soccerMatch의 clubB의 점수를 1 감소시킵니다.
      *
      * @param id soccerMatch의 id
      */
-    public void increaseClub2Score(int id) {
-        mapper.increaseClub2Score(id);
+    public void increaseClubBScore(int id) {
+        mapper.increaseClubBScore(id);
     }
 
     public boolean isClubExist(int id, int clubId) {
         return mapper.isClubExist(id, clubId);
     }
 
-    public int getClub1Id(int id) {
-        return mapper.getClub1Id(id);
+    public int getClubAId(int id) {
+        return mapper.getClubAId(id);
     }
 
-    public int getClub2Id(int id) {
-        return mapper.getClub2Id(id);
+    public int getClubBId(int id) {
+        return mapper.getClubBId(id);
     }
 }
