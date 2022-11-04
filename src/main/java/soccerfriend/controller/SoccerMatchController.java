@@ -71,7 +71,7 @@ public class SoccerMatchController {
     @PatchMapping("/{id}")
     public void update(@PathVariable("id") int id, InputForm.UpdateSoccerMatchRecruitmentRequest request) {
         int memberId = authorizeService.getMemberId();
-        int clubId = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(id).getClub1Id();
+        int clubId = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(id).getClubAId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
@@ -92,6 +92,6 @@ public class SoccerMatchController {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
-        soccerMatchRecruitmentService.setClub2Id(id, clubId);
+        soccerMatchRecruitmentService.setClubBId(id, clubId);
     }
 }

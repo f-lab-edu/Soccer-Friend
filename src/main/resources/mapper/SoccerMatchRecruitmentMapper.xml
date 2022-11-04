@@ -6,9 +6,9 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.SoccerMatchRecruitment">
         INSERT
-        INTO soccer_match_recruitment(start_time, end_time, set_number, set_time, stadium_id, club1_id, club2_id,
+        INTO soccer_match_recruitment(start_time, end_time, set_number, set_time, stadium_id, clubA_id, clubB_id,
                                       created_at, updated_at)
-        VALUES (#{startTime}, #{endTime}, #{setNumber}, #{setTime}, #{stadiumId}, #{club1Id}, #{club2Id}, now(), now())
+        VALUES (#{startTime}, #{endTime}, #{setNumber}, #{setTime}, #{stadiumId}, #{clubAId}, #{clubBId}, now(), now())
     </insert>
 
     <select id="getSoccerMatchRecruitmentById" resultType="soccerfriend.dto.SoccerMatchRecruitment">
@@ -17,8 +17,8 @@
                set_number,
                set_time,
                stadium_id,
-               club1_id,
-               club2_id,
+               clubA_id,
+               clubB_id,
                created_at,
                updated_at
         FROM soccer_match_recruitment
@@ -31,13 +31,13 @@
                set_number,
                set_time,
                stadium_id,
-               club1_id,
-               club2_id,
+               clubA_id,
+               clubB_id,
                created_at,
                updated_at
         FROM soccer_match_recruitment
-        WHERE club1_id = #{clubId}
-           OR club2_id = #{clubId}
+        WHERE clubA_id = #{clubId}
+           OR clubB_id = #{clubId}
     </select>
 
     <update id="update">
@@ -51,15 +51,15 @@
         WHERE id = #{id}
     </update>
 
-    <update id="setClub2Id">
+    <update id="setClubBId">
         UPDATE soccer_match_recruitment
-        SET club2_id  = #{club2Id},
+        SET clubB_id  = #{clubBId},
             updated_at=now()
         WHERE id = #{id}
     </update>
 
-    <select id="isNoClub2Id" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM soccer_match_recruitment WHERE id = #{id} AND club2_id = 0)
+    <select id="isNoClubBId" resultType="boolean">
+        SELECT EXISTS(SELECT * FROM soccer_match_recruitment WHERE id = #{id} AND clubB_id = 0)
     </select>
 
 </mapper>
