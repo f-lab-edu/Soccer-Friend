@@ -3,13 +3,10 @@ package soccerfriend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.SoccerMatch;
+import soccerfriend.dto.SoccerMatchMember;
 import soccerfriend.dto.SoccerMatchRecruitment;
-import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
-import soccerfriend.service.AuthorizeService;
-import soccerfriend.service.ClubMemberService;
-import soccerfriend.service.SoccerMatchRecruitmentService;
-import soccerfriend.service.SoccerMatchService;
+import soccerfriend.service.*;
 import soccerfriend.utility.InputForm;
 
 import java.util.List;
@@ -25,6 +22,7 @@ public class SoccerMatchController {
     private final ClubMemberService clubMemberService;
     private final SoccerMatchService soccerMatchService;
     private final SoccerMatchRecruitmentService soccerMatchRecruitmentService;
+    private final SoccerMatchMemberService soccerMatchMemberService;
     private final AuthorizeService authorizeService;
 
 
@@ -138,5 +136,56 @@ public class SoccerMatchController {
     @GetMapping("/club/{clubId}")
     public List<SoccerMatch> getSoccerMatchByClubId(@PathVariable int clubId) {
         return soccerMatchService.getSoccerMatchByClubId(clubId);
+    }
+
+    /**
+     * 특정 경기에 특정 클럽선수로 참가신청 합니다. 이 때 해당 클럽이 아니어도 참가신청을 할 수 있습니다.
+     *
+     * @param soccerMatchId soccerMatch의 id
+     * @param clubId        선수로 뛰고자 하는 club의 id
+     */
+    @PostMapping("{soccerMatchId}/apply")
+    public void applySoccerMatchMember(@PathVariable int soccerMatchId, @RequestParam int clubId) {
+        int memberId = authorizeService.getMemberId();
+        soccerMatchMemberService.apply(soccerMatchId, clubId, memberId);
+    }
+
+    /**
+     * soccerMatch에 참가신청한 선수들을 반환합니다. approved가 true이면 승인된 선수들 false이면 승인 대기중인 선수들을 반환합니다.
+     *
+     * @param soccerMatchId soccerMatch의 id
+     * @param clubId
+     * @param approved
+     * @return
+     */
+    @GetMapping("/{soccerMatchId}/club/{clubId}/soccer-match-member")
+    public List<SoccerMatchMember> getSoccerMatchMember(@PathVariable int soccerMatchId, @PathVariable int clubId, @RequestParam boolean approved) {
+        int memberId = authorizeService.getMemberId();
+        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
+            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        }
+
+        if (approved) {
+            return soccerMatchMemberService.getApprovedSoccerMatchMember(soccerMatchId, clubId);
+        }
+        return soccerMatchMemberService.getNotApprovedSoccerMatchMember(soccerMatchId, clubId);
+    }
+
+    /**
+     * soccerMatch에 참가신청한 선수를 승인합니다.
+     *
+     * @param soccerMatchMemberId soccerMatchMember의 id
+     */
+    @PatchMapping("soccer-match-member/{soccerMatchMemberId}/approve")
+    public void approveSoccerMatchMember(@PathVariable int soccerMatchMemberId) {
+        int memberId = authorizeService.getMemberId();
+        SoccerMatchMember soccerMatchMember = soccerMatchMemberService.getSoccerMatchMemberById(soccerMatchMemberId);
+        int clubId = soccerMatchMember.getClubId();
+
+        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
+            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        }
+
+        soccerMatchMemberService.approve(soccerMatchMemberId);
     }
 }

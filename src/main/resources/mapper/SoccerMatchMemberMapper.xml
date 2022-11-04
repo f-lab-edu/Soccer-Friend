@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.SoccerMatchMemberMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.SoccerMatchMember">
+        INSERT
+        INTO soccer_match_member(soccer_match_id, member_id, club_id, approved, created_at, updated_at)
+        VALUES (#{soccerMatchId}, #{memberId}, #{clubId}, #{approved}, now(), now())
+    </insert>
+
+    <select id="getSoccerMatchMemberById" resultType="soccerfriend.dto.SoccerMatchMember">
+        SELECT id, soccer_match_id, member_id, club_id, approved, created_at, updated_at
+        FROM soccer_match_member
+        WHERE id = #{id}
+    </select>
+
+    <select id="isSoccerMatchMemberExist" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT *
+                       FROM soccer_match_member
+                       WHERE soccer_match_id = #{soccerMatchId}
+                         AND member_id = #{memberId}
+                   )
+    </select>
+
+    <update id="approve">
+        UPDATE soccer_match_member
+        SET approved   = true,
+            updated_at = now()
+        WHERE id = #{id}
+    </update>
+
+    <select id="getApprovedSoccerMatchMember" resultType="soccerfriend.dto.SoccerMatchMember">
+        SELECT id, soccer_match_id, member_id, club_id, approved, created_at, updated_at
+        FROM soccer_match_member
+        WHERE soccer_match_id = #{soccerMatchId}
+          AND club_id = #{clubId}
+          AND approved = true
+    </select>
+
+    <select id="getNotApprovedSoccerMatchMember" resultType="soccerfriend.dto.SoccerMatchMember">
+        SELECT id, soccer_match_id, member_id, club_id, approved, created_at, updated_at
+        FROM soccer_match_member
+        WHERE soccer_match_id = #{soccerMatchId}
+          AND club_id = #{clubId}
+          AND approved = false
+    </select>
+</mapper>
