@@ -51,4 +51,18 @@
             updated_at=now()
         WHERE id = #{id}
     </update>
+
+    <update id="increasePoint">
+        UPDATE stadium_owner
+        SET point  = point + #{point},
+            updated_at=now()
+        WHERE id = #{id}
+    </update>
+
+    <update id="decreasePoint">
+        UPDATE stadium_owner
+        SET point  = point - #{point},
+            updated_at=now()
+        WHERE id = #{id}
+    </update>
 </mapper>

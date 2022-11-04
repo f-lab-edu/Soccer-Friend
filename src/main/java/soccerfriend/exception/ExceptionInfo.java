@@ -15,6 +15,7 @@ public enum ExceptionInfo {
     ADDRESS_NOT_EXIST(404, "존재하지 않은 주소입니다."),
     ID_NOT_EXIST(404, "존재하지 않은 아이디입니다."),
     MEMBER_NOT_EXIST(404, "해당 회원이 존재하지 않습니다."),
+    STADIUM_OWNER_NOT_EXIST(404, "존재하지 않은 경기장 사업자입니다."),
     LOGIN_FORM_INCORRECT(404, "잘못된 로그인 정보입니다."),
     LOGIN_INFO_NOT_EXIST(404, "로그인 되어있지 않습니다."),
     FORM_NOT_FULL(404, "필수 입력사항이 모두 입력되지 않았습니다."),
