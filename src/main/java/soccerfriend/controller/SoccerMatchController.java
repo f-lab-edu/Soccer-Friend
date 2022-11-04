@@ -34,7 +34,7 @@ public class SoccerMatchController {
      * @param clubId                 경기모집 공고를 게시한 club의 id
      * @param soccerMatchRecruitment 경기에 관한 기본정보
      */
-    @PostMapping("/soccer-match-recruitment")
+    @PostMapping("/recruitments")
     public void create(@RequestParam int clubId, @RequestBody SoccerMatchRecruitment soccerMatchRecruitment) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
@@ -50,7 +50,7 @@ public class SoccerMatchController {
      * @param soccerMatchRecruitmentId soccerMatchRecruitment의 id
      * @return 특정 id의 soccerMatchRecruitment 객체
      */
-    @GetMapping("/soccer-match-recruitment/{soccerMatchRecruitmentId}")
+    @GetMapping("/recruitments/{soccerMatchRecruitmentId}")
     public SoccerMatchRecruitment getSoccerMatchRecruitmentById(@PathVariable int soccerMatchRecruitmentId) {
         return soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId);
     }
@@ -61,7 +61,7 @@ public class SoccerMatchController {
      * @param clubId club의 id
      * @return 특정 club이 참여한 모든 soccerMatchRecruitment
      */
-    @GetMapping("/club/{clubId}/soccer-match-recruitments")
+    @GetMapping("/club/{clubId}/recruitments")
     public List<SoccerMatchRecruitment> getSoccerMatchRecruitmentByClubId(@PathVariable int clubId) {
         return soccerMatchRecruitmentService.getSoccerMatchRecruitmentByClubId(clubId);
     }
@@ -72,10 +72,10 @@ public class SoccerMatchController {
      * @param soccerMatchRecruitmentId soccerMatchRecruitment의 id
      * @param request                  수정하고자 하는 값들
      */
-    @PatchMapping("/soccer-match-recruitment/{soccerMatchRecruitmentId}")
+    @PatchMapping("/recruitments/{soccerMatchRecruitmentId}")
     public void update(@PathVariable int soccerMatchRecruitmentId, InputForm.UpdateSoccerMatchRecruitmentRequest request) {
         int memberId = authorizeService.getMemberId();
-        int clubId = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId).getClub1Id();
+        int clubId = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId).getClubAId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
@@ -89,14 +89,14 @@ public class SoccerMatchController {
      * @param soccerMatchRecruitmentId soccerMatchRecruitment의 id
      * @param clubId                   신청하려는 club의 id
      */
-    @PatchMapping("/soccer-match-recruitment/{soccerMatchRecruitmentId}//approve")
+    @PatchMapping("/recruitments/{soccerMatchRecruitmentId}/approve")
     public void approve(@PathVariable int soccerMatchRecruitmentId, @RequestParam("clubId") int clubId) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
-        soccerMatchRecruitmentService.setClub2Id(soccerMatchRecruitmentId, clubId);
+        soccerMatchRecruitmentService.setClubBId(soccerMatchRecruitmentId, clubId);
     }
 
     /**
@@ -104,12 +104,12 @@ public class SoccerMatchController {
      *
      * @param soccerMatchRecruitmentId 경기모집공고의 id
      */
-    @PostMapping("/soccer-match-recruitment/{soccerMatchRecruitmentId}/start")
+    @PostMapping("/recruitments/{soccerMatchRecruitmentId}/start")
     public void startMatch(@PathVariable int soccerMatchRecruitmentId) {
         int memberId = authorizeService.getMemberId();
         SoccerMatchRecruitment soccerMatchRecruitment = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId);
-        int club1Id = soccerMatchRecruitment.getClub1Id();
-        int club2Id = soccerMatchRecruitment.getClub2Id();
+        int club1Id = soccerMatchRecruitment.getClubAId();
+        int club2Id = soccerMatchRecruitment.getClubBId();
 
         if (!clubMemberService.isClubLeaderOrStaff(club1Id, memberId) && !clubMemberService.isClubLeaderOrStaff(club2Id, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
