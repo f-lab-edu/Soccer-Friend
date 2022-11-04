@@ -30,7 +30,7 @@ public class SoccerMatchController {
      * @param clubId                 경기모집 공고를 게시한 club의 id
      * @param soccerMatchRecruitment 경기에 관한 기본정보
      */
-    @PostMapping("/soccer-match-recruitment")
+    @PostMapping("/recruitments")
     public void create(@RequestParam int clubId, @RequestBody SoccerMatchRecruitment soccerMatchRecruitment) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
@@ -46,7 +46,7 @@ public class SoccerMatchController {
      * @param id soccerMatchRecruitment의 id
      * @return 특정 id의 soccerMatchRecruitment 객체
      */
-    @GetMapping("/soccer-match-recruitment/{id}")
+    @GetMapping("/recruitments/{id}")
     public SoccerMatchRecruitment getSoccerMatchRecruitmentById(@PathVariable int id) {
         return soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(id);
     }
@@ -57,7 +57,7 @@ public class SoccerMatchController {
      * @param clubId club의 id
      * @return 특정 club이 참여한 모든 soccerMatchRecruitment
      */
-    @GetMapping("/club/{clubId}/soccer-match-recruitments")
+    @GetMapping("/club/{clubId}/recruitments")
     public List<SoccerMatchRecruitment> getSoccerMatchRecruitmentByClubId(@PathVariable int clubId) {
         return soccerMatchRecruitmentService.getSoccerMatchRecruitmentByClubId(clubId);
     }
@@ -85,7 +85,7 @@ public class SoccerMatchController {
      * @param id     soccerMatchRecruitment의 id
      * @param clubId 신청하려는 club의 id
      */
-    @PatchMapping("/soccer-match-recruitment/{id}//approve")
+    @PatchMapping("/recruitments/{id}/approve")
     public void approve(@PathVariable("id") int id, @RequestParam("clubId") int clubId) {
         int memberId = authorizeService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
