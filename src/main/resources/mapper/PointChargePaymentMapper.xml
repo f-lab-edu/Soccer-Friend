@@ -4,7 +4,7 @@
 
 <mapper namespace="soccerfriend.mapper.PointChargePaymentMapper">
 
-    <insert id="create" parameterType="soccerfriend.dto.PointChargePayment">
+    <insert id="insert" parameterType="soccerfriend.dto.PointChargePayment">
         INSERT
         INTO point_charge_payment(payer_type, payer_id, price, pg, payment_type, created_at, updated_at)
         VALUES (#{payerType}, #{payerId}, #{price}, #{pg}, #{paymentType}, now(), now())

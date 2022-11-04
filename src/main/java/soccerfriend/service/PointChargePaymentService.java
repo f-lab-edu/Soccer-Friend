@@ -19,10 +19,19 @@ public class PointChargePaymentService {
     private final MemberService memberService;
     private final StadiumOwnerService stadiumOwnerService;
 
+    /**
+     * point 충전정보를 기록합니다.
+     *
+     * @param payerType          point를 충전하는 주체의 종류
+     * @param id                 point를 충전하는 주체의 id
+     * @param pointChargePayment point 충전결제정보
+     */
     @Transactional
     public void chargePoint(PayerType payerType, int id, PointChargePayment pointChargePayment) {
         if (payerType == MEMBER) {
-            PointChargePayment memberPayment = PointChargePayment.builder().payerType(MEMBER).payerId(id)
+            PointChargePayment memberPayment = PointChargePayment.builder()
+                                                                 .payerType(MEMBER)
+                                                                 .payerId(id)
                                                                  .price(pointChargePayment.getPrice())
                                                                  .pg(pointChargePayment.getPg())
                                                                  .paymentType(pointChargePayment.getPaymentType())
@@ -33,14 +42,16 @@ public class PointChargePaymentService {
             memberService.increasePoint(id, pointChargePayment.getPrice());
         }
         else if (payerType == STADIUM_OWNER) {
-            PointChargePayment memberPayment = PointChargePayment.builder().payerType(STADIUM_OWNER).payerId(id)
-                                                                 .price(pointChargePayment.getPrice())
-                                                                 .pg(pointChargePayment.getPg())
-                                                                 .paymentType(pointChargePayment.getPaymentType())
-                                                                 .build();
+            PointChargePayment stadiumOwnerPayment = PointChargePayment.builder().
+                                                                       payerType(STADIUM_OWNER)
+                                                                       .payerId(id)
+                                                                       .price(pointChargePayment.getPrice())
+                                                                       .pg(pointChargePayment.getPg())
+                                                                       .paymentType(pointChargePayment.getPaymentType())
+                                                                       .build();
 
-            mapper.insert(memberPayment);
-            // stadiumOwnerService point 증가부분 구현예정
+            mapper.insert(stadiumOwnerPayment);
+            stadiumOwnerService.increasePoint(id, pointChargePayment.getPrice());
         }
         else {
             throw new BadRequestException(PAYER_TYPE_NOT_EXIST);

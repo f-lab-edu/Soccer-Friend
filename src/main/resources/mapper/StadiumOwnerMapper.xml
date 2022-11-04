@@ -21,7 +21,7 @@
     </select>
 
     <select id="getStadiumOwnerByStadiumOwnerId" resultType="soccerfriend.dto.StadiumOwner">
-        SELEC회T id, stadium_owner_id, password, representative, company_name, address, taxpayer_id, account_bank_id, account_number, point, created_at, updated_at
+        SELECT id, stadium_owner_id, password, representative, company_name, address, taxpayer_id, account_bank_id, account_number, point, created_at, updated_at
         FROM stadium_owner
         WHERE stadium_owner_id = #{stadiumOwnerId}
     </select>
