@@ -10,6 +10,7 @@ public enum ExceptionInfo {
     NO_CLUB_PERMISSION(401, "클럽 내에서 권한이 없습니다."),
     NOT_CLUB_MEMBER(401, "해당 클럽의 회원이 아닙니다."),
     IS_CLUB_LEADER(401, "해당 클럽의 leader는 탈퇴할 수 없습니다."),
+    PAYMENT_FAIL(401, "결제에 실패했습니다."),
 
     POSITIONS_NOT_EXIST(404, "존재하지 않은 포지션입니다."),
     ADDRESS_NOT_EXIST(404, "존재하지 않은 주소입니다."),

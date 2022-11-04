@@ -9,7 +9,7 @@ import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.mapper.PointChargePaymentMapper;
 
 import static soccerfriend.dto.PointChargePayment.PayerType.*;
-import static soccerfriend.exception.ExceptionInfo.PAYER_TYPE_NOT_EXIST;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +28,9 @@ public class PointChargePaymentService {
      */
     @Transactional
     public void chargePoint(PayerType payerType, int id, PointChargePayment pointChargePayment) {
+        if (!pay(payerType, id, pointChargePayment)) {
+            throw new BadRequestException(PAYMENT_FAIL);
+        }
         if (payerType == MEMBER) {
             PointChargePayment memberPayment = PointChargePayment.builder()
                                                                  .payerType(MEMBER)
@@ -56,5 +59,17 @@ public class PointChargePaymentService {
         else {
             throw new BadRequestException(PAYER_TYPE_NOT_EXIST);
         }
+    }
+
+    /**
+     * 결제를 진행합니다. 이는 가상으로 결제를 하는 메소드를 구현한것입니다.
+     *
+     * @param payerType          point를 충전하는 주체의 종류
+     * @param id                 point를 충전하는 주체의 id
+     * @param pointChargePayment point 충전결제정보
+     */
+    public boolean pay(PayerType payerType, int id, PointChargePayment pointChargePayment) {
+        // 가상으로 결제로직 구현. 현재 결제에 성공했다고 가정
+        return true;
     }
 }
