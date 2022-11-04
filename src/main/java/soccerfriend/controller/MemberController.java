@@ -4,11 +4,14 @@ import lombok.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Member;
+import soccerfriend.dto.PointChargePayment;
 import soccerfriend.service.AuthorizeService;
 import soccerfriend.service.MemberService;
+import soccerfriend.service.PointChargePaymentService;
 import soccerfriend.utility.InputForm.LoginRequest;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
+import static soccerfriend.dto.PointChargePayment.PayerType.MEMBER;
 import static soccerfriend.utility.HttpStatusCode.*;
 
 @RestController
@@ -18,6 +21,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final AuthorizeService authorizeService;
+    private final PointChargePaymentService pointChargePaymentService;
 
     /**
      * member 회원가입을 수행합니다.
@@ -96,14 +100,14 @@ public class MemberController {
     }
 
     /**
-     * member의 point를 증가시킵니다.
+     * point를 충전합니다.
      *
-     * @param point 증가시키고자 하는 point의 양
+     * @param pointChargePayment point 충전정보
      */
-    @PostMapping("/point/increase")
-    public void increasePoint(@RequestParam int point) {
+    @PostMapping("/point/charge")
+    public void chargePoint(@RequestBody PointChargePayment pointChargePayment) {
         int memberId = authorizeService.getMemberId();
-        memberService.increasePoint(memberId, point);
+        pointChargePaymentService.chargePoint(MEMBER, memberId, pointChargePayment);
     }
 
     /**
