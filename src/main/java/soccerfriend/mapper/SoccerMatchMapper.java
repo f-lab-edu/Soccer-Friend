@@ -22,9 +22,9 @@ public interface SoccerMatchMapper {
 
     public void increaseClubBScore(int id);
 
-    public int getClub1Id(int id);
+    public int getClubAId(int id);
 
-    public int getClub2Id(int id);
+    public int getClubBId(int id);
 
     public boolean isClubExist(@Param("id") int id, @Param("clubId") int clubId);
 

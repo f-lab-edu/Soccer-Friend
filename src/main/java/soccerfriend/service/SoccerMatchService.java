@@ -93,11 +93,11 @@ public class SoccerMatchService {
         return mapper.isClubExist(id, clubId);
     }
 
-    public int getClub1Id(int id) {
-        return mapper.getClub1Id(id);
+    public int getClubAId(int id) {
+        return mapper.getClubAId(id);
     }
 
-    public int getClub2Id(int id) {
-        return mapper.getClub2Id(id);
+    public int getClubBId(int id) {
+        return mapper.getClubBId(id);
     }
 }
