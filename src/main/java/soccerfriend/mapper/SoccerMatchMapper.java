@@ -2,7 +2,6 @@ package soccerfriend.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import soccerfriend.dto.SoccerMatch;
-import soccerfriend.dto.SoccerMatchRecruitment;
 
 import java.util.List;
 
@@ -18,9 +17,9 @@ public interface SoccerMatchMapper {
 
     public List<SoccerMatch> getSoccerMatchByClubId(int clubId);
 
-    public void increaseClub1Score(int id);
+    public void increaseClubAScore(int id);
 
-    public void increaseClub2Score(int id);
+    public void increaseClubBScore(int id);
 
 
 }

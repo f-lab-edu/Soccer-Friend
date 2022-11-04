@@ -108,10 +108,10 @@ public class SoccerMatchController {
     public void startMatch(@PathVariable int soccerMatchRecruitmentId) {
         int memberId = authorizeService.getMemberId();
         SoccerMatchRecruitment soccerMatchRecruitment = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId);
-        int club1Id = soccerMatchRecruitment.getClubAId();
-        int club2Id = soccerMatchRecruitment.getClubBId();
+        int clubAId = soccerMatchRecruitment.getClubAId();
+        int clubBId = soccerMatchRecruitment.getClubBId();
 
-        if (!clubMemberService.isClubLeaderOrStaff(club1Id, memberId) && !clubMemberService.isClubLeaderOrStaff(club2Id, memberId)) {
+        if (!clubMemberService.isClubLeaderOrStaff(clubAId, memberId) && !clubMemberService.isClubLeaderOrStaff(clubBId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
