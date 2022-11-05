@@ -18,13 +18,13 @@ public interface SoccerMatchMapper {
 
     public List<SoccerMatch> getSoccerMatchByClubId(int clubId);
 
-    public void increaseClubAScore(int id);
+    public void increaseHostClubScore(int id);
 
-    public void increaseClubBScore(int id);
+    public void increaseParticipationClubScore(int id);
 
-    public int getClubAId(int id);
+    public int getHostClubId(int id);
 
-    public int getClubBId(int id);
+    public int getParticipationClubId(int id);
 
     public boolean isClubExist(@Param("id") int id, @Param("clubId") int clubId);
 

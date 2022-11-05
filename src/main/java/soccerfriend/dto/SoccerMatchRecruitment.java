@@ -25,9 +25,9 @@ public class SoccerMatchRecruitment {
 
     int stadiumId;
 
-    int clubAId;
+    int hostClubId;
 
-    Integer clubBId;
+    Integer participationClubId;
 
     LocalDateTime createdAt;
 

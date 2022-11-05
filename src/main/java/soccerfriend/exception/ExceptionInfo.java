@@ -35,7 +35,7 @@ public enum ExceptionInfo {
 
 
     NOT_ENOUGH_POINT(409, "포인트가 부족합니다."),
-    SAME_AS_CLUB_A(409, "경기 주최클럽과 동일한 클럽은 상대가 될 수 없습니다."),
+    SAME_AS_HOST_CLUB(409, "경기 주최클럽과 동일한 클럽은 상대가 될 수 없습니다."),
     ALREADY_MATCH_APPROVED(409, "이미 성사된 경기입니다."),
     ALREADY_PAID_CLUB_MONTHLY_FEE(409, "이미 클럽에 월회비를 납부했습니다."),
     ALREADY_JOINED_CLUB(409, "이미 해당 클럽에 가입신청했습니다."),

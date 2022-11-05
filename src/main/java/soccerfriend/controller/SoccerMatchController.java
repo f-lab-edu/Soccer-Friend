@@ -74,7 +74,7 @@ public class SoccerMatchController {
     @PatchMapping("/recruitments/{soccerMatchRecruitmentId}")
     public void update(@PathVariable int soccerMatchRecruitmentId, InputForm.UpdateSoccerMatchRecruitmentRequest request) {
         int memberId = authorizeService.getMemberId();
-        int clubId = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId).getClubAId();
+        int clubId = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId).getHostClubId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
@@ -95,7 +95,7 @@ public class SoccerMatchController {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
-        soccerMatchRecruitmentService.setClubBId(soccerMatchRecruitmentId, clubId);
+        soccerMatchRecruitmentService.setParticipationClubId(soccerMatchRecruitmentId, clubId);
     }
 
     /**
@@ -107,8 +107,8 @@ public class SoccerMatchController {
     public void startMatch(@PathVariable int soccerMatchRecruitmentId) {
         int memberId = authorizeService.getMemberId();
         SoccerMatchRecruitment soccerMatchRecruitment = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId);
-        int clubAId = soccerMatchRecruitment.getClubAId();
-        int clubBId = soccerMatchRecruitment.getClubBId();
+        int clubAId = soccerMatchRecruitment.getHostClubId();
+        int clubBId = soccerMatchRecruitment.getParticipationClubId();
 
         if (!clubMemberService.isClubLeaderOrStaff(clubAId, memberId) && !clubMemberService.isClubLeaderOrStaff(clubBId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);

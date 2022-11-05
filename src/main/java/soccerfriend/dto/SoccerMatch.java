@@ -12,9 +12,9 @@ public class SoccerMatch {
 
     private int id;
 
-    private int clubAScore;
+    private int hostClubScore;
 
-    private int clubBScore;
+    private int participationClubScore;
 
     private int soccerMatchRecruitmentId;
 
