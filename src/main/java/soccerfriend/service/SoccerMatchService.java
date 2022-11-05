@@ -2,6 +2,7 @@ package soccerfriend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import soccerfriend.dto.SoccerMatch;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.mapper.SoccerMatchMapper;
@@ -73,21 +74,21 @@ public class SoccerMatchService {
     }
 
     /**
-     * soccerMatch의 club1의 점수를 1 증가시킵니다.
+     * soccerMatch의 hostClub의 점수를 1 증가시킵니다.
      *
      * @param id soccerMatch의 id
      */
-    public void increaseClub1Score(int id) {
-        mapper.increaseClub1Score(id);
+    public void increaseHostClubScore(int id) {
+        mapper.increaseHostClubScore(id);
     }
 
     /**
-     * soccerMatch의 club1의 점수를 1 감소시킵니다.
+     * soccerMatch의 participationClub의 점수를 1 감소시킵니다.
      *
      * @param id soccerMatch의 id
      */
-    public void increaseClub2Score(int id) {
-        mapper.increaseClub2Score(id);
+    public void increaseParticipationClubScore(int id) {
+        mapper.increaseParticipationClubScore(id);
     }
 
     /**
@@ -102,31 +103,43 @@ public class SoccerMatchService {
     }
 
     /**
-     * soccerMatch의 club1의 id를 반환합니다.
+     * soccerMatch의 hostClub의 id를 반환합니다.
      *
      * @param id soccerMatch의 id
      * @return club1의 id
      */
-    public int getClub1Id(int id) {
-        return mapper.getClub1Id(id);
+    public int getHostClubId(int id) {
+        return mapper.getHostClubId(id);
     }
 
     /**
-     * soccerMatch의 club2의 id를 반환합니다.
+     * soccerMatch의 participationClub의 id를 반환합니다.
      *
      * @param id soccerMatch의 id
      * @return club2의 id
      */
-    public int getClub2Id(int id) {
-        return mapper.getClub2Id(id);
+    public int getParticipationClubId(int id) {
+        return mapper.getParticipationClubId(id);
     }
 
-    public int getClub1Score(int id) {
-        return mapper.getClub1Score(id);
+    /**
+     * hostClub의 점수를 반환합니다.
+     *
+     * @param id soccerMatch의 id
+     * @return hostClub의 점수
+     */
+    public int getHostClubScore(int id) {
+        return mapper.getHostClubScore(id);
     }
 
-    public int getClub2Score(int id) {
-        return mapper.getClub2Score(id);
+    /**
+     * participationClub의 점수
+     *
+     * @param id soccerMatch의 id
+     * @return participationClub의 점수
+     */
+    public int getParticipationClubScore(int id) {
+        return mapper.getParticipationClubScore(id);
     }
 
     /**
@@ -134,27 +147,28 @@ public class SoccerMatchService {
      *
      * @param id soccerMatch의 id
      */
+    @Transactional
     public void submit(int id) {
         if (isSubmitted(id)) {
             throw new BadRequestException(ALREADY_SUBMITTED_MATCH);
         }
 
-        int club1Score = getClub1Score(id);
-        int club2Score = getClub2Score(id);
-        int club1Id = getClub1Id(id);
-        int club2Id = getClub2Id(id);
+        int hostClubScore = getHostClubScore(id);
+        int participationClubScore = getParticipationClubScore(id);
+        int hostClubId = getHostClubId(id);
+        int participationClubId = getParticipationClubId(id);
 
-        if (club1Score > club2Score) {
-            clubSoccerMatchRecordService.increaseWin(club1Id);
-            clubSoccerMatchRecordService.increaseLose(club2Id);
+        if (hostClubScore > participationClubScore) {
+            clubSoccerMatchRecordService.increaseWin(hostClubId);
+            clubSoccerMatchRecordService.increaseLose(participationClubId);
         }
-        else if (club1Score == club2Score) {
-            clubSoccerMatchRecordService.increaseDraw(club1Id);
-            clubSoccerMatchRecordService.increaseDraw(club2Id);
+        else if (hostClubScore == participationClubScore) {
+            clubSoccerMatchRecordService.increaseDraw(hostClubId);
+            clubSoccerMatchRecordService.increaseDraw(participationClubId);
         }
         else {
-            clubSoccerMatchRecordService.increaseLose(club1Id);
-            clubSoccerMatchRecordService.increaseWin(club2Id);
+            clubSoccerMatchRecordService.increaseLose(hostClubId);
+            clubSoccerMatchRecordService.increaseWin(participationClubId);
         }
 
         setSubmittedTrue(id);
@@ -169,7 +183,8 @@ public class SoccerMatchService {
         mapper.setSubmittedTrue(id);
     }
 
-    /** 해당 soccerMatch의 성적반영처리 여부를 반환합니다.
+    /**
+     * 해당 soccerMatch의 성적반영처리 여부를 반환합니다.
      *
      * @param id soccerMatch의 id
      * @return 성적반영처리 여부

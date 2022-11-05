@@ -6,19 +6,21 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.SoccerMatchRecruitment">
         INSERT
-        INTO soccer_match_recruitment(start_time, end_time, set_number, set_time, stadium_id, club1_id, club2_id,
+        INTO soccer_match_recruitment(start_time, end_time, num_set, time_set, stadium_id, host_club_id,
+                                      participation_club_id,
                                       created_at, updated_at)
-        VALUES (#{startTime}, #{endTime}, #{setNumber}, #{setTime}, #{stadiumId}, #{club1Id}, #{club2Id}, now(), now())
+        VALUES (#{startTime}, #{endTime}, #{numSet}, #{timeSet}, #{stadiumId}, #{hostClubId}, #{participationClubId},
+                now(), now())
     </insert>
 
     <select id="getSoccerMatchRecruitmentById" resultType="soccerfriend.dto.SoccerMatchRecruitment">
         SELECT start_time,
                end_time,
-               set_number,
-               set_time,
+               num_set,
+               time_set,
                stadium_id,
-               club1_id,
-               club2_id,
+               host_club_id,
+               participation_club_id,
                created_at,
                updated_at
         FROM soccer_match_recruitment
@@ -28,38 +30,38 @@
     <select id="getSoccerMatchRecruitmentByClubId" resultType="soccerfriend.dto.SoccerMatchRecruitment">
         SELECT start_time,
                end_time,
-               set_number,
-               set_time,
+               num_set,
+               time_set,
                stadium_id,
-               club1_id,
-               club2_id,
+               host_club_id,
+               participation_club_id,
                created_at,
                updated_at
         FROM soccer_match_recruitment
-        WHERE club1_id = #{clubId}
-           OR club2_id = #{clubId}
+        WHERE host_club_id = #{clubId}
+           OR participation_club_id = #{clubId}
     </select>
 
     <update id="update">
         UPDATE soccer_match_recruitment
         SET start_time = #{request.startTime},
             end_time   = #{request.endTime},
-            set_number = #{request.setNumber},
-            set_time   = #{request.setTime},
+            num_set    = #{request.numSet},
+            time_set   = #{request.timeSet},
             stadium_id = #{request.stadiumId},
             updated_at=now()
         WHERE id = #{id}
     </update>
 
-    <update id="setClub2Id">
+    <update id="setParticipationClubId">
         UPDATE soccer_match_recruitment
-        SET club2_id  = #{club2Id},
+        SET participation_club_id = #{participationClubId},
             updated_at=now()
         WHERE id = #{id}
     </update>
 
-    <select id="isClub2IdExist" resultType="boolean">
-        SELECT EXISTS(SELECT * FROM soccer_match_recruitment WHERE id = #{id} AND club2_id = 0)
+    <select id="isParticipationClubExist" resultType="boolean">
+        SELECT EXISTS(SELECT * FROM soccer_match_recruitment WHERE id = #{id} AND participation_club_id is not null)
     </select>
 
 </mapper>
