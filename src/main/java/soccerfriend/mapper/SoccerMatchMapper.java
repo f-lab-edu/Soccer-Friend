@@ -28,9 +28,9 @@ public interface SoccerMatchMapper {
 
     public boolean isClubExist(@Param("id") int id, @Param("clubId") int clubId);
 
-    public int getClub1Score(int id);
+    public int getHostClubScore(int id);
 
-    public int getClub2Score(int id);
+    public int getParticipationClubScore(int id);
 
     public void setSubmittedTrue(int id);
 

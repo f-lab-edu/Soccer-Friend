@@ -2,7 +2,6 @@ package soccerfriend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import soccerfriend.dto.Goal;
 import soccerfriend.dto.SoccerMatch;
 import soccerfriend.dto.SoccerMatchMember;
 import soccerfriend.dto.SoccerMatchRecruitment;
@@ -79,7 +78,8 @@ public class SoccerMatchController {
     @PatchMapping("/recruitments/{soccerMatchRecruitmentId}")
     public void update(@PathVariable int soccerMatchRecruitmentId, InputForm.UpdateSoccerMatchRecruitmentRequest request) {
         int memberId = authorizeService.getMemberId();
-        int clubId = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId).getHostClubId();
+        int clubId = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId)
+                                                  .getHostClubId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
@@ -194,12 +194,17 @@ public class SoccerMatchController {
         soccerMatchMemberService.approve(soccerMatchMemberId);
     }
 
+    /**
+     * 경기 결과 입력을 마무리하고 전적에 반영합니다.
+     *
+     * @param soccerMatchId soccerMatch의 id
+     */
     @PostMapping("/{soccerMatchId}/submit")
     public void submit(@PathVariable int soccerMatchId) {
         int memberId = authorizeService.getMemberId();
-        int club1Id = soccerMatchService.getHostClubId(soccerMatchId);
+        int hostClub = soccerMatchService.getHostClubId(soccerMatchId);
 
-        if (!clubMemberService.isClubLeaderOrStaff(club1Id, memberId)) {
+        if (!clubMemberService.isClubLeaderOrStaff(hostClub, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
