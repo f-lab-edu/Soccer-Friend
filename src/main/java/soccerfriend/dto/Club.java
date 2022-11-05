@@ -20,14 +20,16 @@ public class Club {
 
     private int point;
 
+    private int monthlyFee;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
     @Builder
-    public Club(String name, int leader, int addressId) {
+    public Club(String name, int addressId, int monthlyFee) {
         this.name = name;
-        this.leader = leader;
         this.addressId = addressId;
+        this.monthlyFee = monthlyFee;
     }
 }

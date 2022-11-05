@@ -42,6 +42,15 @@
                    )
     </select>
 
+    <select id="isApplied" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT *
+                       FROM club_member
+                       WHERE club_id = #{clubId}
+                         AND member_id = #{memberId}
+                   )
+    </select>
+
     <select id="getClubMemberById" resultType="soccerfriend.dto.ClubMember">
         SELECT id, club_id, member_id, grade, approved, created_at, updated_at
         FROM club_member

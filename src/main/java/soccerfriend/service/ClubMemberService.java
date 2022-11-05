@@ -17,6 +17,7 @@ import static soccerfriend.exception.ExceptionInfo.*;
 public class ClubMemberService {
 
     private final ClubMemberMapper mapper;
+    private final MemberService memberService;
 
     /**
      * clubMember를 추가합니다.
@@ -91,6 +92,17 @@ public class ClubMemberService {
     }
 
     /**
+     * 해당 member가 해당 클럽에 신청했지만 아직 승인되지 않은 상태인지 확인합니다.
+     *
+     * @param clubId
+     * @param memberId
+     * @return club의 member인지 여부
+     */
+    public boolean isApplied(int clubId, int memberId) {
+        return mapper.isApplied(clubId, memberId);
+    }
+
+    /**
      * 특정 id의 clubMember를 반환합니다.
      *
      * @param id clubMember의 id
@@ -141,6 +153,7 @@ public class ClubMemberService {
      * @param id clubMember의 id
      */
     public void approve(int id) {
+
         mapper.setApprovedTrue(id);
     }
 

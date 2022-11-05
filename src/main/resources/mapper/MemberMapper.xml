@@ -70,5 +70,4 @@
             updated_at=now()
         WHERE id = #{id}
     </update>
-
 </mapper>
