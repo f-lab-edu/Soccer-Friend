@@ -141,20 +141,20 @@ public class SoccerMatchService {
 
         int club1Score = getClub1Score(id);
         int club2Score = getClub2Score(id);
-        int club1Id = getClub1Id(id);
-        int club2Id = getClub2Id(id);
+        int hostClubId = getHostClubId(id);
+        int participationClubId = getParticipationClubId(id);
 
         if (club1Score > club2Score) {
-            clubSoccerMatchRecordService.increaseWin(club1Id);
-            clubSoccerMatchRecordService.increaseLose(club2Id);
+            clubSoccerMatchRecordService.increaseWin(hostClubId);
+            clubSoccerMatchRecordService.increaseLose(participationClubId);
         }
         else if (club1Score == club2Score) {
-            clubSoccerMatchRecordService.increaseDraw(club1Id);
-            clubSoccerMatchRecordService.increaseDraw(club2Id);
+            clubSoccerMatchRecordService.increaseDraw(hostClubId);
+            clubSoccerMatchRecordService.increaseDraw(participationClubId);
         }
         else {
-            clubSoccerMatchRecordService.increaseLose(club1Id);
-            clubSoccerMatchRecordService.increaseWin(club2Id);
+            clubSoccerMatchRecordService.increaseLose(hostClubId);
+            clubSoccerMatchRecordService.increaseWin(participationClubId);
         }
 
         setSubmittedTrue(id);

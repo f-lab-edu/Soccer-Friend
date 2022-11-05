@@ -197,7 +197,7 @@ public class SoccerMatchController {
     @PostMapping("/{soccerMatchId}/submit")
     public void submit(@PathVariable int soccerMatchId) {
         int memberId = authorizeService.getMemberId();
-        int club1Id = soccerMatchService.getClub1Id(soccerMatchId);
+        int club1Id = soccerMatchService.getHostClubId(soccerMatchId);
 
         if (!clubMemberService.isClubLeaderOrStaff(club1Id, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);

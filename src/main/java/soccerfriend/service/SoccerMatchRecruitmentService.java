@@ -78,12 +78,12 @@ public class SoccerMatchRecruitmentService {
     /**
      * soccerMatchRecruitment를 보고 다른 클럽이 이를 승낙합니다. 즉 결투를 신청합니다.
      *
-     * @param id      soccerMatchRecruitment의 id
+     * @param id                  soccerMatchRecruitment의 id
      * @param participationClubId 신청하려는 club의 id
      */
     public void setParticipationClubId(int id, int participationClubId) {
         SoccerMatchRecruitment soccerMatchRecruitment = getSoccerMatchRecruitmentById(id);
-        if (!mapper.isParticipationClubIdExist(id)) {
+        if (isParticipationClubExist(id)) {
             throw new BadRequestException(ALREADY_MATCH_APPROVED);
         }
         if (soccerMatchRecruitment.getHostClubId() == participationClubId) {
@@ -99,7 +99,7 @@ public class SoccerMatchRecruitmentService {
      * @param id soccerMatchRecruitment의 id
      * @return soccerMatchRecruitment의 상대 club이 정해졌는지 여부
      */
-    public boolean isParticipationClubIdExist(int id) {
-        return mapper.isNoParticipationClubId(id);
+    public boolean isParticipationClubExist(int id) {
+        return mapper.isParticipationClubExist(id);
     }
 }

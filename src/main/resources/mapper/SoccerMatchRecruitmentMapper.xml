@@ -60,8 +60,8 @@
         WHERE id = #{id}
     </update>
 
-    <select id="isParticipationClubIdExist" resultType="boolean">
-        SELECT EXISTS(SELECT * FROM soccer_match_recruitment WHERE id = #{id} AND participation_club_id = 0)
+    <select id="isParticipationClubExist" resultType="boolean">
+        SELECT EXISTS(SELECT * FROM soccer_match_recruitment WHERE id = #{id} AND participation_club_id is not null)
     </select>
 
 </mapper>
