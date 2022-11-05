@@ -35,19 +35,19 @@ public class GoalService {
         int soccerMatchId = soccerMatchMember.getSoccerMatchId();
         int clubId = soccerMatchMember.getClubId();
 
-        if (goal.getSetNumber() > soccerMatchRecruitment.getSetNumber() || goal.getSetNumber() < 1) {
+        if (goal.getNumSet() > soccerMatchRecruitment.getNumSet() || goal.getNumSet() < 1) {
             throw new BadRequestException(NOT_PROPER_GOAL);
         }
-        if (goal.getSetTime() > soccerMatchRecruitment.getSetTime() || goal.getSetTime() < 0) {
+        if (goal.getTimeSet() > soccerMatchRecruitment.getTimeSet() || goal.getTimeSet() < 0) {
             throw new BadRequestException(NOT_PROPER_GOAL);
         }
 
         mapper.insert(goal);
-        if (soccerMatchRecruitment.getClub1Id() == clubId) {
-            soccerMatchService.increaseClub1Score(soccerMatchId);
+        if (soccerMatchRecruitment.getHostClubId() == clubId) {
+            soccerMatchService.increaseHostClubScore(soccerMatchId);
         }
-        else if (soccerMatchRecruitment.getClub2Id() == clubId) {
-            soccerMatchService.increaseClub2Score(soccerMatchId);
+        else if (soccerMatchRecruitment.getParticipationClubId() == clubId) {
+            soccerMatchService.increaseParticipationClubScore(soccerMatchId);
         }
         else {
             throw new BadRequestException(NOT_CLUB_OF_SOCCER_MATCH);

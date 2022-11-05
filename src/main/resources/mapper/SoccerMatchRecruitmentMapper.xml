@@ -6,16 +6,18 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.SoccerMatchRecruitment">
         INSERT
-        INTO soccer_match_recruitment(start_time, end_time, set_number, set_time, stadium_id, host_club_id, participation_club_id,
+        INTO soccer_match_recruitment(start_time, end_time, num_set, time_set, stadium_id, host_club_id,
+                                      participation_club_id,
                                       created_at, updated_at)
-        VALUES (#{startTime}, #{endTime}, #{setNumber}, #{setTime}, #{stadiumId}, #{hostClubId}, #{participationClubId}, now(), now())
+        VALUES (#{startTime}, #{endTime}, #{numSet}, #{timeSet}, #{stadiumId}, #{hostClubId}, #{participationClubId},
+                now(), now())
     </insert>
 
     <select id="getSoccerMatchRecruitmentById" resultType="soccerfriend.dto.SoccerMatchRecruitment">
         SELECT start_time,
                end_time,
-               set_number,
-               set_time,
+               num_set,
+               time_set,
                stadium_id,
                host_club_id,
                participation_club_id,
@@ -28,8 +30,8 @@
     <select id="getSoccerMatchRecruitmentByClubId" resultType="soccerfriend.dto.SoccerMatchRecruitment">
         SELECT start_time,
                end_time,
-               set_number,
-               set_time,
+               num_set,
+               time_set,
                stadium_id,
                host_club_id,
                participation_club_id,
@@ -44,8 +46,8 @@
         UPDATE soccer_match_recruitment
         SET start_time = #{request.startTime},
             end_time   = #{request.endTime},
-            set_number = #{request.setNumber},
-            set_time   = #{request.setTime},
+            num_set    = #{request.numSet},
+            time_set   = #{request.timeSet},
             stadium_id = #{request.stadiumId},
             updated_at=now()
         WHERE id = #{id}
@@ -53,7 +55,7 @@
 
     <update id="setParticipationClubId">
         UPDATE soccer_match_recruitment
-        SET participation_club_id  = #{participationClubId},
+        SET participation_club_id = #{participationClubId},
             updated_at=now()
         WHERE id = #{id}
     </update>
