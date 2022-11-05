@@ -22,11 +22,11 @@ public class StadiumOwner {
 
     private String address;
 
-    private int taxpayerId;
+    private String taxpayerId;
 
     private int accountBankId;
 
-    private int accountNumber;
+    private String accountNumber;
 
     private int point;
 
@@ -35,7 +35,7 @@ public class StadiumOwner {
     private LocalDateTime updatedAt;
 
     @Builder
-    public StadiumOwner(String stadiumOwnerId, String password, String representative, String companyName, String address, int taxpayerId, int accountBankId, int accountNumber) {
+    public StadiumOwner(String stadiumOwnerId, String password, String representative, String companyName, String address, String taxpayerId, int accountBankId, String accountNumber) {
         this.stadiumOwnerId = stadiumOwnerId;
         this.password = password;
         this.representative = representative;
