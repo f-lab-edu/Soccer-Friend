@@ -3,7 +3,6 @@ package soccerfriend.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import soccerfriend.dto.SoccerMatch;
-import soccerfriend.dto.SoccerMatchRecruitment;
 
 import java.util.List;
 
@@ -19,13 +18,13 @@ public interface SoccerMatchMapper {
 
     public List<SoccerMatch> getSoccerMatchByClubId(int clubId);
 
-    public void increaseClub1Score(int id);
+    public void increaseHostClubScore(int id);
 
-    public void increaseClub2Score(int id);
+    public void increaseParticipationClubScore(int id);
 
-    public int getClub1Id(int id);
+    public int getHostClubId(int id);
 
-    public int getClub2Id(int id);
+    public int getParticipationClubId(int id);
 
     public boolean isClubExist(@Param("id") int id, @Param("clubId") int clubId);
 

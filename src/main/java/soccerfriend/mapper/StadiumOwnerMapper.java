@@ -21,4 +21,8 @@ public interface StadiumOwnerMapper {
     public void updateStadiumOwner(@Param("id") int id, @Param("request") UpdateStadiumOwnerRequest stadiumOwnerRequest);
 
     public void updatePassword(@Param("id") int id, @Param("password") String password);
+
+    public void increasePoint(@Param("id") int id, @Param("point") int point);
+
+    public void decreasePoint(@Param("id") int id, @Param("point") int point);
 }

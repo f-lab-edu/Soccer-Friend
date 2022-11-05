@@ -14,18 +14,18 @@ public class Goal {
 
     private int soccerMatchMemberId;
 
-    private int setNumber;
+    private int numSet;
 
-    private int setTime;
+    private int timeSet;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
     @Builder
-    public Goal(int soccerMatchMemberId, int setNumber, int setTime) {
+    public Goal(int soccerMatchMemberId, int numSet, int timeSet) {
         this.soccerMatchMemberId = soccerMatchMemberId;
-        this.setNumber = setNumber;
-        this.setTime = setTime;
+        this.numSet = numSet;
+        this.timeSet = timeSet;
     }
 }

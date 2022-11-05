@@ -6,58 +6,75 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.SoccerMatch">
         INSERT
-        INTO soccer_match(club1_score, club2_score, soccer_match_recruitment_id, submitted, created_at, updated_at)
+        INTO soccer_match(host_club_score, participation_club_score, soccer_match_recruitment_id, submitted, created_at,
+                          updated_at)
         VALUES (0, 0, #{soccerMatchRecruitmentId}, 0, now(), now())
     </insert>
 
     <select id="getSoccerMatchById" resultType="soccerfriend.dto.SoccerMatch">
-        SELECT id, club1_score, club2_score, soccer_match_recruitment_id, created_at, updated_at
+        SELECT id,
+               host_club_score,
+               participation_club_score,
+               soccer_match_recruitment_id,
+               submitted,
+               created_at,
+               updated_at
         FROM soccer_match
         WHERE id = #{id}
     </select>
 
     <select id="getSoccerMatchBySoccerMatchRecruitmentId" resultType="soccerfriend.dto.SoccerMatch">
-        SELECT id, club1_score, club2_score, soccer_match_recruitment_id, created_at, updated_at
+        SELECT id,
+               host_club_score,
+               participation_club_score,
+               soccer_match_recruitment_id,
+               submitted,
+               created_at,
+               updated_at
         FROM soccer_match
         WHERE soccer_match_recruitment_id = #{soccerMatchRecruitmentId}
     </select>
 
     <select id="getSoccerMatchByClubId" resultType="soccerfriend.dto.SoccerMatch">
-        SELECT a.id, a.club1_score, a.club2_score, a.soccer_match_recruitment_id, a.created_at, a.updated_at
-        FROM soccer_match a
-                 INNER JOIN soccer_match_recruitment b
-                            ON a.soccer_match_recruitment_id = b.id
-        WHERE (b.club2_id is not null)
-          AND (b.club1_id = #{clubId} OR b.club2_id = #{clubId})
+        SELECT a.id,
+               a.host_club__score,
+               a.participation_score,
+               a.soccer_match_recruitment_id,
+               a.submitted,
+               a.created_at,
+               a.updated_at
+        FROM soccer_match a,
+             soccer_match_recruitment b ON a.soccer_match_recruitment_id = b.id
+        WHERE (b.host_club_id is not null)
+          AND (b.participation_club_id = #{clubId}
+           OR b.participation_club_id = #{clubId})
     </select>
 
-    <update id="increaseClub1Score">
+    <update id="increaseHostClubScore">
         UPDATE soccer_match
-        SET club1_score = club1_score + 1,
-            updated_at  = now()
+        SET host_club_score = host_club_score + 1,
+            updated_at      = now()
         WHERE id = #{id}
     </update>
 
-    <update id="increaseClub2Score">
+    <update id="increaseParticipationClubScore">
         UPDATE soccer_match
-        SET club2_score = club2_score + 1,
-            updated_at  = now()
+        SET participation_club_score = participation_club_score + 1,
+            updated_at               = now()
         WHERE id = #{id}
     </update>
 
-    <select id="getClub1Id" resultType="int">
-        SELECT b.club1_id
+    <select id="getHostClubId" resultType="int">
+        SELECT b.host_club_id
         FROM soccer_match a
-                 INNER JOIN soccer_match_recruitment b
-                            ON a.soccer_match_recruitment_id = b.id
+           , soccer_match_recruitment b ON a.soccer_match_recruitment_id = b.id
         WHERE a.id = #{id}
     </select>
 
-    <select id="getClub2Id" resultType="int">
-        SELECT b.club2_id
+    <select id="getParticipationClubId" resultType="int">
+        SELECT b.participation_club_id
         FROM soccer_match a
-                 INNER JOIN soccer_match_recruitment b
-                            ON a.soccer_match_recruitment_id = b.id
+           , soccer_match_recruitment b ON a.soccer_match_recruitment_id = b.id
         WHERE a.id = #{id}
     </select>
 
@@ -65,21 +82,21 @@
         SELECT EXISTS(
                        SELECT *
                        FROM soccer_match a
-                                INNER JOIN soccer_match_recruitment b
-                                           ON a.soccer_match_recruitment_id = b.id
+                          , soccer_match_recruitment b
+                       ON a.soccer_match_recruitment_id = b.id
                        WHERE a.id = #{id}
-                         AND (b.club1_id = #{clubId} OR b.club2_id = #{clubId})
+                           AND (b.host_club_id = #{clubId} OR b.participation_club_id = #{clubId})
                    )
     </select>
 
-    <select id="getClub1Score" resultType="int">
-        SELECT club1_score
+    <select id="getHostClubScore" resultType="int">
+        SELECT host_club_score
         FROM soccer_match
         WHERE id = #{id}
     </select>
 
-    <select id="getClub2Score" resultType="int">
-        SELECT club2_score
+    <select id="getParticipationClubScore" resultType="int">
+        SELECT participation_club_score
         FROM soccer_match
         WHERE id = #{id}
     </select>

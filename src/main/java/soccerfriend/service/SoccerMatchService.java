@@ -73,21 +73,21 @@ public class SoccerMatchService {
     }
 
     /**
-     * soccerMatch의 club1의 점수를 1 증가시킵니다.
+     * soccerMatch의 hostClub의 점수를 1 증가시킵니다.
      *
      * @param id soccerMatch의 id
      */
-    public void increaseClub1Score(int id) {
-        mapper.increaseClub1Score(id);
+    public void increaseHostClubScore(int id) {
+        mapper.increaseHostClubScore(id);
     }
 
     /**
-     * soccerMatch의 club1의 점수를 1 감소시킵니다.
+     * soccerMatch의 participationClub의 점수를 1 감소시킵니다.
      *
      * @param id soccerMatch의 id
      */
-    public void increaseClub2Score(int id) {
-        mapper.increaseClub2Score(id);
+    public void increaseParticipationClubScore(int id) {
+        mapper.increaseParticipationClubScore(id);
     }
 
     /**
@@ -107,8 +107,8 @@ public class SoccerMatchService {
      * @param id soccerMatch의 id
      * @return club1의 id
      */
-    public int getClub1Id(int id) {
-        return mapper.getClub1Id(id);
+    public int getHostClubId(int id) {
+        return mapper.getHostClubId(id);
     }
 
     /**
@@ -117,8 +117,8 @@ public class SoccerMatchService {
      * @param id soccerMatch의 id
      * @return club2의 id
      */
-    public int getClub2Id(int id) {
-        return mapper.getClub2Id(id);
+    public int getParticipationClubId(int id) {
+        return mapper.getParticipationClubId(id);
     }
 
     public int getClub1Score(int id) {
@@ -169,7 +169,8 @@ public class SoccerMatchService {
         mapper.setSubmittedTrue(id);
     }
 
-    /** 해당 soccerMatch의 성적반영처리 여부를 반환합니다.
+    /**
+     * 해당 soccerMatch의 성적반영처리 여부를 반환합니다.
      *
      * @param id soccerMatch의 id
      * @return 성적반영처리 여부
