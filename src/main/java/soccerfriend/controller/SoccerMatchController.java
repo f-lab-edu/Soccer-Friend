@@ -55,6 +55,7 @@ public class SoccerMatchController {
      */
     @GetMapping("/recruitments/{soccerMatchRecruitmentId}")
     public SoccerMatchRecruitment getSoccerMatchRecruitmentById(@PathVariable int soccerMatchRecruitmentId) {
+        SoccerMatchRecruitment ret = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId);
         return soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId);
     }
 
