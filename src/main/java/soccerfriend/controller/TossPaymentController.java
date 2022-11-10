@@ -31,7 +31,6 @@ public class TossPaymentController {
         OrderInfo orderInfo = orderInfoService.getOrderInfoByOrderId(orderId);
 
         HttpHeaders headers = new HttpHeaders();
-        // headers.setBasicAuth(SECRET_KEY, ""); // spring framework 5.2 이상 버전에서 지원
         headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((SECRET_KEY + ":").getBytes()));
         headers.setContentType(MediaType.APPLICATION_JSON);
 
