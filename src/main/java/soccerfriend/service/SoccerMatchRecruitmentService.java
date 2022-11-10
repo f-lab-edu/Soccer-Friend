@@ -44,7 +44,11 @@ public class SoccerMatchRecruitmentService {
      * @return 특정 id의 soccerMatchRecruitment 객체
      */
     public SoccerMatchRecruitment getSoccerMatchRecruitmentById(int id) {
-        return mapper.getSoccerMatchRecruitmentById(id);
+        SoccerMatchRecruitment soccerMatchRecruitment = mapper.getSoccerMatchRecruitmentById(id);
+        if (soccerMatchRecruitment == null) {
+            throw new BadRequestException(SOCCER_MATCH_RECRUITMENT_NOT_EXIST);
+        }
+        return soccerMatchRecruitment;
     }
 
     /**
@@ -54,7 +58,11 @@ public class SoccerMatchRecruitmentService {
      * @return 특정 club이 참여한 모든 soccerMatchRecruitment
      */
     public List<SoccerMatchRecruitment> getSoccerMatchRecruitmentByClubId(int clubId) {
-        return mapper.getSoccerMatchRecruitmentByClubId(clubId);
+        List<SoccerMatchRecruitment> soccerMatchRecruitment = mapper.getSoccerMatchRecruitmentByClubId(clubId);
+        if (soccerMatchRecruitment.isEmpty()) {
+            throw new BadRequestException(SOCCER_MATCH_RECRUITMENT_NOT_EXIST);
+        }
+        return soccerMatchRecruitment;
     }
 
     /**
