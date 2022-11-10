@@ -24,8 +24,14 @@ public class TossPaymentController {
     private final OrderInfoService orderInfoService;
 
     @Value("${toss-payments.secret-key}")
-    public String SECRET_KEY;
+    private String SECRET_KEY;
 
+    /**
+     * 토스페이먼츠로 부터 결제승인을 받은 후 처리하는 로직입니다.
+     * 클라이언트 측에서 설정한 success-url에 해당하는 url로 설정되어있습니다.
+     * 결제 승인을 받은 후 토스페이먼츠 측으로 승인 API를 요청합니다.
+     * 승인 결과를 응답받고 성공하면 포인트를 충전하고 그렇지 않으면 fail을 return 합니다.
+     */
     @RequestMapping("/success")
     public String confirmPayment(@RequestParam String paymentKey, @RequestParam String orderId, @RequestParam Long amount) throws Exception {
         OrderInfo orderInfo = orderInfoService.getOrderInfoByOrderId(orderId);
@@ -40,8 +46,7 @@ public class TossPaymentController {
 
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
 
-        ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
-                "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
+        ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity("https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             orderInfoService.paymentSubmitted(orderInfo.getId());
@@ -53,6 +58,9 @@ public class TossPaymentController {
         }
     }
 
+    /**
+     * 토스페이먼츠로 부터 결제승인을 요청 후 실패했을 때 처리하는 로직입니다.
+     */
     @RequestMapping("/fail")
     public String failPayment(@RequestParam String message, @RequestParam String code) {
         return "fail";

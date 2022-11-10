@@ -17,12 +17,23 @@ public class OrderInfoController {
     private final OrderInfoService orderInfoService;
     private final AuthorizeService authorizeService;
 
+    /**
+     * 사용자가 주문을 진행합니다.
+     *
+     * @param orderInfo 주문 정보
+     */
     @PostMapping
     public void order(@RequestBody OrderInfo orderInfo) {
         int memberId = authorizeService.getMemberId();
         orderInfoService.order(memberId, orderInfo);
     }
 
+    /**
+     * id를 통해 주문정보를 조회합니다.
+     *
+     * @param id 주문정보의 id
+     * @return 주문 정보
+     */
     @GetMapping("/{id}")
     public OrderInfo getOrderInfoById(@PathVariable int id) {
         int memberId = authorizeService.getMemberId();
