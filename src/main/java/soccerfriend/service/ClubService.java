@@ -8,8 +8,9 @@ import soccerfriend.dto.ClubMember;
 import soccerfriend.dto.Member;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
-import soccerfriend.exception.exception.NotExistException;
 import soccerfriend.mapper.ClubMapper;
+
+import java.util.List;
 
 import static soccerfriend.exception.ExceptionInfo.*;
 
@@ -20,6 +21,7 @@ public class ClubService {
     private final ClubMapper clubMapper;
     private final ClubMemberService clubMemberService;
     private final MemberService memberService;
+    private final ClubMonthlyFeeService clubMonthlyFeeService;
 
     /**
      * 클럽을 생성합니다.
@@ -151,20 +153,27 @@ public class ClubService {
         clubMapper.decreasePoint(id, point);
     }
 
+    /**
+     * club에 가입한 member가 월회비를 납부합니다.
+     *
+     * @param clubId   월회비를 납부하려는 club의 id
+     * @param memberId 납부하는 member의 id
+     */
     @Transactional
-    public void approveClubMember(int clubMemberId) {
-        ClubMember clubMember = clubMemberService.getClubMemberById(clubMemberId);
-        Club club = getClubById(clubMember.getClubId());
-        Member member = memberService.getMemberById(clubMember.getMemberId());
-        int monthlyFee = club.getMonthlyFee();
-
-        if (member.getPoint() < club.getMonthlyFee()) {
+    public void payMonthlyFee(int clubId, int memberId, int year, int month) {
+        Member member = memberService.getMemberById(memberId);
+        ClubMember clubMember = clubMemberService.getClubMemberByClubIdAndMemberId(clubId, memberId);
+        Club club = getClubById(clubId);
+        int fee = club.getMonthlyFee();
+        if (member.getPoint() < fee) {
             throw new BadRequestException(NOT_ENOUGH_POINT);
         }
+        if (clubMonthlyFeeService.isAlreadyPaid(clubId, memberId, year, month)) {
+            throw new BadRequestException(ALREADY_PAID_CLUB_MONTHLY_FEE);
+        }
 
-        memberService.decreasePoint(member.getId(), monthlyFee);
-        increasePont(club.getId(), monthlyFee);
-
-        clubMemberService.approve(clubMemberId);
+        memberService.decreasePoint(memberId, fee);
+        increasePont(clubId, fee);
+        clubMonthlyFeeService.add(clubId, clubMember.getId(), fee, year, month);
     }
 }

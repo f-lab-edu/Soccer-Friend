@@ -25,13 +25,29 @@
     </select>
 
     <select id="getMemberByMemberId" resultType="soccerfriend.dto.Member">
-        SELECT id, member_id, password, nickname, point, positions_id, address_id, created_at, updated_at
+        SELECT id,
+               member_id,
+               password,
+               nickname,
+               point,
+               positions_id,
+               address_id,
+               created_at,
+               updated_at
         FROM member
         WHERE member_id = #{memberId}
     </select>
 
     <select id="getMemberById" resultType="soccerfriend.dto.Member">
-        SELECT id, member_id, password, nickname, point, positions_id, address_id, created_at, updated_at
+        SELECT id,
+               member_id,
+               password,
+               nickname,
+               point,
+               positions_id,
+               address_id,
+               created_at,
+               updated_at
         FROM member
         WHERE id = #{id}
     </select>
@@ -52,21 +68,21 @@
 
     <update id="addPoint">
         UPDATE member
-        SET point  = point + #{point},
+        SET point     = point + #{point},
             updated_at=now()
         WHERE id = #{id}
     </update>
 
     <update id="increasePoint">
         UPDATE member
-        SET point  = point + #{point},
+        SET point     = point + #{point},
             updated_at=now()
         WHERE id = #{id}
     </update>
 
     <update id="decreasePoint">
         UPDATE member
-        SET point  = point - #{point},
+        SET point     = point - #{point},
             updated_at=now()
         WHERE id = #{id}
     </update>

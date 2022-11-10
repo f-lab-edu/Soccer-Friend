@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.StadiumMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.Stadium">
+        INSERT
+        INTO stadium(name, stadium_owner_id, address, phone_number, price_day, price_night, price_weekend, created_at,
+                     updated_at)
+        VALUES (#{name}, #{stadiumOwnerId}, #{address}, #{phoneNumber}, #{priceDay}, #{priceNight}, #{priceWeekend},
+                now(), now())
+    </insert>
+
+    <select id="isStadiumOwner" resultType="boolean">
+        SELECT EXISTS (SELECT * FROM stadium WHERE id = #{id} AND stadium_owner_id = #{stadiumOwnerId})
+    </select>
+
+    <select id="getStadiumById" resultType="soccerfriend.dto.Stadium">
+        SELECT id,
+               name,
+               stadium_owner_id,
+               address,
+               phone_number,
+               price_day,
+               price_night,
+               price_weekend,
+               created_at,
+               updated_at
+        FROM stadium
+        WHERE id = #{id}
+    </select>
+
+    <select id="getStadiumByStadiumOwnerId" resultType="soccerfriend.dto.Stadium">
+        SELECT id,
+               name,
+               stadium_owner_id,
+               address,
+               phone_number,
+               price_day,
+               price_night,
+               price_weekend,
+               created_at,
+               updated_at
+        FROM stadium
+        WHERE stadium_owner_id = #{stadiumOwnerId}
+    </select>
+
+    <update id="updateStadium">
+        UPDATE stadium
+        SET name          = #{stadium.name},
+            address       = #{stadium.address},
+            phone_number  = #{stadium.phoneNumber},
+            price_day     = #{stadium.priceDay},
+            price_night   = #{stadium.priceNight},
+            price_weekend = #{stadium.priceWeekend},
+            updated_at    = now()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStadiumOwner">
+        UPDATE stadium
+        SET stadium_owner_id = #{stadiumOwnerId},
+            updated_at       = now()
+        WHERE id = #{id}
+    </update>
+</mapper>

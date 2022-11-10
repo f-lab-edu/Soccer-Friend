@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.SoccerMatchMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.SoccerMatch">
+        INSERT
+        INTO soccer_match(host_club_score, participation+club_score, soccer_match_recruitment_id, created_at,
+                          updated_at)
+        VALUES (0, 0, #{soccerMatchRecruitmentId}, now(), now())
+    </insert>
+
+    <select id="getSoccerMatchById" resultType="soccerfriend.dto.SoccerMatch">
+        SELECT id, host_club_score, participation_club_score, soccer_match_recruitment_id, created_at, updated_at
+        FROM soccer_match
+        WHERE id = #{id}
+    </select>
+
+    <select id="getSoccerMatchBySoccerMatchRecruitmentId" resultType="soccerfriend.dto.SoccerMatch">
+        SELECT id, host_club_score, participation_club_score, soccer_match_recruitment_id, created_at, updated_at
+        FROM soccer_match
+        WHERE soccer_match_recruitment_id = #{soccerMatchRecruitmentId}
+    </select>
+
+    <select id="getSoccerMatchByClubId" resultType="soccerfriend.dto.SoccerMatch">
+        SELECT a.id,
+               a.host_club__score,
+               a.participation_score,
+               a.soccer_match_recruitment_id,
+               a.created_at,
+               a.updated_at
+        FROM soccer_match a,
+             soccer_match_recruitment b ON a.soccer_match_recruitment_id = b.id
+        WHERE (b.host_club_id is not null)
+          AND (b.participation_club_id = #{clubId}
+           OR b.participation_club_id = #{clubId})
+    </select>
+
+    <update id="increaseHostClubScore">
+        UPDATE soccer_match
+        SET host_club_score = host_club_score + 1,
+            updated_at      = now()
+        WHERE id = #{id}
+    </update>
+
+    <update id="increaseParticipationClubScore">
+        UPDATE soccer_match
+        SET participation_club_score = participation_club_score + 1,
+            updated_at               = now()
+        WHERE id = #{id}
+    </update>
+
+    <select id="getHostClubId" resultType="int">
+        SELECT b.host_club_id
+        FROM soccer_match a
+           , soccer_match_recruitment b ON a.soccer_match_recruitment_id = b.id
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="getParticipationClubId" resultType="int">
+        SELECT b.participation_club_id
+        FROM soccer_match a
+           , soccer_match_recruitment b ON a.soccer_match_recruitment_id = b.id
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="isClubExist" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT *
+                       FROM soccer_match a
+                          , soccer_match_recruitment b
+                       ON a.soccer_match_recruitment_id = b.id
+                       WHERE a.id = #{id}
+                           AND (b.host_club_id = #{clubId} OR b.participation_club_id = #{clubId})
+                   )
+    </select>
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.SoccerMatchRecruitmentMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.SoccerMatchRecruitment">
+        INSERT
+        INTO soccer_match_recruitment(start_time, end_time, set_number, set_time, stadium_id, host_club_id, participation_club_id,
+                                      created_at, updated_at)
+        VALUES (#{startTime}, #{endTime}, #{setNumber}, #{setTime}, #{stadiumId}, #{hostClubId}, #{participationClubId}, now(), now())
+    </insert>
+
+    <select id="getSoccerMatchRecruitmentById" resultType="soccerfriend.dto.SoccerMatchRecruitment">
+        SELECT start_time,
+               end_time,
+               set_number,
+               set_time,
+               stadium_id,
+               host_club_id,
+               participation_club_id,
+               created_at,
+               updated_at
+        FROM soccer_match_recruitment
+        WHERE id = #{id}
+    </select>
+
+    <select id="getSoccerMatchRecruitmentByClubId" resultType="soccerfriend.dto.SoccerMatchRecruitment">
+        SELECT start_time,
+               end_time,
+               set_number,
+               set_time,
+               stadium_id,
+               host_club_id,
+               participation_club_id,
+               created_at,
+               updated_at
+        FROM soccer_match_recruitment
+        WHERE host_club_id = #{clubId}
+           OR participation_club_id = #{clubId}
+    </select>
+
+    <update id="update">
+        UPDATE soccer_match_recruitment
+        SET start_time = #{request.startTime},
+            end_time   = #{request.endTime},
+            set_number = #{request.setNumber},
+            set_time   = #{request.setTime},
+            stadium_id = #{request.stadiumId},
+            updated_at=now()
+        WHERE id = #{id}
+    </update>
+
+    <update id="setParticipationClubId">
+        UPDATE soccer_match_recruitment
+        SET participation_club_id  = #{participationClubId},
+            updated_at=now()
+        WHERE id = #{id}
+    </update>
+
+    <select id="isNoParticipationClubId" resultType="boolean">
+        SELECT EXISTS(SELECT * FROM soccer_match_recruitment WHERE id = #{id} AND participation_club_id = 0)
+    </select>
+
+</mapper>

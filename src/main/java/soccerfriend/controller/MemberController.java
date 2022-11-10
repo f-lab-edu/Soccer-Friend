@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Member;
 import soccerfriend.dto.PointChargePayment;
 import soccerfriend.service.AuthorizeService;
-import soccerfriend.service.ClubService;
 import soccerfriend.service.MemberService;
 import soccerfriend.service.PointChargePaymentService;
 import soccerfriend.utility.InputForm.LoginRequest;

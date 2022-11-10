@@ -8,36 +8,27 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ClubMember {
+public class SoccerMatchMember {
 
     private int id;
+
+    private int soccerMatchId;
 
     private int clubId;
 
     private int memberId;
 
-    private ClubMemberGrade grade;
-
     private boolean approved;
 
-    private boolean paymentStatus;
-
-    private LocalDateTime paidAt;
-
-    private LocalDateTime createdAt;
+    private LocalDateTime createAt;
 
     private LocalDateTime updatedAt;
 
     @Builder
-    public ClubMember(int clubId, int memberId, ClubMemberGrade grade) {
+    public SoccerMatchMember(int soccerMatchId, int clubId, int memberId, boolean approved) {
+        this.soccerMatchId = soccerMatchId;
         this.clubId = clubId;
         this.memberId = memberId;
-        this.grade = grade;
-    }
-
-    public static enum ClubMemberGrade {
-        LEADER,
-        STAFF,
-        MEMBER
+        this.approved = approved;
     }
 }
