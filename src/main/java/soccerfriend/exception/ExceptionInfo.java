@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum ExceptionInfo {
 
+    NO_ORDER_PERMISSION(401, "해당 주문에 관한 권한이 없습니다."),
     NOT_CLUB_OF_SOCCER_MATCH(401, "경기에 참여하는 club이 아닙니다."),
     NOT_STADIUM_OWNER(401, "경기장의 사업자가 아닙니다."),
     NO_CLUB_PERMISSION(401, "클럽 내에서 권한이 없습니다."),
@@ -15,6 +16,7 @@ public enum ExceptionInfo {
     IS_CLUB_LEADER(401, "해당 클럽의 leader는 탈퇴할 수 없습니다."),
     PAYMENT_FAIL(401, "결제에 실패했습니다."),
 
+    ORDER_INFO_NOT_EXIST(404, "주문 정보가 존재하지 않습니다."),
     CLUB_HAS_NO_RECORD(404, "해당 클럽은 기록을 저장하고 있지 않습니다."),
     NOT_PROPER_GOAL(404, "골에 대한 정보가 정확하지 않습니다. 세트와 시간을 다시 확인해주세요."),
     GOAL_NOT_EXIST(404, "존재하지 않은 골입니다."),
