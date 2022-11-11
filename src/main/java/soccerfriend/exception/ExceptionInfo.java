@@ -16,6 +16,7 @@ public enum ExceptionInfo {
     IS_CLUB_LEADER(401, "해당 클럽의 leader는 탈퇴할 수 없습니다."),
     PAYMENT_FAIL(401, "결제에 실패했습니다."),
 
+    TOSS_PAYMENT_FAIL(404, "토스페이먼트 결제승인과정에서 오류가 발생했습니다."),
     ORDER_INFO_NOT_EXIST(404, "주문 정보가 존재하지 않습니다."),
     CLUB_HAS_NO_RECORD(404, "해당 클럽은 기록을 저장하고 있지 않습니다."),
     NOT_PROPER_GOAL(404, "골에 대한 정보가 정확하지 않습니다. 세트와 시간을 다시 확인해주세요."),
