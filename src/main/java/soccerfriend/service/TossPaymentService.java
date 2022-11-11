@@ -74,6 +74,9 @@ public class TossPaymentService implements PaymentService {
         }
     }
 
+    /**
+     * 토스페이먼츠로 부터 결제과정에서 실패했을 때 처리하는 로직입니다.
+     */
     @Override
     public String fail(Map<String, Object> req) {
         return "fail";
