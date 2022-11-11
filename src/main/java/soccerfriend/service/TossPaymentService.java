@@ -19,7 +19,6 @@ import java.util.Map;
 import static soccerfriend.exception.ExceptionInfo.TOSS_PAYMENT_FAIL;
 
 @Service
-@Slf4j
 public class TossPaymentService implements PaymentService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
