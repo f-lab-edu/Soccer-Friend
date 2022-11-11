@@ -3,6 +3,7 @@ package soccerfriend.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -18,6 +19,7 @@ import java.util.Map;
 import static soccerfriend.exception.ExceptionInfo.TOSS_PAYMENT_FAIL;
 
 @Service
+@Slf4j
 public class TossPaymentService implements PaymentService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -39,7 +41,7 @@ public class TossPaymentService implements PaymentService {
      * 승인 결과를 응답받고 성공하면 포인트를 충전하고 그렇지 않으면 fail을 return 합니다.
      */
     @Override
-    public String success(Map<String, Object> req) {
+    public String success(Map<String, Object> req) throws Exception {
 
         String paymentKey = (String) req.get("paymentKey");
         String orderId = (String) req.get("orderId");
@@ -55,12 +57,7 @@ public class TossPaymentService implements PaymentService {
         payloadMap.put("orderId", orderId);
         payloadMap.put("amount", String.valueOf(amount));
 
-        HttpEntity<String> request = null;
-        try {
-            request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
-        } catch (JsonProcessingException e) {
-            throw new BadRequestException(TOSS_PAYMENT_FAIL);
-        }
+        HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
 
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity("https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
 
@@ -70,7 +67,9 @@ public class TossPaymentService implements PaymentService {
         }
         else {
             JsonNode failNode = responseEntity.getBody();
-            return "fail";
+            String code = failNode.get("code").asText();
+            String message = failNode.get("message").asText();
+            return code + " " + message;
         }
     }
 
