@@ -1,10 +1,8 @@
 package soccerfriend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.Positions;
-import soccerfriend.exception.ExceptionInfo;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.mapper.PositionsMapper;
 
@@ -23,7 +21,6 @@ public class PositionsService {
      *
      * @return 모든 positions
      */
-    @Cacheable(value = "POSITION", key = "'POSITIONS'")
     public List<Positions> getAll() {
         List<Positions> all = mapper.getAll();
         if (all.isEmpty()) {

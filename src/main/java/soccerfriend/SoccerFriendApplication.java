@@ -6,7 +6,6 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 
-@EnableRedisHttpSession
 @SpringBootApplication
 public class SoccerFriendApplication {
 
