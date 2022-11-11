@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.GoalMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.Goal">
+        INSERT
+        INTO goal(soccer_match_member_id, num_set, time_set, created_at, updated_at)
+        VALUES (#{soccerMatchMemberId}, #{numSet}, #{timeSet}, now(), now())
+    </insert>
+
+    <select id="getGoalById" resultType="soccerfriend.dto.Goal">
+        SELECT id, soccer_match_member_id, num_set, time_set, created_at, updated_at
+        FROM goal
+        WHERE id = #{id}
+    </select>
+
+    <select id="getGoalByMemberId" resultType="soccerfriend.dto.Goal">
+        SELECT a.id, a.soccer_match_member_id, a.num_set, a.time_set, a.created_at, a.updated_at
+        FROM goal a
+                 INNER JOIN soccer_match_member b ON a.soccer_match_member_id = b.id
+        WHERE b.member_id = #{memberId}
+    </select>
+</mapper>

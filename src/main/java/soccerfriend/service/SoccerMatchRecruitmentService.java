@@ -28,8 +28,8 @@ public class SoccerMatchRecruitmentService {
                 SoccerMatchRecruitment.builder()
                                       .startTime(soccerMatchRecruitment.getStartTime())
                                       .endTime(soccerMatchRecruitment.getEndTime())
-                                      .setTime(soccerMatchRecruitment.getSetTime())
-                                      .setNumber(soccerMatchRecruitment.getSetNumber())
+                                      .timeSet(soccerMatchRecruitment.getTimeSet())
+                                      .numSet(soccerMatchRecruitment.getNumSet())
                                       .stadiumId(soccerMatchRecruitment.getStadiumId())
                                       .hostClubId(clubId)
                                       .build();

@@ -2,6 +2,7 @@ package soccerfriend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import soccerfriend.dto.Goal;
 import soccerfriend.dto.SoccerMatch;
 import soccerfriend.dto.SoccerMatchMember;
 import soccerfriend.dto.SoccerMatchRecruitment;
@@ -181,7 +182,6 @@ public class SoccerMatchController {
         int memberId = authorizeService.getMemberId();
         SoccerMatchMember soccerMatchMember = soccerMatchMemberService.getSoccerMatchMemberById(soccerMatchMemberId);
         int clubId = soccerMatchMember.getClubId();
-
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }

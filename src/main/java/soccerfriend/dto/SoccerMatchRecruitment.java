@@ -19,9 +19,9 @@ public class SoccerMatchRecruitment {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime endTime;
 
-    int setNumber;
+    int numSet;
 
-    int setTime;
+    int timeSet;
 
     int stadiumId;
 
@@ -34,11 +34,11 @@ public class SoccerMatchRecruitment {
     LocalDateTime updatedAt;
 
     @Builder
-    public SoccerMatchRecruitment(LocalDateTime startTime, LocalDateTime endTime, int setNumber, int setTime, int stadiumId) {
+    public SoccerMatchRecruitment(LocalDateTime startTime, LocalDateTime endTime, int numSet, int timeSet, int stadiumId) {
         this.startTime = startTime;
         this.endTime = endTime;
-        this.setNumber = setNumber;
-        this.setTime = setTime;
+        this.numSet = numSet;
+        this.timeSet = timeSet;
         this.stadiumId = stadiumId;
     }
 }
