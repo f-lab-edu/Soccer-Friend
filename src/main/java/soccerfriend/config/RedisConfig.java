@@ -16,6 +16,10 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair.fromSerializer;
 
 @EnableCaching
 @Configuration
@@ -40,21 +44,31 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(host, port);
+        var redisStandaloneConfiguration = new RedisStandaloneConfiguration(host, port);
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
     @Bean
-    public CacheManager userCacheManager(RedisConnectionFactory connectionFactory) {
-        RedisCacheConfiguration redisCacheConfiguration =
-                RedisCacheConfiguration.defaultCacheConfig()
-                                       .serializeKeysWith(RedisSerializationContext.SerializationPair
-                                               .fromSerializer(new StringRedisSerializer()))
-                                       .serializeValuesWith(RedisSerializationContext.SerializationPair
-                                               .fromSerializer(new GenericJackson2JsonRedisSerializer()))
-                                       .entryTtl(Duration.ofMinutes(3L));
+    public RedisCacheManager redisCacheManager() {
 
-        return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(connectionFactory)
-                                                         .cacheDefaults(redisCacheConfiguration).build();
+        return RedisCacheManager
+                .RedisCacheManagerBuilder
+                .fromConnectionFactory(redisConnectionFactory())
+                .cacheDefaults(defaultConfiguration())
+                .withInitialCacheConfigurations(customConfigurationMap())
+                .build();
+    }
+
+    private RedisCacheConfiguration defaultConfiguration() {
+        return RedisCacheConfiguration.defaultCacheConfig()
+                                      .serializeKeysWith(fromSerializer(new StringRedisSerializer()))
+                                      .serializeValuesWith(fromSerializer(new GenericJackson2JsonRedisSerializer()))
+                                      .entryTtl(Duration.ofMinutes(5));
+    }
+
+    private Map<String, RedisCacheConfiguration> customConfigurationMap() {
+        Map<String, RedisCacheConfiguration> customConfigurationMap = new HashMap<>();
+        customConfigurationMap.put("SIGNUP", defaultConfiguration().entryTtl(Duration.ofDays(1)));
+        return customConfigurationMap;
     }
 }

@@ -24,7 +24,7 @@ public class AddressService {
      * @param city
      * @return city에 존재하는 모든 Address
      */
-    @Cacheable(value = "ADDRESS", key = "#city")
+    @Cacheable(value = "SIGNUP", key = "'ADDRESS'+#city")
     public List<Address> getAddressByCity(String city) {
         List<Address> addressByCity = mapper.getAddressByCity(city);
         if(addressByCity.isEmpty()){

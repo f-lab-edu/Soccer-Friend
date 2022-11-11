@@ -23,7 +23,7 @@ public class PositionsService {
      *
      * @return 모든 positions
      */
-    @Cacheable(value = "POSITION", key = "'POSITIONS'")
+    @Cacheable(value = "SIGNUP", key = "'POSITIONS'")
     public List<Positions> getAll() {
         List<Positions> all = mapper.getAll();
         if (all.isEmpty()) {
