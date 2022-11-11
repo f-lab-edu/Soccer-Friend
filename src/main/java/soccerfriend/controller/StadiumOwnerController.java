@@ -3,16 +3,13 @@ package soccerfriend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import soccerfriend.dto.PointChargePayment;
 import soccerfriend.dto.StadiumOwner;
 import soccerfriend.service.AuthorizeService;
-import soccerfriend.service.PointChargePaymentService;
 import soccerfriend.service.StadiumOwnerService;
 import soccerfriend.utility.InputForm.LoginRequest;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 import soccerfriend.utility.InputForm.UpdateStadiumOwnerRequest;
 
-import static soccerfriend.dto.PointChargePayment.PayerType.STADIUM_OWNER;
 import static soccerfriend.utility.HttpStatusCode.CONFLICT;
 import static soccerfriend.utility.HttpStatusCode.OK;
 
@@ -23,7 +20,6 @@ public class StadiumOwnerController {
 
     private final StadiumOwnerService stadiumOwnerService;
     private final AuthorizeService authorizeService;
-    private final PointChargePaymentService pointChargePaymentService;
 
     /**
      * stadiumOwner의 회원가입을 수행합니다.
@@ -100,16 +96,5 @@ public class StadiumOwnerController {
         int id = authorizeService.getStadiumOwnerId();
         stadiumOwnerService.updatePassword(id, passwordRequest);
         authorizeService.logout();
-    }
-
-    /**
-     * point를 충전합니다.
-     *
-     * @param pointChargePayment point 충전정보
-     */
-    @PostMapping("/point/charge")
-    public void chargePoint(@RequestBody PointChargePayment pointChargePayment) {
-        int id = authorizeService.getStadiumOwnerId();
-        pointChargePaymentService.chargePoint(STADIUM_OWNER, id, pointChargePayment);
     }
 }
