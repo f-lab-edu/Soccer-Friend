@@ -30,8 +30,6 @@ public class TossPaymentService implements PaymentService {
         this.objectMapper = objectMapper;
         this.orderInfoService = orderInfoService;
         this.SECRET_KEY = SECRET_KEY;
-        System.out.println("afafaf");
-        System.out.println("ADFafasfa");
     }
 
     /**
