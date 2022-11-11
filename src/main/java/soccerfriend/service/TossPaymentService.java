@@ -3,7 +3,7 @@ package soccerfriend.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -18,14 +18,21 @@ import java.util.Map;
 import static soccerfriend.exception.ExceptionInfo.TOSS_PAYMENT_FAIL;
 
 @Service
-@RequiredArgsConstructor
 public class TossPaymentService implements PaymentService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final OrderInfoService orderInfoService;
+    private final String SECRET_KEY;
 
-    @Value("${toss-payments.secret-key}")
-    private String SECRET_KEY;
+    @Autowired
+    public TossPaymentService(RestTemplate restTemplate, ObjectMapper objectMapper, OrderInfoService orderInfoService, @Value("${toss-payments.secret-key}") String SECRET_KEY) {
+        this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
+        this.orderInfoService = orderInfoService;
+        this.SECRET_KEY = SECRET_KEY;
+        System.out.println("afafaf");
+        System.out.println("ADFafasfa");
+    }
 
     /**
      * 토스페이먼츠로 부터 결제승인을 받은 후 처리하는 로직입니다.

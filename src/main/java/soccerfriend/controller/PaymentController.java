@@ -15,7 +15,7 @@ public class PaymentController {
     private final PaymentService tossPaymentService;
 
     /**
-     * 토스페이먼츠로 부터 결제승인을 받은 후 처리하는 로직입니다.
+     * 결제대행사로 부터 결제승인을 받은 후 처리하는 로직입니다.
      */
     @RequestMapping("/success")
     public String confirmPayment(@RequestParam Map<String, Object> req) throws Exception {
@@ -23,7 +23,7 @@ public class PaymentController {
     }
 
     /**
-     * 토스페이먼츠로 부터 결제승인을 요청 후 실패했을 때 처리하는 로직입니다.
+     * 결제대행사로 부터 결제승인을 요청 후 실패했을 때 처리하는 로직입니다.
      */
     @RequestMapping("/fail")
     public String failPayment(@RequestParam Map<String, Object> req) {

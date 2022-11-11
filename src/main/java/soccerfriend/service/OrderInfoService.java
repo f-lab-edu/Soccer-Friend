@@ -101,6 +101,10 @@ public class OrderInfoService {
         memberService.increasePoint(memberId, orderInfo.getAmount());
     }
 
+    /**
+     * 주문번호를 생성하는 난수생성기입니다.
+     * @return 새롭게 생성된 주문번호
+     */
     private String getOrderIdRandomly() {
         int length = 32;
         String alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=";
