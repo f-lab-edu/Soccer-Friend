@@ -18,6 +18,8 @@ public class SoccerMatch {
 
     private int soccerMatchRecruitmentId;
 
+    private boolean submitted;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

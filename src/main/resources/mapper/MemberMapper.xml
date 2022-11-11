@@ -10,10 +10,25 @@
         VALUES (#{memberId}, #{password}, #{nickname}, #{point}, #{positionsId}, #{addressId}, now(), now())
     </insert>
 
-    <delete id="delete" parameterType="int">
+    <update id="delete">
+        UPDATE member
+        SET deleted    = true,
+            updated_at = now()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deletePermanently">
         DELETE
         FROM member
-        WHERE id = #{id}
+        WHERE deleted = true
+          AND id = #{id}
+    </delete>
+
+    <delete id="deletePermanentlyDaysBefore">
+        DELETE
+        FROM member
+        WHERE deleted = true
+          AND DATE_DIFF(updated_at, now()) > #{days}
     </delete>
 
     <select id="isMemberIdExist" resultType="boolean">

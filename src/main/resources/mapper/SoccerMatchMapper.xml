@@ -6,19 +6,31 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.SoccerMatch">
         INSERT
-        INTO soccer_match(host_club_score, participation+club_score, soccer_match_recruitment_id, created_at,
+        INTO soccer_match(host_club_score, participation_club_score, soccer_match_recruitment_id, submitted, created_at,
                           updated_at)
-        VALUES (0, 0, #{soccerMatchRecruitmentId}, now(), now())
+        VALUES (0, 0, #{soccerMatchRecruitmentId}, 0, now(), now())
     </insert>
 
     <select id="getSoccerMatchById" resultType="soccerfriend.dto.SoccerMatch">
-        SELECT id, host_club_score, participation_club_score, soccer_match_recruitment_id, created_at, updated_at
+        SELECT id,
+               host_club_score,
+               participation_club_score,
+               soccer_match_recruitment_id,
+               submitted,
+               created_at,
+               updated_at
         FROM soccer_match
         WHERE id = #{id}
     </select>
 
     <select id="getSoccerMatchBySoccerMatchRecruitmentId" resultType="soccerfriend.dto.SoccerMatch">
-        SELECT id, host_club_score, participation_club_score, soccer_match_recruitment_id, created_at, updated_at
+        SELECT id,
+               host_club_score,
+               participation_club_score,
+               soccer_match_recruitment_id,
+               submitted,
+               created_at,
+               updated_at
         FROM soccer_match
         WHERE soccer_match_recruitment_id = #{soccerMatchRecruitmentId}
     </select>
@@ -28,6 +40,7 @@
                a.host_club__score,
                a.participation_score,
                a.soccer_match_recruitment_id,
+               a.submitted,
                a.created_at,
                a.updated_at
         FROM soccer_match a,
@@ -73,6 +86,30 @@
                        ON a.soccer_match_recruitment_id = b.id
                        WHERE a.id = #{id}
                            AND (b.host_club_id = #{clubId} OR b.participation_club_id = #{clubId})
+                   )
+    </select>
+
+    <select id="getHostClubScore" resultType="int">
+        SELECT host_club_score
+        FROM soccer_match
+        WHERE id = #{id}
+    </select>
+
+    <select id="getParticipationClubScore" resultType="int">
+        SELECT participation_club_score
+        FROM soccer_match
+        WHERE id = #{id}
+    </select>
+
+    <update id="setSubmittedTrue">
+        UPDATE soccer_match
+        SET submitted = true
+        WHERE id = #{id}
+    </update>
+
+    <select id="isSubmitted" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT * FROM soccer_match WHERE id = #{id} AND submitted = true
                    )
     </select>
 </mapper>

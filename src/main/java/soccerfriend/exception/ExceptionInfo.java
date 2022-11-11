@@ -10,10 +10,12 @@ public enum ExceptionInfo {
     NOT_CLUB_OF_SOCCER_MATCH(401, "경기에 참여하는 club이 아닙니다."),
     NOT_STADIUM_OWNER(401, "경기장의 사업자가 아닙니다."),
     NO_CLUB_PERMISSION(401, "클럽 내에서 권한이 없습니다."),
+    NO_SUBMIT_MATCH_PERMISSION(401, "클럽결과 제출은 주최클럽의 운영진만 가능합니다."),
     NOT_CLUB_MEMBER(401, "해당 클럽의 회원이 아닙니다."),
     IS_CLUB_LEADER(401, "해당 클럽의 leader는 탈퇴할 수 없습니다."),
     PAYMENT_FAIL(401, "결제에 실패했습니다."),
 
+    CLUB_HAS_NO_RECORD(404, "해당 클럽은 기록을 저장하고 있지 않습니다."),
     NOT_PROPER_GOAL(404, "골에 대한 정보가 정확하지 않습니다. 세트와 시간을 다시 확인해주세요."),
     GOAL_NOT_EXIST(404, "존재하지 않은 골입니다."),
     SOCCER_MATCH_MEMBER_NOT_EXIST(404, "존재하지 않은 경기참가선수입니다."),
@@ -34,6 +36,8 @@ public enum ExceptionInfo {
     PAYER_TYPE_NOT_EXIST(404, "결제 대상이 아닙니다."),
 
 
+    ALREADY_SUBMITTED_MATCH(409, "해당 경기는 이미 성적이 반영되었습니다."),
+    ALREADY_CLUB_HAS_RECORD(409, "해당클럽은 이미 기록을 저장하고 있습니다."),
     NOT_ENOUGH_POINT(409, "포인트가 부족합니다."),
     SAME_AS_HOST_CLUB(409, "경기 주최클럽과 동일한 클럽은 상대가 될 수 없습니다."),
     ALREADY_MATCH_APPROVED(409, "이미 성사된 경기입니다."),

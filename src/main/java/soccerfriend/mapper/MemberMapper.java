@@ -4,12 +4,18 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import soccerfriend.dto.Member;
 
+import java.time.LocalDateTime;
+
 @Mapper
 public interface MemberMapper {
 
     public void insert(Member member);
 
     public void delete(int id);
+
+    public void deletePermanently(int id);
+
+    public void deletePermanentlyDaysBefore(int days);
 
     public Member getMemberByMemberId(String memberId);
 

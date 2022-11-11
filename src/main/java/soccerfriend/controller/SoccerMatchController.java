@@ -2,10 +2,10 @@ package soccerfriend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import soccerfriend.dto.Goal;
 import soccerfriend.dto.SoccerMatch;
 import soccerfriend.dto.SoccerMatchMember;
 import soccerfriend.dto.SoccerMatchRecruitment;
+import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.service.*;
 import soccerfriend.utility.InputForm;
@@ -25,6 +25,7 @@ public class SoccerMatchController {
     private final SoccerMatchRecruitmentService soccerMatchRecruitmentService;
     private final SoccerMatchMemberService soccerMatchMemberService;
     private final AuthorizeService authorizeService;
+    private final ClubService clubService;
 
 
     /**
@@ -36,6 +37,9 @@ public class SoccerMatchController {
     @PostMapping("/recruitments")
     public void create(@RequestParam int clubId, @RequestBody SoccerMatchRecruitment soccerMatchRecruitment) {
         int memberId = authorizeService.getMemberId();
+        if (!clubService.isIdExist(clubId)) {
+            throw new BadRequestException(CLUB_NOT_EXIST);
+        }
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
@@ -74,7 +78,8 @@ public class SoccerMatchController {
     @PatchMapping("/recruitments/{soccerMatchRecruitmentId}")
     public void update(@PathVariable int soccerMatchRecruitmentId, InputForm.UpdateSoccerMatchRecruitmentRequest request) {
         int memberId = authorizeService.getMemberId();
-        int clubId = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId).getHostClubId();
+        int clubId = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId)
+                                                  .getHostClubId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
@@ -187,5 +192,22 @@ public class SoccerMatchController {
         }
 
         soccerMatchMemberService.approve(soccerMatchMemberId);
+    }
+
+    /**
+     * 경기 결과 입력을 마무리하고 전적에 반영합니다.
+     *
+     * @param soccerMatchId soccerMatch의 id
+     */
+    @PostMapping("/{soccerMatchId}/submit")
+    public void submit(@PathVariable int soccerMatchId) {
+        int memberId = authorizeService.getMemberId();
+        int hostClub = soccerMatchService.getHostClubId(soccerMatchId);
+
+        if (!clubMemberService.isClubLeaderOrStaff(hostClub, memberId)) {
+            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        }
+
+        soccerMatchService.submit(soccerMatchId);
     }
 }
