@@ -29,7 +29,6 @@ public class PositionsService {
         if (all.isEmpty()) {
             throw new BadRequestException(POSITIONS_NOT_EXIST);
         }
-
         return all;
     }
 }

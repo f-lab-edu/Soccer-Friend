@@ -1,6 +1,5 @@
 package soccerfriend.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -47,11 +46,15 @@ public class RedisConfig {
 
     @Bean
     public CacheManager userCacheManager(RedisConnectionFactory connectionFactory) {
-        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-                                                                                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                                                                                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
-                                                                                 .entryTtl(Duration.ofMinutes(3L));
+        RedisCacheConfiguration redisCacheConfiguration =
+                RedisCacheConfiguration.defaultCacheConfig()
+                                       .serializeKeysWith(RedisSerializationContext.SerializationPair
+                                               .fromSerializer(new StringRedisSerializer()))
+                                       .serializeValuesWith(RedisSerializationContext.SerializationPair
+                                               .fromSerializer(new GenericJackson2JsonRedisSerializer()))
+                                       .entryTtl(Duration.ofMinutes(3L));
 
-        return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(connectionFactory).cacheDefaults(redisCacheConfiguration).build();
+        return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(connectionFactory)
+                                                         .cacheDefaults(redisCacheConfiguration).build();
     }
 }
