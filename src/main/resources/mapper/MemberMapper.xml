@@ -126,9 +126,16 @@
           AND deleted = 0
     </update>
 
-    <update id="approveEmail">
+    <select id="isPasswordWarning" resultType="boolean">
+        SELECT password_warning
+        FROM member
+        WHERE member_id = #{memberId}
+          AND deleted = 0
+    </select>
+
+    <update id="setPasswordWarning">
         UPDATE member
-        SET email_approved = 1,
+        SET password_warning = #{check},
             updated_at=now()
         WHERE id = #{id}
           AND deleted = 0
