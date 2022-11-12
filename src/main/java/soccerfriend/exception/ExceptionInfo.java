@@ -16,6 +16,7 @@ public enum ExceptionInfo {
     IS_CLUB_LEADER(401, "해당 클럽의 leader는 탈퇴할 수 없습니다."),
     PAYMENT_FAIL(401, "결제에 실패했습니다."),
 
+    CODE_NOT_EXIST(404, "존재하지 않는 코드입니다."),
     TOSS_PAYMENT_FAIL(404, "토스페이먼트 결제승인과정에서 오류가 발생했습니다."),
     ORDER_INFO_NOT_EXIST(404, "주문 정보가 존재하지 않습니다."),
     CLUB_HAS_NO_RECORD(404, "해당 클럽은 기록을 저장하고 있지 않습니다."),
@@ -39,6 +40,7 @@ public enum ExceptionInfo {
     PAYER_TYPE_NOT_EXIST(404, "결제 대상이 아닙니다."),
 
 
+    CODE_INCORRECT(409, "일치하지 않은 코드입니다."),
     ALREADY_SUBMITTED_MATCH(409, "해당 경기는 이미 성적이 반영되었습니다."),
     ALREADY_CLUB_HAS_RECORD(409, "해당클럽은 이미 기록을 저장하고 있습니다."),
     NOT_ENOUGH_POINT(409, "포인트가 부족합니다."),
@@ -51,6 +53,7 @@ public enum ExceptionInfo {
     CLUB_NAME_DUPLICATED(409, "이미 존재하는 클럽 이름입니다"),
     CLUB_MEMBER_DUPLICATED(409, "이미 존재하는 클럽 회원입니다"),
     ID_DUPLICATED(409, "이미 존재하는 아이디입니다."),
+    EMAIL_DUPLICATED(409, "이미 존재하는 이메일입니다."),
     PASSWORD_SAME(409, "새로운 비밀번호가 현재 비밀번호와 같습니다.");
 
     private int status;

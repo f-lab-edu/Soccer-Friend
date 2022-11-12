@@ -41,6 +41,10 @@
         SELECT EXISTS (SELECT * FROM member WHERE nickname = #{nickname} AND deleted = 0)
     </select>
 
+    <select id="isEmailExist" resultType="boolean">
+        SELECT EXISTS (SELECT * FROM member WHERE email = #{email} AND deleted = 0)
+    </select>
+
     <select id="getMemberByMemberId" resultType="soccerfriend.dto.Member">
         SELECT id,
                member_id,
@@ -103,6 +107,14 @@
     <update id="decreasePoint">
         UPDATE member
         SET point     = point - #{point},
+            updated_at=now()
+        WHERE id = #{id}
+          AND deleted = 0
+    </update>
+
+    <update id="approveEmail">
+        UPDATE member
+        SET email_approved = 1,
             updated_at=now()
         WHERE id = #{id}
           AND deleted = 0

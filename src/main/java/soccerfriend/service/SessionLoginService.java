@@ -19,7 +19,7 @@ import static soccerfriend.utility.SessionKey.SESSION_LOGIN_STADIUM_OWNER;
 
 @RequiredArgsConstructor
 @Service
-public class SessionAuthorizeService implements AuthorizeService {
+public class SessionLoginService implements LoginService {
 
     private final HttpSession httpSession;
     private final MemberService memberService;

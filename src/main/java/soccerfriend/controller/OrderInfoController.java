@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.OrderInfo;
 import soccerfriend.exception.exception.NoPermissionException;
-import soccerfriend.service.AuthorizeService;
+import soccerfriend.service.LoginService;
 import soccerfriend.service.OrderInfoService;
 
 import static soccerfriend.exception.ExceptionInfo.NO_ORDER_PERMISSION;
@@ -15,7 +15,7 @@ import static soccerfriend.exception.ExceptionInfo.NO_ORDER_PERMISSION;
 public class OrderInfoController {
 
     private final OrderInfoService orderInfoService;
-    private final AuthorizeService authorizeService;
+    private final LoginService loginService;
 
     /**
      * 사용자가 주문을 진행합니다.
@@ -24,7 +24,7 @@ public class OrderInfoController {
      */
     @PostMapping
     public void order(@RequestBody OrderInfo orderInfo) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         orderInfoService.order(memberId, orderInfo);
     }
 
@@ -36,7 +36,7 @@ public class OrderInfoController {
      */
     @GetMapping("/{id}")
     public OrderInfo getOrderInfoById(@PathVariable int id) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         OrderInfo orderInfo = orderInfoService.getOrderInfoById(id);
         if (memberId != orderInfo.getMemberId()) {
             throw new NoPermissionException(NO_ORDER_PERMISSION);

@@ -1,15 +1,16 @@
 package soccerfriend.controller;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Member;
-import soccerfriend.service.AuthorizeService;
+import soccerfriend.service.LoginService;
 import soccerfriend.service.MemberService;
 import soccerfriend.utility.InputForm.LoginRequest;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
-import static soccerfriend.utility.HttpStatusCode.*;
+import static soccerfriend.utility.HttpStatusCode.CONFLICT;
+import static soccerfriend.utility.HttpStatusCode.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ import static soccerfriend.utility.HttpStatusCode.*;
 public class MemberController {
 
     private final MemberService memberService;
-    private final AuthorizeService authorizeService;
+    private final LoginService loginService;
 
     /**
      * member 회원가입을 수행합니다.
@@ -36,7 +37,7 @@ public class MemberController {
      */
     @PostMapping("/login")
     public void login(@RequestBody LoginRequest loginRequest) {
-        authorizeService.memberLogin(loginRequest);
+        loginService.memberLogin(loginRequest);
     }
 
     /**
@@ -44,7 +45,7 @@ public class MemberController {
      */
     @GetMapping("/logout")
     public void logout() {
-        authorizeService.logout();
+        loginService.logout();
     }
 
     /**
@@ -52,7 +53,7 @@ public class MemberController {
      */
     @DeleteMapping("/delete")
     public void deleteAccount() {
-        int id = authorizeService.getMemberId();
+        int id = loginService.getMemberId();
         memberService.deleteAccount(id);
     }
 
@@ -79,7 +80,7 @@ public class MemberController {
      */
     @PatchMapping("/nickname")
     public void updateNickname(@RequestParam String nickname) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         memberService.updateNickname(memberId, nickname);
     }
 
@@ -90,9 +91,9 @@ public class MemberController {
      */
     @PatchMapping("/password")
     public void updatePassword(@RequestBody UpdatePasswordRequest passwordRequest) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         memberService.updatePassword(memberId, passwordRequest);
-        authorizeService.logout();
+        loginService.logout();
     }
 
     /**
@@ -102,7 +103,29 @@ public class MemberController {
      */
     @PostMapping("/point/decrease")
     public void decreasePoint(@RequestParam int point) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         memberService.decreasePoint(memberId, point);
+    }
+
+    /**
+     * 이메일 인증을 위한 인증메일을 인증코드와 함께 전송합니다.
+     *
+     * @param email 인증하려는 email
+     */
+    @PostMapping("/email/send-code")
+    public void sendEmailAuthenticationCode(@RequestParam String email) {
+        memberService.emailAuthentication(email);
+    }
+
+    /**
+     * 이메일 인증코드를 확인합니다.
+     *
+     * @param email 인증하려는 email
+     * @param code 인증코드
+     * @return 인증코드 일치여부
+     */
+    @PostMapping("/email/check-code")
+    public boolean checkEmailAuthenticationCode(@RequestParam String email, @RequestParam String code) {
+        return memberService.approveEmail(email, code);
     }
 }

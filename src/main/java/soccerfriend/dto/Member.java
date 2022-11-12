@@ -27,9 +27,10 @@ public class Member {
     int addressId;
 
     @Builder
-    public Member(String memberId, String password, String nickname, int positionsId, int addressId) {
+    public Member(String memberId, String password, String email, String nickname, int positionsId, int addressId) {
         this.memberId = memberId;
         this.password = password;
+        this.email = email;
         this.nickname = nickname;
         this.positionsId = positionsId;
         this.addressId = addressId;

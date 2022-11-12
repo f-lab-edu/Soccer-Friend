@@ -9,18 +9,20 @@ import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.mapper.MemberMapper;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
+import soccerfriend.utility.RedisUtil;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static soccerfriend.exception.ExceptionInfo.*;
+import static soccerfriend.utility.CodeGenerator.getEmailAuthorizationCode;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberMapper mapper;
+    private final EmailService javaEmailService;
+    private final RedisUtil redisUtil;
 
     /**
      * 회원가입을 수행합니다.
@@ -34,9 +36,13 @@ public class MemberService {
         if (isNicknameExist(member.getNickname())) {
             throw new DuplicatedException(NICKNAME_DUPLICATED);
         }
+        if (isEmailExist(member.getEmail())) {
+            throw new DuplicatedException(EMAIL_DUPLICATED);
+        }
         Member encryptedMember = Member.builder()
                                        .memberId(member.getMemberId())
                                        .password(BCrypt.hashpw(member.getPassword(), BCrypt.gensalt()))
+                                       .email(member.getEmail())
                                        .nickname(member.getNickname())
                                        .positionsId(member.getPositionsId())
                                        .addressId(member.getAddressId())
@@ -85,6 +91,21 @@ public class MemberService {
     }
 
     /**
+     * 특정 memberId의 member를 반환합니다.
+     *
+     * @param memberId member의 memberId
+     * @return 특정 memberId의 member 객체
+     */
+    public Member getMemberByMemberId(String memberId) {
+        Member member = mapper.getMemberByMemberId(memberId);
+        if (member == null) {
+            throw new BadRequestException(MEMBER_NOT_EXIST);
+        }
+
+        return member;
+    }
+
+    /**
      * 해당 loginId를 사용중인 member가 있는지 확인합니다.
      *
      * @param memberId 존재 유무를 확인하려는 memberId
@@ -102,6 +123,16 @@ public class MemberService {
      */
     public boolean isNicknameExist(String nickname) {
         return mapper.isNicknameExist(nickname);
+    }
+
+    /**
+     * 해당 email 사용중인 member가 있는지 확인합니다.
+     *
+     * @param email 존재 유무를 확인하려는 nickname
+     * @return email 존재 유무(true: 있음, false: 없음)
+     */
+    public boolean isEmailExist(String email) {
+        return mapper.isEmailExist(email);
     }
 
     /**
@@ -178,4 +209,34 @@ public class MemberService {
         }
         mapper.decreasePoint(id, point);
     }
+
+    /**
+     * email 인증과정 중 인증코드를 생성하고 코드를 이메일로 전달하는 과정을 수행합니다.
+     *
+     * @param email 인증하려는 email
+     */
+    public void emailAuthentication(String email) {
+        String code = getEmailAuthorizationCode();
+        redisUtil.setStringDataExpire(email, code, 5000);
+        javaEmailService.sendAuthorizationCode(code, email);
+    }
+
+    /**
+     * 해당 email을 인증코드로 인증합니다.
+     *
+     * @param email 인증하려는 email
+     * @param code 인증코드
+     * @return 인증여부
+     */
+    public boolean approveEmail(String email, String code) {
+        String emailCode = redisUtil.getStringData(email);
+        if (!code.equals(emailCode)) {
+            return false;
+        }
+
+        redisUtil.deleteData(email);
+        return true;
+    }
+
+
 }
