@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class JavaEmailService implements EmailService {
+public class GoogleEmailService implements EmailService {
 
     private final JavaMailSender mailSender;
     private final String FROM_ADDRESS;
 
     @Autowired
-    public JavaEmailService(JavaMailSender mailSender, @Value("${spring.mail.username}") String FROM_ADDRESS) {
+    public GoogleEmailService(JavaMailSender mailSender, @Value("${spring.mail.username}") String FROM_ADDRESS) {
         this.mailSender = mailSender;
         this.FROM_ADDRESS = FROM_ADDRESS;
     }
