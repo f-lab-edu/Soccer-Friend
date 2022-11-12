@@ -106,6 +106,21 @@ public class MemberService {
     }
 
     /**
+     * 특정 email의 member를 반환합니다.
+     *
+     * @param email member의 email
+     * @return 특정 email의 member 객체
+     */
+    public Member getMemberByEmail(String email) {
+        Member member = mapper.getMemberByEmail(email);
+        if (member == null) {
+            throw new BadRequestException(MEMBER_NOT_EXIST);
+        }
+
+        return member;
+    }
+
+    /**
      * 해당 loginId를 사용중인 member가 있는지 확인합니다.
      *
      * @param memberId 존재 유무를 확인하려는 memberId
@@ -217,7 +232,7 @@ public class MemberService {
      */
     public void emailAuthentication(String email) {
         String code = getEmailAuthorizationCode();
-        redisUtil.setStringDataExpire(email, code, 5000);
+        redisUtil.setStringDataExpire(email, code, 1000*60*5);
         emailService.sendAuthorizationCode(code, email);
     }
 
@@ -225,7 +240,7 @@ public class MemberService {
      * 해당 email을 인증코드로 인증합니다.
      *
      * @param email 인증하려는 email
-     * @param code 인증코드
+     * @param code  인증코드
      * @return 인증여부
      */
     public boolean approveEmail(String email, String code) {
@@ -235,6 +250,22 @@ public class MemberService {
         }
 
         redisUtil.deleteData(email);
+        return true;
+    }
+
+    /**
+     * 아이디 찾기과정 중 이메일 인증을 완료한 후 아이디를 이메일로 전송해줍니다.
+     * @param email 사용자의 email
+     * @param code email 인증번호
+     * @return
+     */
+    public boolean sendMemberId(String email, String code) {
+        if (!approveEmail(email, code)) {
+            return false;
+        }
+        Member member = getMemberByEmail(email);
+
+        emailService.sendMemberId(member.getMemberId(), email);
         return true;
     }
 
