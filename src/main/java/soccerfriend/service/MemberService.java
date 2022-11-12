@@ -21,7 +21,7 @@ import static soccerfriend.utility.CodeGenerator.getEmailAuthorizationCode;
 public class MemberService {
 
     private final MemberMapper mapper;
-    private final EmailService googleEmailService;
+    private final EmailService emailService;
     private final RedisUtil redisUtil;
 
     /**
@@ -218,7 +218,7 @@ public class MemberService {
     public void emailAuthentication(String email) {
         String code = getEmailAuthorizationCode();
         redisUtil.setStringDataExpire(email, code, 5000);
-        googleEmailService.sendAuthorizationCode(code, email);
+        emailService.sendAuthorizationCode(code, email);
     }
 
     /**
