@@ -19,6 +19,8 @@ public interface MemberMapper {
 
     public Member getMemberById(int id);
 
+    public Member getMemberByEmail(String email);
+
     public boolean isMemberIdExist(String memberId);
 
     public boolean isNicknameExist(String nickname);

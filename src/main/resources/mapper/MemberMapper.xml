@@ -53,7 +53,7 @@
                nickname,
                point,
                positions_id,
-               address_id,
+               address_id
         FROM member
         WHERE member_id = #{memberId}
           AND deleted = 0
@@ -67,9 +67,23 @@
                nickname,
                point,
                positions_id,
-               address_id,
+               address_id
         FROM member
         WHERE id = #{id}
+          AND deleted = 0
+    </select>
+
+    <select id="getMemberByEmail" resultType="soccerfriend.dto.Member">
+        SELECT id,
+               member_id,
+               password,
+               email,
+               nickname,
+               point,
+               positions_id,
+               address_id
+        FROM member
+        WHERE email = #{email}
           AND deleted = 0
     </select>
 
