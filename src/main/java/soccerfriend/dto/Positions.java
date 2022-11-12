@@ -1,11 +1,7 @@
 package soccerfriend.dto;
 
-import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
-@Builder
 @Getter
 public class Positions {
 
@@ -14,8 +10,4 @@ public class Positions {
     String formation;
 
     String detail;
-
-    LocalDateTime createdAt;
-
-    LocalDateTime updatedAt;
 }

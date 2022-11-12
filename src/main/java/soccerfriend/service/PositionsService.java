@@ -21,12 +21,12 @@ public class PositionsService {
      *
      * @return 모든 positions
      */
+    @Cacheable(value = "SIGNUP", key = "'POSITIONS'")
     public List<Positions> getAll() {
         List<Positions> all = mapper.getAll();
         if (all.isEmpty()) {
             throw new BadRequestException(POSITIONS_NOT_EXIST);
         }
-
         return all;
     }
 }
