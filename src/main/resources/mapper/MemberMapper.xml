@@ -129,7 +129,7 @@
     <select id="isPasswordWarning" resultType="boolean">
         SELECT password_warning
         FROM member
-        WHERE member_id = #{memberId}
+        WHERE id = #{id}
           AND deleted = 0
     </select>
 

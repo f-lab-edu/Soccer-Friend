@@ -37,5 +37,5 @@ public interface MemberMapper {
 
     public boolean isPasswordWarning(int id);
 
-    public void setPasswordWarning(boolean check);
+    public void setPasswordWarning(int id, boolean check);
 }

@@ -232,7 +232,7 @@ public class MemberService {
      */
     public void emailAuthentication(String email) {
         String code = getEmailAuthorizationCode();
-        redisUtil.setStringDataExpire(email, code, 1000*60*5);
+        redisUtil.setStringDataExpire(email, code, 1000 * 60 * 5);
         emailService.sendAuthorizationCode(code, email);
     }
 
@@ -255,8 +255,9 @@ public class MemberService {
 
     /**
      * 아이디 찾기과정 중 이메일 인증을 완료한 후 아이디를 이메일로 전송해줍니다.
+     *
      * @param email 사용자의 email
-     * @param code email 인증번호
+     * @param code  email 인증번호
      * @return
      */
     public boolean sendMemberId(String email, String code) {
@@ -269,5 +270,21 @@ public class MemberService {
         return true;
     }
 
+    public boolean isPasswordWarning(int id) {
+        Member member = getMemberById(id);
+        if (member == null) {
+            throw new BadRequestException(MEMBER_NOT_EXIST);
+        }
 
+        return mapper.isPasswordWarning(id);
+    }
+
+    public void setPasswordWarning(int id, boolean check) {
+        Member member = getMemberById(id);
+        if (member == null) {
+            throw new BadRequestException(MEMBER_NOT_EXIST);
+        }
+
+        mapper.setPasswordWarning(id, check);
+    }
 }
