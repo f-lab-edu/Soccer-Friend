@@ -16,6 +16,8 @@ public class Member {
 
     String password;
 
+    String email;
+
     String nickname;
 
     int point;
@@ -23,10 +25,6 @@ public class Member {
     int positionsId;
 
     int addressId;
-
-    LocalDateTime createdAt;
-
-    LocalDateTime updatedAt;
 
     @Builder
     public Member(String memberId, String password, String nickname, int positionsId, int addressId) {
