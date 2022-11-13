@@ -3,7 +3,7 @@ package soccerfriend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import soccerfriend.aop.MemberAuth;
+import soccerfriend.aop.MemberLoginCheck;
 import soccerfriend.dto.Member;
 import soccerfriend.service.LoginService;
 import soccerfriend.service.MemberService;
@@ -53,7 +53,7 @@ public class MemberController {
     /**
      * member의 탈퇴를 수행합니다.
      */
-    @MemberAuth
+    @MemberLoginCheck
     @DeleteMapping("/delete")
     public void deleteAccount() {
         int id = loginService.getMemberId();
@@ -81,7 +81,7 @@ public class MemberController {
      *
      * @param nickname
      */
-    @MemberAuth
+    @MemberLoginCheck
     @PatchMapping("/nickname")
     public void updateNickname(@RequestParam String nickname) {
         int memberId = loginService.getMemberId();
@@ -93,7 +93,7 @@ public class MemberController {
      *
      * @param passwordRequest 기존 password, 새로운 password
      */
-    @MemberAuth
+    @MemberLoginCheck
     @PatchMapping("/password")
     public void updatePassword(@RequestBody UpdatePasswordRequest passwordRequest) {
         int memberId = loginService.getMemberId();

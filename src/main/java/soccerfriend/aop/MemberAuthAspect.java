@@ -22,7 +22,7 @@ public class MemberAuthAspect {
      * member의 로그인 여부를 확인합니다.
      * 로그인한 member의 비밀번호 상태에 이상이 있는지 확인합니다.
      */
-    @Before("@annotation(soccerfriend.aop.MemberAuth)")
+    @Before("@annotation(soccerfriend.aop.MemberLoginCheck)")
     public void memberAuthentication() {
         int memberId = loginService.getMemberId();
         if (memberService.getPasswordWarning(memberId) != NO_WARNING.getCode()) {
