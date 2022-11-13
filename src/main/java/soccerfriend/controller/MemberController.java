@@ -124,6 +124,7 @@ public class MemberController {
      * @param code  인증코드
      * @return 인증코드 일치여부
      */
+
     @PostMapping("/email/check-code")
     public boolean checkEmailAuthenticationCode(@RequestParam String email, @RequestParam String code) {
         return memberService.approveEmail(email, code);
@@ -134,12 +135,10 @@ public class MemberController {
      *
      * @param email 인증하려는 email
      * @param code  인증코드
-     * @return 인증코드 일치여부
+     * @return 인증코드 일치여부가
      */
     @PostMapping("email/check-code/find-id")
     public boolean findMemberId(@RequestParam String email, @RequestParam String code) {
         return memberService.sendMemberId(email, code);
     }
-
-
 }
