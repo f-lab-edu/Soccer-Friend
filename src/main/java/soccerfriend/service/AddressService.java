@@ -1,6 +1,7 @@
 package soccerfriend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.Address;
 import soccerfriend.exception.ExceptionInfo;
@@ -23,6 +24,7 @@ public class AddressService {
      * @param city
      * @return city에 존재하는 모든 Address
      */
+    @Cacheable(value = "SIGNUP", key = "'ADDRESS'+#city")
     public List<Address> getAddressByCity(String city) {
         List<Address> addressByCity = mapper.getAddressByCity(city);
         if(addressByCity.isEmpty()){
