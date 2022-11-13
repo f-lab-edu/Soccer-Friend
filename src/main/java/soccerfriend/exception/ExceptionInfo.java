@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum ExceptionInfo {
 
+    CHANGE_PASSWORD_REQUIRED(401, "비밀번호를 변경해주세요"),
     NOT_LOGIN(401, "로그인되어있지 않습니다."),
     NO_ORDER_PERMISSION(401, "해당 주문에 관한 권한이 없습니다."),
     NOT_CLUB_OF_SOCCER_MATCH(401, "경기에 참여하는 club이 아닙니다."),
