@@ -36,13 +36,10 @@ public class TossPaymentService implements PaymentService {
      * 승인 결과를 응답받고 성공하면 포인트를 충전하고 그렇지 않으면 fail을 return 합니다.
      */
     @Override
-    public String success(Map<String, Object> req) throws Exception {
-
-        String paymentKey = (String) req.get("paymentKey");
-        String orderId = (String) req.get("orderId");
-        Long amount = Long.parseLong((String) req.get("amount"));
+    public String pay(String paymentKey, String orderId) throws Exception {
 
         OrderInfo orderInfo = orderInfoService.getOrderInfoByOrderId(orderId);
+        int amount = orderInfo.getAmount();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((SECRET_KEY + ":").getBytes()));
@@ -66,13 +63,5 @@ public class TossPaymentService implements PaymentService {
             String message = failNode.get("message").asText();
             return code + " " + message;
         }
-    }
-
-    /**
-     * 토스페이먼츠로 부터 결제과정에서 실패했을 때 처리하는 로직입니다.
-     */
-    @Override
-    public String fail(Map<String, Object> req) {
-        return "fail";
     }
 }
