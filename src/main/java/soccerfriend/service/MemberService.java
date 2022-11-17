@@ -2,6 +2,7 @@ package soccerfriend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.Member;
 import soccerfriend.exception.exception.BadRequestException;
@@ -26,6 +27,7 @@ public class MemberService {
     private final MemberMapper mapper;
     private final EmailService emailService;
     private final RedisUtil redisUtil;
+    private final RedisTemplate redisTemplate;
 
     /**
      * 회원가입을 수행합니다.
@@ -248,7 +250,7 @@ public class MemberService {
      */
     public void emailAuthentication(String email) {
         String code = getEmailAuthorizationCode();
-        redisUtil.setStringDataExpire(email, code, 1000 * 60 * 5);
+        redisTemplate.opsForValue().set(email, code, 5 * 60);
         emailService.sendAuthorizationCode(code, email);
     }
 
