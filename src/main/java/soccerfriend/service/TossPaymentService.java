@@ -22,7 +22,10 @@ public class TossPaymentService implements PaymentService {
     private final String SECRET_KEY;
 
     @Autowired
-    public TossPaymentService(RestTemplate restTemplate, ObjectMapper objectMapper, OrderInfoService orderInfoService, @Value("${toss-payments.secret-key}") String SECRET_KEY) {
+    public TossPaymentService(RestTemplate restTemplate,
+                              ObjectMapper objectMapper,
+                              OrderInfoService orderInfoService,
+                              @Value("${toss-payments.secret-key}") String SECRET_KEY) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
         this.orderInfoService = orderInfoService;
@@ -51,7 +54,8 @@ public class TossPaymentService implements PaymentService {
 
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
 
-        ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity("https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
+        ResponseEntity<JsonNode> responseEntity =
+                restTemplate.postForEntity("https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             orderInfoService.paymentSubmitted(orderInfo.getId());
