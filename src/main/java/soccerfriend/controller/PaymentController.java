@@ -19,7 +19,9 @@ public class PaymentController {
      */
     @RequestMapping("/success")
     public String confirmPayment(@RequestParam Map<String, Object> req) throws Exception {
-        return tossPaymentService.success(req);
+        String paymentKey = (String) req.get("paymentKey");
+        String orderId = (String) req.get("orderId");
+        return tossPaymentService.pay(paymentKey, orderId);
     }
 
     /**
@@ -27,6 +29,6 @@ public class PaymentController {
      */
     @RequestMapping("/fail")
     public String failPayment(@RequestParam Map<String, Object> req) {
-        return tossPaymentService.fail(req);
+        return "결제에 실패했습니다.";
     }
 }
