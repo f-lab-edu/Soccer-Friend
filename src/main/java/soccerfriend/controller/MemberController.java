@@ -4,11 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Member;
+import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.service.LoginService;
 import soccerfriend.service.MemberService;
 import soccerfriend.utility.InputForm.LoginRequest;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
+import static soccerfriend.exception.ExceptionInfo.EMAIL_DUPLICATED;
+import static soccerfriend.exception.ExceptionInfo.EMAIL_NOT_EXIST;
 import static soccerfriend.utility.HttpStatusCode.CONFLICT;
 import static soccerfriend.utility.HttpStatusCode.OK;
 
@@ -108,12 +111,30 @@ public class MemberController {
     }
 
     /**
-     * 이메일 인증을 위한 인증메일을 인증코드와 함께 전송합니다.
+     * 회원가입을 위한 이메일 인증을 위한 인증메일을 인증코드와 함께 전송합니다.
      *
      * @param email 인증하려는 email
      */
-    @PostMapping("/email/send-code")
-    public void sendEmailAuthenticationCode(@RequestParam String email) {
+    @PostMapping("/email/send-code/sign-up")
+    public void sendEmailAuthenticationCodeForSignUp(@RequestParam String email) {
+        if (memberService.isEmailExist(email)) {
+            throw new BadRequestException(EMAIL_DUPLICATED);
+        }
+
+        memberService.emailAuthentication(email);
+    }
+
+    /**
+     * 아이디 및 비밀번호 찾기 시 이메일 인증을 위한 인증메일을 인증코드와 함께 전송합니다.
+     *
+     * @param email 인증하려는 email
+     */
+    @PostMapping("/email/send-code/find")
+    public void sendEmailAuthenticationCodeForFinding(@RequestParam String email) {
+        if (!memberService.isEmailExist(email)) {
+            throw new BadRequestException(EMAIL_NOT_EXIST);
+        }
+
         memberService.emailAuthentication(email);
     }
 
@@ -121,7 +142,7 @@ public class MemberController {
      * 이메일 인증코드를 확인합니다.
      *
      * @param email 인증하려는 email
-     * @param code 인증코드
+     * @param code  인증코드
      * @return 인증코드 일치여부
      */
     @PostMapping("/email/check-code")

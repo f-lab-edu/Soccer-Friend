@@ -28,6 +28,7 @@ public enum ExceptionInfo {
     SOCCER_MATCH_NOT_EXIST(404, "존재하지 않은 경기입니다."),
     POSITIONS_NOT_EXIST(404, "존재하지 않은 포지션입니다."),
     ADDRESS_NOT_EXIST(404, "존재하지 않은 주소입니다."),
+    EMAIL_NOT_EXIST(404, "존재하지 않은 이메일입니다."),
     ID_NOT_EXIST(404, "존재하지 않은 아이디입니다."),
     MEMBER_NOT_EXIST(404, "해당 회원이 존재하지 않습니다."),
     STADIUM_OWNER_NOT_EXIST(404, "존재하지 않은 경기장 사업자입니다."),
