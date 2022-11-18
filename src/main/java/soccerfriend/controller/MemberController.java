@@ -2,7 +2,9 @@ package soccerfriend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import soccerfriend.aop.MemberLoginCheck;
 import soccerfriend.dto.Member;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.service.LoginService;
@@ -14,6 +16,7 @@ import static soccerfriend.exception.ExceptionInfo.EMAIL_DUPLICATED;
 import static soccerfriend.exception.ExceptionInfo.EMAIL_NOT_EXIST;
 import static soccerfriend.utility.HttpStatusCode.CONFLICT;
 import static soccerfriend.utility.HttpStatusCode.OK;
+import static soccerfriend.utility.PasswordWarning.NO_WARNING;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +32,7 @@ public class MemberController {
      * @param member memberId, password, nickname, positionsId, addressId를 가진 member 객체
      */
     @PostMapping
-    public void signUp(@RequestBody Member member) {
+    public void signUp(@Validated @RequestBody Member member) {
         memberService.signUp(member);
     }
 
@@ -54,6 +57,7 @@ public class MemberController {
     /**
      * member의 탈퇴를 수행합니다.
      */
+    @MemberLoginCheck
     @DeleteMapping("/delete")
     public void deleteAccount() {
         int id = loginService.getMemberId();
@@ -81,6 +85,7 @@ public class MemberController {
      *
      * @param nickname
      */
+    @MemberLoginCheck
     @PatchMapping("/nickname")
     public void updateNickname(@RequestParam String nickname) {
         int memberId = loginService.getMemberId();
@@ -92,22 +97,25 @@ public class MemberController {
      *
      * @param passwordRequest 기존 password, 새로운 password
      */
+    @MemberLoginCheck
     @PatchMapping("/password")
     public void updatePassword(@RequestBody UpdatePasswordRequest passwordRequest) {
         int memberId = loginService.getMemberId();
-        memberService.updatePassword(memberId, passwordRequest);
+        memberService.updatePasswordByRequest(memberId, passwordRequest);
+        memberService.setPasswordWarning(memberId, NO_WARNING);
         loginService.logout();
     }
 
     /**
-     * member의 point를 감소시킵니다.
+     * 문제있는 member의 pasword를 수정합니다.
      *
-     * @param point 감소시키고자 하는 point의 양
+     * @param passwordRequest 기존 password, 새로운 password
      */
-    @PostMapping("/point/decrease")
-    public void decreasePoint(@RequestParam int point) {
+    @PatchMapping("/password/warning")
+    public void updateWarningPassword(@RequestBody UpdatePasswordRequest passwordRequest) {
         int memberId = loginService.getMemberId();
-        memberService.decreasePoint(memberId, point);
+        memberService.updatePasswordByRequest(memberId, passwordRequest);
+        loginService.logout();
     }
 
     /**
@@ -176,5 +184,27 @@ public class MemberController {
     @PostMapping("/email/check-code")
     public boolean checkEmailAuthenticationCode(@RequestParam String email, @RequestParam String code) {
         return memberService.approveEmail(email, code);
+    }
+
+    /**
+     * 아이디 찾기를 위한 이메일 인증절차를 진행합니다.
+     *
+     * @param email 인증하려는 email
+     * @param code  인증코드
+     */
+    @PostMapping("email/check-code/find-id")
+    public void findMemberId(@RequestParam String email, @RequestParam String code) {
+        memberService.sendMemberId(email, code);
+    }
+
+    /**
+     * 비밀번호 찾기를 위한 이메일 인증절차를 진행합니다.
+     *
+     * @param email 인증하려는 email
+     * @param code  인증코드
+     */
+    @PostMapping("/email/check-code/find-password")
+    public void findPassword(@RequestParam String email, @RequestParam String code) {
+        memberService.sendTemporaryPassword(email, code);
     }
 }

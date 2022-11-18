@@ -33,4 +33,24 @@ public class CodeGenerator {
 
         return code.toString();
     }
+
+    /**
+     * 비밀번호를 생성하는 난수생성기입니다.
+     *
+     * @return 새롭게 생성된 비밀번호
+     */
+    public static String getPasswordRandomly() {
+        int length = 12;
+        String alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$";
+        int alphaNumLength = alphaNum.length();
+
+        Random random = new Random();
+
+        StringBuffer code = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            code.append(alphaNum.charAt(random.nextInt(alphaNumLength)));
+        }
+
+        return code.toString();
+    }
 }

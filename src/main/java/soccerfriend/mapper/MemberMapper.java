@@ -35,5 +35,7 @@ public interface MemberMapper {
 
     public void decreasePoint(@Param("id") int id, @Param("point") int point);
 
-    public void approveEmail(int id);
+    public int getPasswordWarning(int id);
+
+    public void setPasswordWarning(@Param("id") int id, @Param("warning") int warning);
 }

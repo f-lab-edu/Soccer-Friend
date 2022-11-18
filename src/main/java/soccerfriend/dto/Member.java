@@ -2,7 +2,9 @@ package soccerfriend.dto;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Builder
@@ -12,12 +14,20 @@ public class Member {
 
     int id;
 
+    @NotNull
+    @Size(min = 6, max = 18)
     String memberId;
 
+    @NotNull
+    @Size(min = 8, max = 18)
     String password;
 
+    @NotNull
+    @Email
     String email;
 
+    @NotNull
+    @Size(min = 2, max = 8)
     String nickname;
 
     int point;

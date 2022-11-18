@@ -7,8 +7,9 @@
     <insert id="insert" parameterType="soccerfriend.dto.Member">
         INSERT
         INTO member(member_id, password, email, nickname, point, positions_id, address_id, email_approved, deleted,
-                    created_at, updated_at)
-        VALUES (#{memberId}, #{password}, #{email}, #{nickname}, #{point}, #{positionsId}, #{addressId}, 0, 0, now(),
+                    password_warning, created_at, updated_at)
+        VALUES (#{memberId}, #{password}, #{email}, #{nickname}, #{point}, #{positionsId}, #{addressId}, 0, 0,
+                0, now(),
                 now())
     </insert>
 
@@ -126,9 +127,16 @@
           AND deleted = 0
     </update>
 
-    <update id="approveEmail">
+    <select id="getPasswordWarning" resultType="int">
+        SELECT password_warning
+        FROM member
+        WHERE id = #{id}
+          AND deleted = 0
+    </select>
+
+    <update id="setPasswordWarning">
         UPDATE member
-        SET email_approved = 1,
+        SET password_warning = #{warning},
             updated_at=now()
         WHERE id = #{id}
           AND deleted = 0
