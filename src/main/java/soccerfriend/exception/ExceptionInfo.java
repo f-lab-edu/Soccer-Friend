@@ -31,6 +31,7 @@ public enum ExceptionInfo {
     POSITIONS_NOT_EXIST(404, "존재하지 않은 포지션입니다."),
     ADDRESS_NOT_EXIST(404, "존재하지 않은 주소입니다."),
     EMAIL_NOT_EXIST(404, "존재하지 않은 이메일입니다."),
+    BULLETIN_NOT_EXIST(404, "존재하지 않은 게시판입니다."),
     ID_NOT_EXIST(404, "존재하지 않은 아이디입니다."),
     MEMBER_NOT_EXIST(404, "해당 회원이 존재하지 않습니다."),
     STADIUM_OWNER_NOT_EXIST(404, "존재하지 않은 경기장 사업자입니다."),
@@ -43,6 +44,7 @@ public enum ExceptionInfo {
     PAYER_TYPE_NOT_EXIST(404, "결제 대상이 아닙니다."),
 
 
+    BULLETIN_NAME_DUPLICATED(409, "이미 존재하는 게시판 이름입니다."),
     CODE_INCORRECT(409, "일치하지 않은 코드입니다."),
     ALREADY_SUBMITTED_MATCH(409, "해당 경기는 이미 성적이 반영되었습니다."),
     ALREADY_CLUB_HAS_RECORD(409, "해당클럽은 이미 기록을 저장하고 있습니다."),

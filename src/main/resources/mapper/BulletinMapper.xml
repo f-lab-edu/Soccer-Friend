@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.BulletinMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.Bulletin">
+        INSERT
+        INTO bulletin(club_id, name, deleted, created_at, updated_at)
+        VALUES (#{clubId}, #{name}, 0, now(), now())
+    </insert>
+
+    <update id="delete">
+        UPDATE bulletin
+        SET deleted    = 1,
+            updated_at = now()
+        WHERE id = #{id} AND deleted = 0
+    </update>
+
+    <delete id="deletePermanently">
+        DELETE
+        FROM bulletin
+        WHERE deleted = true
+          AND id = #{id}
+    </delete>
+
+    <select id="isIdExist" resultType="boolean">
+        SELECT EXISTS(SELECT * FROM bulletin WHERE id = #{id} AND deleted = 0)
+    </select>
+
+    <select id="isIdExistIncludeDeleted" resultType="boolean">
+        SELECT EXISTS(SELECT * FROM bulletin WHERE id = #{id})
+    </select>
+
+    <select id="isNameExist" resultType="boolean">
+        SELECT EXISTS(SELECT * FROM bulletin WHERE club_id = #{clubId} AND name = #{name} AND deleted = 0)
+    </select>
+
+    <select id="getBulletinById" resultType="soccerfriend.dto.Bulletin">
+        SELECT id, club_id, name
+        FROM bulletin
+        WHERE id = #{id}
+          AND deleted = 0
+    </select>
+
+    <select id="getBulletinsByClubId" resultType="soccerfriend.dto.Member">
+        SELECT id, club_id, name
+        FROM bulletin
+        WHERE club_id = #{clubId}
+          AND deleted = 0
+    </select>
+</mapper>
