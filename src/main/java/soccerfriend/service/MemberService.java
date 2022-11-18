@@ -218,6 +218,11 @@ public class MemberService {
      * @param email 인증하려는 email
      */
     public void emailAuthentication(String email) {
+        String emailCode = redisUtil.getStringData(email);
+        if (emailCode != null) {
+            throw new BadRequestException(ALREADY_SENT_EMAIL_CODE);
+        }
+
         String code = getEmailAuthorizationCode();
         redisTemplate.opsForValue().set(email, code, 5 * 60);
         emailService.sendAuthorizationCode(code, email);

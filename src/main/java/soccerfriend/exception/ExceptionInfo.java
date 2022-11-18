@@ -44,6 +44,7 @@ public enum ExceptionInfo {
     CODE_INCORRECT(409, "일치하지 않은 코드입니다."),
     ALREADY_SUBMITTED_MATCH(409, "해당 경기는 이미 성적이 반영되었습니다."),
     ALREADY_CLUB_HAS_RECORD(409, "해당클럽은 이미 기록을 저장하고 있습니다."),
+    ALREADY_SENT_EMAIL_CODE(409,"이미 인증번호를 전송한 이메일입니다."),
     NOT_ENOUGH_POINT(409, "포인트가 부족합니다."),
     SAME_AS_HOST_CLUB(409, "경기 주최클럽과 동일한 클럽은 상대가 될 수 없습니다."),
     ALREADY_MATCH_APPROVED(409, "이미 성사된 경기입니다."),
