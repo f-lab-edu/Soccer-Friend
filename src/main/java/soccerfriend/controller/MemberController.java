@@ -3,7 +3,7 @@ package soccerfriend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import soccerfriend.aop.MemberLoginCheck;
+import soccerfriend.authentication.MemberLoginCheck;
 import soccerfriend.dto.Member;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.service.LoginService;
