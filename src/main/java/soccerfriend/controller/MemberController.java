@@ -2,6 +2,7 @@ package soccerfriend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.aop.MemberLoginCheck;
 import soccerfriend.dto.Member;
@@ -31,7 +32,7 @@ public class MemberController {
      * @param member memberId, password, nickname, positionsId, addressId를 가진 member 객체
      */
     @PostMapping
-    public void signUp(@RequestBody Member member) {
+    public void signUp(@Validated @RequestBody Member member) {
         memberService.signUp(member);
     }
 
