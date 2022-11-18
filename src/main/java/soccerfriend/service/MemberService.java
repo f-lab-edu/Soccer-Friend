@@ -13,6 +13,7 @@ import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 import soccerfriend.utility.PasswordWarning;
 import soccerfriend.utility.RedisUtil;
 
+import java.time.Duration;
 import java.util.Optional;
 
 import static soccerfriend.exception.ExceptionInfo.*;
@@ -249,8 +250,24 @@ public class MemberService {
      * @param email 인증하려는 email
      */
     public void emailAuthentication(String email) {
+        String emailCode = redisUtil.getStringData(email);
+        if (emailCode != null) {
+            throw new BadRequestException(ALREADY_SENT_EMAIL_CODE);
+        }
+
         String code = getEmailAuthorizationCode();
-        redisTemplate.opsForValue().set(email, code, 5 * 60);
+        redisTemplate.opsForValue().set(email, code, Duration.ofMinutes(5));
+        emailService.sendAuthorizationCode(code, email);
+    }
+
+    /**
+     * email 인증과정 중 인증코드를 생성을 재시도 합니다.
+     *
+     * @param email 인증하려는 email
+     */
+    public void emailAuthenticationRetry(String email) {
+        String code = getEmailAuthorizationCode();
+        redisTemplate.opsForValue().set(email, code, Duration.ofMinutes(5));
         emailService.sendAuthorizationCode(code, email);
     }
 

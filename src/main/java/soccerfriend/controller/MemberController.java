@@ -132,6 +132,20 @@ public class MemberController {
     }
 
     /**
+     * 회원가입을 위한 이메일 인증을 위한 인증메일을 인증코드와 함께 재전송합니다.
+     *
+     * @param email 인증하려는 email
+     */
+    @PostMapping("/email/send-code/sign-up/retry")
+    public void sendEmailAuthenticationCodeForSignUpRetry(@RequestParam String email) {
+        if (memberService.isEmailExist(email)) {
+            throw new BadRequestException(EMAIL_DUPLICATED);
+        }
+
+        memberService.emailAuthenticationRetry(email);
+    }
+
+    /**
      * 아이디 및 비밀번호 찾기 시 이메일 인증을 위한 인증메일을 인증코드와 함께 전송합니다.
      *
      * @param email 인증하려는 email
@@ -143,6 +157,20 @@ public class MemberController {
         }
 
         memberService.emailAuthentication(email);
+    }
+
+    /**
+     * 아이디 및 비밀번호 찾기 시 이메일 인증을 위한 인증메일을 인증코드와 함께 재전송합니다.
+     *
+     * @param email 인증하려는 email
+     */
+    @PostMapping("/email/send-code/find/retry")
+    public void sendEmailAuthenticationCodeForFindingRetry(@RequestParam String email) {
+        if (!memberService.isEmailExist(email)) {
+            throw new BadRequestException(EMAIL_NOT_EXIST);
+        }
+
+        memberService.emailAuthenticationRetry(email);
     }
 
     /**
