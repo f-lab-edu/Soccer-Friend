@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.Member;
 import soccerfriend.dto.StadiumOwner;
+import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.exception.exception.NotExistException;
 import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.utility.InputForm.LoginRequest;
@@ -12,14 +13,14 @@ import javax.servlet.http.HttpSession;
 
 import java.util.Optional;
 
-import static soccerfriend.exception.ExceptionInfo.LOGIN_FORM_INCORRECT;
-import static soccerfriend.exception.ExceptionInfo.LOGIN_INFO_NOT_EXIST;
+import static soccerfriend.exception.ExceptionInfo.*;
+import static soccerfriend.utility.PasswordWarning.NO_WARNING;
 import static soccerfriend.utility.SessionKey.SESSION_LOGIN_MEMBER;
 import static soccerfriend.utility.SessionKey.SESSION_LOGIN_STADIUM_OWNER;
 
 @RequiredArgsConstructor
 @Service
-public class SessionAuthorizeService implements AuthorizeService {
+public class SessionLoginService implements LoginService {
 
     private final HttpSession httpSession;
     private final MemberService memberService;
@@ -27,6 +28,7 @@ public class SessionAuthorizeService implements AuthorizeService {
 
     /**
      * 현재 세션에 존재하는 Member의 id를 반환합니다.
+     *
      * @return Member의 id
      */
     @Override
@@ -64,6 +66,9 @@ public class SessionAuthorizeService implements AuthorizeService {
 
         if (!member.isPresent()) {
             throw new NotMatchException(LOGIN_FORM_INCORRECT);
+        }
+        if (memberService.getPasswordWarning(member.get().getId()) != NO_WARNING.getCode()) {
+            throw new NoPermissionException(CHANGE_PASSWORD_REQUIRED);
         }
 
         httpSession.setAttribute(SESSION_LOGIN_MEMBER, member.get().getId());

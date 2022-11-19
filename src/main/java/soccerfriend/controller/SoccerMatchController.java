@@ -24,7 +24,7 @@ public class SoccerMatchController {
     private final SoccerMatchService soccerMatchService;
     private final SoccerMatchRecruitmentService soccerMatchRecruitmentService;
     private final SoccerMatchMemberService soccerMatchMemberService;
-    private final AuthorizeService authorizeService;
+    private final LoginService loginService;
     private final ClubService clubService;
 
 
@@ -36,7 +36,7 @@ public class SoccerMatchController {
      */
     @PostMapping("/recruitments")
     public void create(@RequestParam int clubId, @RequestBody SoccerMatchRecruitment soccerMatchRecruitment) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         if (!clubService.isIdExist(clubId)) {
             throw new BadRequestException(CLUB_NOT_EXIST);
         }
@@ -78,7 +78,7 @@ public class SoccerMatchController {
      */
     @PatchMapping("/recruitments/{soccerMatchRecruitmentId}")
     public void update(@PathVariable int soccerMatchRecruitmentId, InputForm.UpdateSoccerMatchRecruitmentRequest request) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         int clubId = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId)
                                                   .getHostClubId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
@@ -96,7 +96,7 @@ public class SoccerMatchController {
      */
     @PatchMapping("/recruitments/{soccerMatchRecruitmentId}/approve")
     public void approve(@PathVariable int soccerMatchRecruitmentId, @RequestParam("clubId") int clubId) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
@@ -111,7 +111,7 @@ public class SoccerMatchController {
      */
     @PostMapping("/recruitments/{soccerMatchRecruitmentId}/start")
     public void startMatch(@PathVariable int soccerMatchRecruitmentId) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         SoccerMatchRecruitment soccerMatchRecruitment = soccerMatchRecruitmentService.getSoccerMatchRecruitmentById(soccerMatchRecruitmentId);
         int clubAId = soccerMatchRecruitment.getHostClubId();
         int clubBId = soccerMatchRecruitment.getParticipationClubId();
@@ -153,7 +153,7 @@ public class SoccerMatchController {
      */
     @PostMapping("{soccerMatchId}/apply")
     public void applySoccerMatchMember(@PathVariable int soccerMatchId, @RequestParam int clubId) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         soccerMatchMemberService.apply(soccerMatchId, clubId, memberId);
     }
 
@@ -167,7 +167,7 @@ public class SoccerMatchController {
      */
     @GetMapping("/{soccerMatchId}/club/{clubId}/soccer-match-member")
     public List<SoccerMatchMember> getSoccerMatchMember(@PathVariable int soccerMatchId, @PathVariable int clubId, @RequestParam boolean approved) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
@@ -185,7 +185,7 @@ public class SoccerMatchController {
      */
     @PatchMapping("soccer-match-member/{soccerMatchMemberId}/approve")
     public void approveSoccerMatchMember(@PathVariable int soccerMatchMemberId) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         SoccerMatchMember soccerMatchMember = soccerMatchMemberService.getSoccerMatchMemberById(soccerMatchMemberId);
         int clubId = soccerMatchMember.getClubId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
@@ -202,7 +202,7 @@ public class SoccerMatchController {
      */
     @PostMapping("/{soccerMatchId}/submit")
     public void submit(@PathVariable int soccerMatchId) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         int hostClub = soccerMatchService.getHostClubId(soccerMatchId);
 
         if (!clubMemberService.isClubLeaderOrStaff(hostClub, memberId)) {

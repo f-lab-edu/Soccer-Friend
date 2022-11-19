@@ -7,9 +7,8 @@ import soccerfriend.dto.OrderInfo;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.mapper.OrderInfoMapper;
 
-import java.util.Random;
-
 import static soccerfriend.exception.ExceptionInfo.ORDER_INFO_NOT_EXIST;
+import static soccerfriend.utility.CodeGenerator.getOrderIdRandomly;
 
 @Service
 @RequiredArgsConstructor
@@ -99,24 +98,5 @@ public class OrderInfoService {
         int memberId = orderInfo.getMemberId();
         mapper.setConfirmedTrue(id);
         memberService.increasePoint(memberId, orderInfo.getAmount());
-    }
-
-    /**
-     * 주문번호를 생성하는 난수생성기입니다.
-     * @return 새롭게 생성된 주문번호
-     */
-    private String getOrderIdRandomly() {
-        int length = 32;
-        String alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=";
-        int alphaNumLength = alphaNum.length();
-
-        Random random = new Random();
-
-        StringBuffer code = new StringBuffer();
-        for (int i = 0; i < length; i++) {
-            code.append(alphaNum.charAt(random.nextInt(alphaNumLength)));
-        }
-
-        return code.toString();
     }
 }

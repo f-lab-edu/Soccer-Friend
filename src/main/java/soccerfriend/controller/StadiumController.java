@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Stadium;
 import soccerfriend.exception.exception.NoPermissionException;
-import soccerfriend.service.AuthorizeService;
+import soccerfriend.service.LoginService;
 import soccerfriend.service.StadiumService;
 import soccerfriend.utility.InputForm.UpdateStadiumRequest;
 
@@ -19,7 +19,7 @@ import static soccerfriend.exception.ExceptionInfo.*;
 public class StadiumController {
 
     private final StadiumService stadiumService;
-    private final AuthorizeService authorizeService;
+    private final LoginService loginService;
 
     /**
      * stadium을 생성합니다.
@@ -28,7 +28,7 @@ public class StadiumController {
      */
     @PostMapping
     public void create(@RequestBody Stadium stadium) {
-        int stadiumOwnerId = authorizeService.getStadiumOwnerId();
+        int stadiumOwnerId = loginService.getStadiumOwnerId();
         stadiumService.create(stadiumOwnerId, stadium);
     }
 
@@ -50,7 +50,7 @@ public class StadiumController {
      */
     @GetMapping("/stadium-owner")
     public List<Stadium> getStadiumByStadiumOwnerId() {
-        int stadiumOwnerId = authorizeService.getStadiumOwnerId();
+        int stadiumOwnerId = loginService.getStadiumOwnerId();
         return stadiumService.getStadiumByStadiumOwnerId(stadiumOwnerId);
     }
 
@@ -62,7 +62,7 @@ public class StadiumController {
      */
     @PatchMapping("{id}")
     public void updateStadium(@PathVariable int id, @RequestBody UpdateStadiumRequest stadium) {
-        int stadiumOwnerId = authorizeService.getStadiumOwnerId();
+        int stadiumOwnerId = loginService.getStadiumOwnerId();
         if (!stadiumService.isStadiumOwner(id, stadiumOwnerId)) {
             throw new NoPermissionException(NOT_STADIUM_OWNER);
         }

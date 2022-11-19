@@ -1,15 +1,22 @@
 package soccerfriend.controller;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import soccerfriend.authentication.MemberLoginCheck;
 import soccerfriend.dto.Member;
-import soccerfriend.service.AuthorizeService;
+import soccerfriend.exception.exception.BadRequestException;
+import soccerfriend.service.LoginService;
 import soccerfriend.service.MemberService;
 import soccerfriend.utility.InputForm.LoginRequest;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 
-import static soccerfriend.utility.HttpStatusCode.*;
+import static soccerfriend.exception.ExceptionInfo.EMAIL_DUPLICATED;
+import static soccerfriend.exception.ExceptionInfo.EMAIL_NOT_EXIST;
+import static soccerfriend.utility.HttpStatusCode.CONFLICT;
+import static soccerfriend.utility.HttpStatusCode.OK;
+import static soccerfriend.utility.PasswordWarning.NO_WARNING;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +24,7 @@ import static soccerfriend.utility.HttpStatusCode.*;
 public class MemberController {
 
     private final MemberService memberService;
-    private final AuthorizeService authorizeService;
+    private final LoginService loginService;
 
     /**
      * member 회원가입을 수행합니다.
@@ -25,7 +32,7 @@ public class MemberController {
      * @param member memberId, password, nickname, positionsId, addressId를 가진 member 객체
      */
     @PostMapping
-    public void signUp(@RequestBody Member member) {
+    public void signUp(@Validated @RequestBody Member member) {
         memberService.signUp(member);
     }
 
@@ -36,7 +43,7 @@ public class MemberController {
      */
     @PostMapping("/login")
     public void login(@RequestBody LoginRequest loginRequest) {
-        authorizeService.memberLogin(loginRequest);
+        loginService.memberLogin(loginRequest);
     }
 
     /**
@@ -44,15 +51,16 @@ public class MemberController {
      */
     @GetMapping("/logout")
     public void logout() {
-        authorizeService.logout();
+        loginService.logout();
     }
 
     /**
      * member의 탈퇴를 수행합니다.
      */
+    @MemberLoginCheck
     @DeleteMapping("/delete")
     public void deleteAccount() {
-        int id = authorizeService.getMemberId();
+        int id = loginService.getMemberId();
         memberService.deleteAccount(id);
     }
 
@@ -77,9 +85,10 @@ public class MemberController {
      *
      * @param nickname
      */
+    @MemberLoginCheck
     @PatchMapping("/nickname")
     public void updateNickname(@RequestParam String nickname) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         memberService.updateNickname(memberId, nickname);
     }
 
@@ -88,21 +97,114 @@ public class MemberController {
      *
      * @param passwordRequest 기존 password, 새로운 password
      */
+    @MemberLoginCheck
     @PatchMapping("/password")
     public void updatePassword(@RequestBody UpdatePasswordRequest passwordRequest) {
-        int memberId = authorizeService.getMemberId();
-        memberService.updatePassword(memberId, passwordRequest);
-        authorizeService.logout();
+        int memberId = loginService.getMemberId();
+        memberService.updatePasswordByRequest(memberId, passwordRequest);
+        memberService.setPasswordWarning(memberId, NO_WARNING);
+        loginService.logout();
     }
 
     /**
-     * member의 point를 감소시킵니다.
+     * 문제있는 member의 pasword를 수정합니다.
      *
-     * @param point 감소시키고자 하는 point의 양
+     * @param passwordRequest 기존 password, 새로운 password
      */
-    @PostMapping("/point/decrease")
-    public void decreasePoint(@RequestParam int point) {
-        int memberId = authorizeService.getMemberId();
-        memberService.decreasePoint(memberId, point);
+    @PatchMapping("/password/warning")
+    public void updateWarningPassword(@RequestBody UpdatePasswordRequest passwordRequest) {
+        int memberId = loginService.getMemberId();
+        memberService.updatePasswordByRequest(memberId, passwordRequest);
+        loginService.logout();
+    }
+
+    /**
+     * 회원가입을 위한 이메일 인증을 위한 인증메일을 인증코드와 함께 전송합니다.
+     *
+     * @param email 인증하려는 email
+     */
+    @PostMapping("/email/send-code/sign-up")
+    public void sendEmailAuthenticationCodeForSignUp(@RequestParam String email) {
+        if (memberService.isEmailExist(email)) {
+            throw new BadRequestException(EMAIL_DUPLICATED);
+        }
+
+        memberService.emailAuthentication(email);
+    }
+
+    /**
+     * 회원가입을 위한 이메일 인증을 위한 인증메일을 인증코드와 함께 재전송합니다.
+     *
+     * @param email 인증하려는 email
+     */
+    @PostMapping("/email/send-code/sign-up/retry")
+    public void sendEmailAuthenticationCodeForSignUpRetry(@RequestParam String email) {
+        if (memberService.isEmailExist(email)) {
+            throw new BadRequestException(EMAIL_DUPLICATED);
+        }
+
+        memberService.emailAuthenticationRetry(email);
+    }
+
+    /**
+     * 아이디 및 비밀번호 찾기 시 이메일 인증을 위한 인증메일을 인증코드와 함께 전송합니다.
+     *
+     * @param email 인증하려는 email
+     */
+    @PostMapping("/email/send-code/find")
+    public void sendEmailAuthenticationCodeForFinding(@RequestParam String email) {
+        if (!memberService.isEmailExist(email)) {
+            throw new BadRequestException(EMAIL_NOT_EXIST);
+        }
+
+        memberService.emailAuthentication(email);
+    }
+
+    /**
+     * 아이디 및 비밀번호 찾기 시 이메일 인증을 위한 인증메일을 인증코드와 함께 재전송합니다.
+     *
+     * @param email 인증하려는 email
+     */
+    @PostMapping("/email/send-code/find/retry")
+    public void sendEmailAuthenticationCodeForFindingRetry(@RequestParam String email) {
+        if (!memberService.isEmailExist(email)) {
+            throw new BadRequestException(EMAIL_NOT_EXIST);
+        }
+
+        memberService.emailAuthenticationRetry(email);
+    }
+
+    /**
+     * 이메일 인증코드를 확인합니다.
+     *
+     * @param email 인증하려는 email
+     * @param code  인증코드
+     * @return 인증코드 일치여부
+     */
+    @PostMapping("/email/check-code")
+    public boolean checkEmailAuthenticationCode(@RequestParam String email, @RequestParam String code) {
+        return memberService.approveEmail(email, code);
+    }
+
+    /**
+     * 아이디 찾기를 위한 이메일 인증절차를 진행합니다.
+     *
+     * @param email 인증하려는 email
+     * @param code  인증코드
+     */
+    @PostMapping("email/check-code/find-id")
+    public void findMemberId(@RequestParam String email, @RequestParam String code) {
+        memberService.sendMemberId(email, code);
+    }
+
+    /**
+     * 비밀번호 찾기를 위한 이메일 인증절차를 진행합니다.
+     *
+     * @param email 인증하려는 email
+     * @param code  인증코드
+     */
+    @PostMapping("/email/check-code/find-password")
+    public void findPassword(@RequestParam String email, @RequestParam String code) {
+        memberService.sendTemporaryPassword(email, code);
     }
 }

@@ -4,8 +4,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import soccerfriend.dto.Member;
 
-import java.time.LocalDateTime;
-
 @Mapper
 public interface MemberMapper {
 
@@ -21,9 +19,13 @@ public interface MemberMapper {
 
     public Member getMemberById(int id);
 
+    public Member getMemberByEmail(String email);
+
     public boolean isMemberIdExist(String memberId);
 
     public boolean isNicknameExist(String nickname);
+
+    public boolean isEmailExist(String email);
 
     public void updateNickname(@Param("id") int id, @Param("nickname") String nickname);
 
@@ -32,4 +34,8 @@ public interface MemberMapper {
     public void increasePoint(@Param("id") int id, @Param("point") int point);
 
     public void decreasePoint(@Param("id") int id, @Param("point") int point);
+
+    public int getPasswordWarning(int id);
+
+    public void setPasswordWarning(@Param("id") int id, @Param("warning") int warning);
 }

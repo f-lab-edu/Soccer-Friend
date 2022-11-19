@@ -6,13 +6,16 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.Member">
         INSERT
-        INTO member(member_id, password, nickname, point, positions_id, address_id, created_at, updated_at)
-        VALUES (#{memberId}, #{password}, #{nickname}, #{point}, #{positionsId}, #{addressId}, now(), now())
+        INTO member(member_id, password, email, nickname, point, positions_id, address_id, email_approved, deleted,
+                    password_warning, created_at, updated_at)
+        VALUES (#{memberId}, #{password}, #{email}, #{nickname}, #{point}, #{positionsId}, #{addressId}, 0, 0,
+                0, now(),
+                now())
     </insert>
 
     <update id="delete">
         UPDATE member
-        SET deleted    = true,
+        SET deleted    = 1,
             updated_at = now()
         WHERE id = #{id}
     </update>
@@ -32,39 +35,57 @@
     </delete>
 
     <select id="isMemberIdExist" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM member WHERE member_id = #{memberId})
+        SELECT EXISTS (SELECT * FROM member WHERE member_id = #{memberId} AND deleted = 0)
     </select>
 
     <select id="isNicknameExist" resultType="boolean">
-        SELECT EXISTS (SELECT * FROM member WHERE nickname = #{nickname})
+        SELECT EXISTS (SELECT * FROM member WHERE nickname = #{nickname} AND deleted = 0)
+    </select>
+
+    <select id="isEmailExist" resultType="boolean">
+        SELECT EXISTS (SELECT * FROM member WHERE email = #{email} AND deleted = 0)
     </select>
 
     <select id="getMemberByMemberId" resultType="soccerfriend.dto.Member">
         SELECT id,
                member_id,
                password,
+               email,
                nickname,
                point,
                positions_id,
-               address_id,
-               created_at,
-               updated_at
+               address_id
         FROM member
         WHERE member_id = #{memberId}
+          AND deleted = 0
     </select>
 
     <select id="getMemberById" resultType="soccerfriend.dto.Member">
         SELECT id,
                member_id,
                password,
+               email,
                nickname,
                point,
                positions_id,
-               address_id,
-               created_at,
-               updated_at
+               address_id
         FROM member
         WHERE id = #{id}
+          AND deleted = 0
+    </select>
+
+    <select id="getMemberByEmail" resultType="soccerfriend.dto.Member">
+        SELECT id,
+               member_id,
+               password,
+               email,
+               nickname,
+               point,
+               positions_id,
+               address_id
+        FROM member
+        WHERE email = #{email}
+          AND deleted = 0
     </select>
 
     <update id="updateNickname">
@@ -72,6 +93,7 @@
         SET nickname  = #{nickname},
             updated_at=now()
         WHERE id = #{id}
+          AND deleted = 0
     </update>
 
     <update id="updatePassword">
@@ -79,6 +101,7 @@
         SET password  = #{password},
             updated_at=now()
         WHERE id = #{id}
+          AND deleted = 0
     </update>
 
     <update id="addPoint">
@@ -93,6 +116,7 @@
         SET point     = point + #{point},
             updated_at=now()
         WHERE id = #{id}
+          AND deleted = 0
     </update>
 
     <update id="decreasePoint">
@@ -100,5 +124,21 @@
         SET point     = point - #{point},
             updated_at=now()
         WHERE id = #{id}
+          AND deleted = 0
+    </update>
+
+    <select id="getPasswordWarning" resultType="int">
+        SELECT password_warning
+        FROM member
+        WHERE id = #{id}
+          AND deleted = 0
+    </select>
+
+    <update id="setPasswordWarning">
+        UPDATE member
+        SET password_warning = #{warning},
+            updated_at=now()
+        WHERE id = #{id}
+          AND deleted = 0
     </update>
 </mapper>
