@@ -8,6 +8,8 @@ import soccerfriend.service.BulletinService;
 import soccerfriend.service.ClubMemberService;
 import soccerfriend.service.LoginService;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/bulletins")
@@ -30,5 +32,10 @@ public class BulletinController {
         int memberId = loginService.getMemberId();
 
         bulletinService.delete(memberId, id);
+    }
+
+    @GetMapping("/club/{clubId}")
+    public List<Bulletin> get(@PathVariable int clubId) {
+        return bulletinService.getBulletinsByClubId(clubId);
     }
 }

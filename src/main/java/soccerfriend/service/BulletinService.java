@@ -1,6 +1,8 @@
 package soccerfriend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.Bulletin;
 import soccerfriend.exception.exception.BadRequestException;
@@ -8,9 +10,7 @@ import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.mapper.BulletinMapper;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static soccerfriend.exception.ExceptionInfo.*;
 
@@ -20,7 +20,7 @@ public class BulletinService {
     private final ClubService clubService;
     private final ClubMemberService clubMemberService;
     private final BulletinMapper mapper;
-    private final Map<Integer, Bulletin> bulletinMap = new HashMap<>();
+    private final RedisTemplate redisTemplate;
 
     public void create(int memberId, Bulletin bulletin) {
         int clubId = bulletin.getClubId();
@@ -42,6 +42,7 @@ public class BulletinService {
     public void delete(int memberId, int id) {
         Bulletin bulletin = getBulletinById(id);
         int clubId = bulletin.getClubId();
+
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
@@ -68,16 +69,19 @@ public class BulletinService {
         return mapper.isNameExist(clubId, name);
     }
 
+    @Cacheable(value = "BULLETIN", key = "'BULLETIN'+#id")
     public Bulletin getBulletinById(int id) {
         Bulletin bulletin = mapper.getBulletinById(id);
         if (bulletin == null) {
             throw new BadRequestException(BULLETIN_NOT_EXIST);
         }
+        int clubId = bulletin.getClubId();
 
         return bulletin;
     }
 
-    public List<Bulletin> getBulletinByClubId(int clubId) {
+    @Cacheable(value = "BULLETIN", key = "'BULLETIN CLUB'+#clubId")
+    public List<Bulletin> getBulletinsByClubId(int clubId) {
         List<Bulletin> bulletins = mapper.getBulletinsByClubId(clubId);
         if (bulletins.isEmpty()) {
             throw new BadRequestException(BULLETIN_NOT_EXIST);

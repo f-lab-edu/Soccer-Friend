@@ -27,17 +27,7 @@ public class Bulletin {
     }
 
     public enum Category {
-        GENERAL(0),
-        PHOTO(1);
-
-        Category(int code) {
-            this.code = code;
-        }
-
-        int code;
-
-        public int getCode() {
-            return code;
-        }
+        GENERAL,
+        PHOTO;
     }
 }

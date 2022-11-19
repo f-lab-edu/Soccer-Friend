@@ -7,7 +7,7 @@
     <insert id="insert" parameterType="soccerfriend.dto.Bulletin">
         INSERT
         INTO bulletin(club_id, name, category, deleted, created_at, updated_at)
-        VALUES (#{clubId}, #{name}, #{category.code}, 0, now(), now())
+        VALUES (#{clubId}, #{name}, #{category}, 0, now(), now())
     </insert>
 
     <update id="delete">
@@ -38,14 +38,14 @@
     </select>
 
     <select id="getBulletinById" resultType="soccerfriend.dto.Bulletin">
-        SELECT id, club_id, name
+        SELECT id, club_id, name, category
         FROM bulletin
         WHERE id = #{id}
           AND deleted = 0
     </select>
 
-    <select id="getBulletinsByClubId" resultType="soccerfriend.dto.Member">
-        SELECT id, club_id, name
+    <select id="getBulletinsByClubId" resultType="soccerfriend.dto.Bulletin">
+        SELECT id, club_id, name, category
         FROM bulletin
         WHERE club_id = #{clubId}
           AND deleted = 0
