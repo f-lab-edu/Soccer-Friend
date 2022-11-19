@@ -24,6 +24,8 @@ public class Club {
 
     private int paymentDay;
 
+    private int bulletinNum;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

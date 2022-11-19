@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import soccerfriend.dto.Bulletin;
+import soccerfriend.dto.Club;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.mapper.BulletinMapper;
@@ -20,9 +22,13 @@ public class BulletinService {
     private final ClubMemberService clubMemberService;
     private final BulletinMapper mapper;
     private final RedisTemplate redisTemplate;
+    private final int MAX_BULLETIN_NUM = 8;
 
+    @Transactional
     public void create(int clubId, Bulletin bulletin) {
         String name = bulletin.getName();
+        Club club = clubService.getClubById(clubId);
+        int bulletinNum = club.getBulletinNum();
         Bulletin newBulletin = Bulletin.builder()
                                        .clubId(clubId)
                                        .name(name)
@@ -35,14 +41,21 @@ public class BulletinService {
         if (isNameExist(clubId, name)) {
             throw new DuplicatedException(BULLETIN_NAME_DUPLICATED);
         }
+        if (bulletinNum >= MAX_BULLETIN_NUM) {
+            throw new BadRequestException(CLUB_BULLETINS_FULL);
+        }
 
         mapper.insert(newBulletin);
+        clubService.increaseBulletinNum(clubId);
     }
 
+    @Transactional
     public void delete(int id) {
         Bulletin bulletin = getBulletinById(id);
+        int clubId = bulletin.getClubId();
 
         mapper.delete(id);
+        clubService.decreaseBulletinNum(clubId);
     }
 
     public void deletePermanently(int id) {

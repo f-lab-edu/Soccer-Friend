@@ -27,4 +27,8 @@ public interface ClubMapper {
     public void increasePoint(@Param("id") int id, @Param("point") int point);
 
     public void decreasePoint(@Param("id") int id, @Param("point") int point);
+
+    public void increaseBulletinNum(int id);
+
+    public void decreaseBulletinNum(int id);
 }

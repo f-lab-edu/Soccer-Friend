@@ -10,15 +10,13 @@ import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.mapper.ClubMapper;
 
-import java.util.List;
-
 import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 @RequiredArgsConstructor
 public class ClubService {
 
-    private final ClubMapper clubMapper;
+    private final ClubMapper mapper;
     private final ClubMemberService clubMemberService;
     private final MemberService memberService;
     private final ClubMonthlyFeeService clubMonthlyFeeService;
@@ -43,10 +41,11 @@ public class ClubService {
                            .addressId(club.getAddressId())
                            .point(0)
                            .monthlyFee(club.getMonthlyFee())
+                           .bulletinNum(0)
                            .build();
 
-        clubMapper.insert(oldClub);
-        Club newClub = clubMapper.getClubByName(club.getName());
+        mapper.insert(oldClub);
+        Club newClub = mapper.getClubByName(club.getName());
         clubMemberService.addLeader(newClub.getId(), memberId);
         clubSoccerMatchRecordService.create(newClub.getId());
     }
@@ -77,7 +76,7 @@ public class ClubService {
      * @return 특정 id의 club 객체
      */
     public Club getClubById(int id) {
-        return clubMapper.getClubById(id);
+        return mapper.getClubById(id);
     }
 
     /**
@@ -87,7 +86,7 @@ public class ClubService {
      * @return name 존재 유무(true: 있음, false: 없음)
      */
     public boolean isNameExist(String name) {
-        return clubMapper.isNameExist(name);
+        return mapper.isNameExist(name);
     }
 
     /**
@@ -97,7 +96,7 @@ public class ClubService {
      * @return id 존재 유무(true: 있음, false: 없음)
      */
     public boolean isIdExist(int id) {
-        return clubMapper.isIdExist(id);
+        return mapper.isIdExist(id);
     }
 
     /**
@@ -111,7 +110,7 @@ public class ClubService {
             throw new DuplicatedException(CLUB_NAME_DUPLICATED);
         }
 
-        clubMapper.updateName(id, name);
+        mapper.updateName(id, name);
     }
 
     /**
@@ -121,7 +120,7 @@ public class ClubService {
      * @param addressId 새로 변경할 addressId
      */
     public void updateAddressId(int id, int addressId) {
-        clubMapper.updateAddressId(id, addressId);
+        mapper.updateAddressId(id, addressId);
     }
 
     /**
@@ -131,7 +130,7 @@ public class ClubService {
      * @param monthlyFee 새로 변경할 monthlyFee
      */
     public void updateMonthlyFee(int id, int monthlyFee) {
-        clubMapper.updateMonthlyFee(id, monthlyFee);
+        mapper.updateMonthlyFee(id, monthlyFee);
     }
 
     /**
@@ -141,7 +140,7 @@ public class ClubService {
      * @param point 증가시키고자 하는 point의 양
      */
     public void increasePont(int id, int point) {
-        clubMapper.increasePoint(id, point);
+        mapper.increasePoint(id, point);
     }
 
     /**
@@ -151,7 +150,7 @@ public class ClubService {
      * @param point 감소시키고자 하는 point의 양
      */
     public void decreasePoint(int id, int point) {
-        clubMapper.decreasePoint(id, point);
+        mapper.decreasePoint(id, point);
     }
 
     /**
@@ -176,5 +175,23 @@ public class ClubService {
         memberService.decreasePoint(memberId, fee);
         increasePont(clubId, fee);
         clubMonthlyFeeService.add(clubId, clubMember.getId(), fee, year, month);
+    }
+
+    /**
+     * club의 게시판 개수를 증가시킵니다.
+     *
+     * @param id club의 id
+     */
+    public void increaseBulletinNum(int id) {
+        mapper.increaseBulletinNum(id);
+    }
+
+    /**
+     * club의 게시판 개수를 감소시킵니다.
+     *
+     * @param id club의 id
+     */
+    public void decreaseBulletinNum(int id) {
+        mapper.decreaseBulletinNum(id);
     }
 }
