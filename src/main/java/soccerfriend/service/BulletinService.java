@@ -19,10 +19,9 @@ import static soccerfriend.exception.ExceptionInfo.*;
 @RequiredArgsConstructor
 public class BulletinService {
     private final ClubService clubService;
-    private final ClubMemberService clubMemberService;
     private final BulletinMapper mapper;
-    private final RedisTemplate redisTemplate;
     private final int MAX_BULLETIN_NUM = 8;
+    private final RedisTemplate redisTemplate;
 
     @Transactional
     public void create(int clubId, Bulletin bulletin) {
@@ -56,6 +55,8 @@ public class BulletinService {
 
         mapper.delete(id);
         clubService.decreaseBulletinNum(clubId);
+        redisTemplate.delete("BULLETIN::BULLETIN" + String.valueOf(id));
+        redisTemplate.delete("BULLETIN::BULLETIN CLUB" + String.valueOf(clubId));
     }
 
     public void deletePermanently(int id) {
@@ -83,7 +84,6 @@ public class BulletinService {
         if (bulletin == null) {
             throw new BadRequestException(BULLETIN_NOT_EXIST);
         }
-        int clubId = bulletin.getClubId();
 
         return bulletin;
     }
