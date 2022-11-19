@@ -3,10 +3,10 @@ package soccerfriend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import soccerfriend.authentication.IsClubLeaderOrManager;
+import soccerfriend.authentication.IsClubMember;
 import soccerfriend.dto.Bulletin;
 import soccerfriend.service.BulletinService;
-import soccerfriend.service.ClubMemberService;
-import soccerfriend.service.LoginService;
 
 import java.util.List;
 
@@ -16,26 +16,28 @@ import java.util.List;
 public class BulletinController {
 
     private final BulletinService bulletinService;
-    private final LoginService loginService;
-    private final ClubMemberService clubMemberService;
 
-    @PostMapping
-    public void create(@Validated @RequestBody Bulletin bulletin) {
-        int memberId = loginService.getMemberId();
-        int clubId = bulletin.getClubId();
-
-        bulletinService.create(memberId, bulletin);
+    @PostMapping("/club/{clubId}")
+    @IsClubLeaderOrManager
+    public void create(@Validated @RequestBody Bulletin bulletin, @PathVariable int clubId) {
+        bulletinService.create(clubId, bulletin);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
-        int memberId = loginService.getMemberId();
-
-        bulletinService.delete(memberId, id);
+    @DeleteMapping("/club/{clubId}/{id}")
+    @IsClubLeaderOrManager
+    public void delete(@PathVariable int clubId, @PathVariable int id) {
+        bulletinService.delete(id);
     }
 
     @GetMapping("/club/{clubId}")
-    public List<Bulletin> get(@PathVariable int clubId) {
+    @IsClubMember
+    public List<Bulletin> getBulletinsByClubId(@PathVariable int clubId) {
         return bulletinService.getBulletinsByClubId(clubId);
+    }
+
+    @GetMapping("/club/{clubId}/{id}")
+    @IsClubMember
+    public Bulletin getBulletinById(@PathVariable int clubId, @PathVariable int id) {
+        return bulletinService.getBulletinById(id);
     }
 }

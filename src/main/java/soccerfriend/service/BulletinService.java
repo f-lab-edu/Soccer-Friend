@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import soccerfriend.dto.Bulletin;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
-import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.mapper.BulletinMapper;
 
 import java.util.List;
@@ -22,13 +21,14 @@ public class BulletinService {
     private final BulletinMapper mapper;
     private final RedisTemplate redisTemplate;
 
-    public void create(int memberId, Bulletin bulletin) {
-        int clubId = bulletin.getClubId();
+    public void create(int clubId, Bulletin bulletin) {
         String name = bulletin.getName();
+        Bulletin newBulletin = Bulletin.builder()
+                                       .clubId(clubId)
+                                       .name(name)
+                                       .category(bulletin.getCategory())
+                                       .build();
 
-        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
-            throw new NoPermissionException(NO_CLUB_PERMISSION);
-        }
         if (!clubService.isIdExist(clubId)) {
             throw new BadRequestException(CLUB_ID_NOT_EXIST);
         }
@@ -36,16 +36,11 @@ public class BulletinService {
             throw new DuplicatedException(BULLETIN_NAME_DUPLICATED);
         }
 
-        mapper.insert(bulletin);
+        mapper.insert(newBulletin);
     }
 
-    public void delete(int memberId, int id) {
+    public void delete(int id) {
         Bulletin bulletin = getBulletinById(id);
-        int clubId = bulletin.getClubId();
-
-        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
-            throw new NoPermissionException(NO_CLUB_PERMISSION);
-        }
 
         mapper.delete(id);
     }

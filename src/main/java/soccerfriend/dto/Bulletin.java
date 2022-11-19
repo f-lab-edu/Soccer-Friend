@@ -20,8 +20,7 @@ public class Bulletin {
     private Category category;
 
     @Builder
-    public Bulletin(int clubId, String name, Category category) {
-        this.clubId = clubId;
+    public Bulletin(String name, Category category) {
         this.name = name;
         this.category = category;
     }
