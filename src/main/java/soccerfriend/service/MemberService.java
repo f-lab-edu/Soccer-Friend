@@ -10,6 +10,7 @@ import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.mapper.MemberMapper;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
+import soccerfriend.utility.PasswordWarning;
 import soccerfriend.utility.RedisUtil;
 
 import java.time.Duration;
@@ -17,6 +18,8 @@ import java.util.Optional;
 
 import static soccerfriend.exception.ExceptionInfo.*;
 import static soccerfriend.utility.CodeGenerator.getEmailAuthorizationCode;
+import static soccerfriend.utility.CodeGenerator.getPasswordRandomly;
+import static soccerfriend.utility.PasswordWarning.PASSWORD_FIND;
 
 @Service
 @RequiredArgsConstructor
@@ -109,6 +112,21 @@ public class MemberService {
     }
 
     /**
+     * 특정 email의 member를 반환합니다.
+     *
+     * @param email member의 email
+     * @return 특정 email의 member 객체
+     */
+    public Member getMemberByEmail(String email) {
+        Member member = mapper.getMemberByEmail(email);
+        if (member == null) {
+            throw new BadRequestException(MEMBER_NOT_EXIST);
+        }
+
+        return member;
+    }
+
+    /**
      * 해당 loginId를 사용중인 member가 있는지 확인합니다.
      *
      * @param memberId 존재 유무를 확인하려는 memberId
@@ -172,11 +190,13 @@ public class MemberService {
     }
 
     /**
-     * member의 password를 변경합니다.
+     * member의 password를 PasswordRequest 의해 변경합니다.
+     * PasswordRequest는 이전 비밀번호, 새로운 비밀번호를 포함합니다.
      *
+     * @param id              member의 id
      * @param passwordRequest before(현재 password), after(새로운 password)를 가지는 객체
      */
-    public void updatePassword(int id, UpdatePasswordRequest passwordRequest) {
+    public void updatePasswordByRequest(int id, UpdatePasswordRequest passwordRequest) {
         String before = passwordRequest.getBefore();
         String after = passwordRequest.getAfter();
         String encryptedCurrent = getMemberById(id).getPassword();
@@ -187,6 +207,17 @@ public class MemberService {
 
         after = BCrypt.hashpw(after, BCrypt.gensalt());
         mapper.updatePassword(id, after);
+    }
+
+    /**
+     * member의 비밀번호를 변경합니다.
+     *
+     * @param id       member의 id
+     * @param password 새로운 비밀번호
+     */
+    public void updatePassword(int id, String password) {
+        String encryptedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        mapper.updatePassword(id, encryptedPassword);
     }
 
     /**
@@ -257,5 +288,74 @@ public class MemberService {
         return true;
     }
 
+    /**
+     * 아이디 찾기과정 중 이메일 인증을 완료한 후 아이디를 이메일로 전송해줍니다.
+     *
+     * @param email 사용자의 email
+     * @param code  email 인증번호
+     * @return
+     */
+    public void sendMemberId(String email, String code) {
+        if (!approveEmail(email, code)) {
+            throw new BadRequestException(CODE_INCORRECT);
+        }
+        Member member = getMemberByEmail(email);
 
+        emailService.sendMemberId(member.getMemberId(), email);
+    }
+
+    /**
+     * member의 비밀번호 경고 내용을 확인합니다.
+     *
+     * @param id member의 id
+     * @return PasswordWarning의 code
+     */
+    public int getPasswordWarning(int id) {
+        Member member = getMemberById(id);
+        if (member == null) {
+            throw new BadRequestException(MEMBER_NOT_EXIST);
+        }
+
+        return mapper.getPasswordWarning(id);
+    }
+
+    /**
+     * member에게 비밀번호 경고 내용을 추가합니다.
+     *
+     * @param id              member의 id
+     * @param passwordWarning 경고내용
+     */
+    public void setPasswordWarning(int id, PasswordWarning passwordWarning) {
+        Member member = getMemberById(id);
+        if (member == null) {
+            throw new BadRequestException(MEMBER_NOT_EXIST);
+        }
+
+        mapper.setPasswordWarning(id, passwordWarning.getCode());
+    }
+
+    /**
+     * 이메일 인증을 확인한 후 임시 비밀번호를 이메일로 전송합니다.
+     *
+     * @param email 임시 비밀번호를 발급하려는 email
+     * @param code  email 인증번호
+     */
+    public void sendTemporaryPassword(String email, String code) {
+        if (!approveEmail(email, code)) {
+            throw new BadRequestException(CODE_INCORRECT);
+        }
+
+        Member member = getMemberByEmail(email);
+        int id = member.getId();
+
+        String password = getPasswordRandomly();
+        updatePassword(id, password);
+        setPasswordWarning(id, PASSWORD_FIND);
+
+        if (member == null) {
+            throw new BadRequestException(MEMBER_NOT_EXIST);
+        }
+
+        emailService.sendTemporaryPassword(password, email);
+    }
 }

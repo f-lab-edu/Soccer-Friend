@@ -1,10 +1,11 @@
 package soccerfriend.utility;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 public class InputForm {
@@ -24,7 +25,12 @@ public class InputForm {
     @Getter
     @NoArgsConstructor
     public static class LoginRequest {
+        @NotNull
+        @Size(min = 6, max = 18)
         String id;
+
+        @NotNull
+        @Size(min = 8, max = 18)
         String password;
     }
 
@@ -47,7 +53,7 @@ public class InputForm {
      */
     @Getter
     @NoArgsConstructor
-    public static class UpdateStadiumRequest{
+    public static class UpdateStadiumRequest {
         String name;
         String address;
         String phoneNumber;
@@ -61,7 +67,7 @@ public class InputForm {
      */
     @Getter
     @NoArgsConstructor
-    public static class UpdateSoccerMatchRecruitmentRequest{
+    public static class UpdateSoccerMatchRecruitmentRequest {
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         LocalDateTime startTime;
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
