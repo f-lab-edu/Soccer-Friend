@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.Positions;
-import soccerfriend.exception.ExceptionInfo;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.mapper.PositionsMapper;
 

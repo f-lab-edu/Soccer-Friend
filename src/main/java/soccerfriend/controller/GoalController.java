@@ -19,7 +19,7 @@ public class GoalController {
 
     private final ClubMemberService clubMemberService;
     private final SoccerMatchMemberService soccerMatchMemberService;
-    private final AuthorizeService authorizeService;
+    private final LoginService loginService;
     private final soccerfriend.service.GoalService goalService;
 
 
@@ -30,7 +30,7 @@ public class GoalController {
      */
     @PostMapping
     public void addGoal(@RequestBody Goal goal) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         int soccerMatchMemberId = goal.getSoccerMatchMemberId();
         SoccerMatchMember soccerMatchMember = soccerMatchMemberService.getSoccerMatchMemberById(soccerMatchMemberId);
         if (!clubMemberService.isClubLeaderOrStaff(soccerMatchMember.getClubId(), memberId)) {

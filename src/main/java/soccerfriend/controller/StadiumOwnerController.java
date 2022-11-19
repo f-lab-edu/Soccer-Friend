@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.StadiumOwner;
-import soccerfriend.service.AuthorizeService;
+import soccerfriend.service.LoginService;
 import soccerfriend.service.StadiumOwnerService;
 import soccerfriend.utility.InputForm.LoginRequest;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
@@ -19,7 +19,7 @@ import static soccerfriend.utility.HttpStatusCode.OK;
 public class StadiumOwnerController {
 
     private final StadiumOwnerService stadiumOwnerService;
-    private final AuthorizeService authorizeService;
+    private final LoginService loginService;
 
     /**
      * stadiumOwner의 회원가입을 수행합니다.
@@ -38,7 +38,7 @@ public class StadiumOwnerController {
      */
     @PostMapping("/login")
     public void login(@RequestBody LoginRequest loginRequest) {
-        authorizeService.stadiumOwnerLogin(loginRequest);
+        loginService.stadiumOwnerLogin(loginRequest);
     }
 
     /**
@@ -46,7 +46,7 @@ public class StadiumOwnerController {
      */
     @GetMapping("/logout")
     public void logout() {
-        authorizeService.logout();
+        loginService.logout();
     }
 
     /**
@@ -54,7 +54,7 @@ public class StadiumOwnerController {
      */
     @DeleteMapping
     public void deleteAccount() {
-        int id = authorizeService.getStadiumOwnerId();
+        int id = loginService.getStadiumOwnerId();
         stadiumOwnerService.deleteAccount(id);
     }
 
@@ -81,9 +81,9 @@ public class StadiumOwnerController {
      */
     @PatchMapping
     public void updateStadiumOwner(@RequestBody UpdateStadiumOwnerRequest stadiumOwnerRequest) {
-        int id = authorizeService.getStadiumOwnerId();
+        int id = loginService.getStadiumOwnerId();
         stadiumOwnerService.updateStadiumOwner(id, stadiumOwnerRequest);
-        authorizeService.logout();
+        loginService.logout();
     }
 
     /**
@@ -93,8 +93,8 @@ public class StadiumOwnerController {
      */
     @PatchMapping("/password")
     public void updatePassword(@RequestBody UpdatePasswordRequest passwordRequest) {
-        int id = authorizeService.getStadiumOwnerId();
+        int id = loginService.getStadiumOwnerId();
         stadiumOwnerService.updatePassword(id, passwordRequest);
-        authorizeService.logout();
+        loginService.logout();
     }
 }

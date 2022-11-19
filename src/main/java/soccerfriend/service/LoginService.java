@@ -2,7 +2,7 @@ package soccerfriend.service;
 
 import static soccerfriend.utility.InputForm.*;
 
-public interface AuthorizeService {
+public interface LoginService {
 
 
     /**

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Club;
 import soccerfriend.dto.ClubMember;
 import soccerfriend.exception.exception.NoPermissionException;
-import soccerfriend.service.AuthorizeService;
+import soccerfriend.service.LoginService;
 import soccerfriend.service.ClubMemberService;
 import soccerfriend.service.ClubService;
 
@@ -21,7 +21,7 @@ public class ClubController {
 
     private final ClubService clubService;
     private final ClubMemberService clubMemberService;
-    private final AuthorizeService authorizeService;
+    private final LoginService loginService;
 
     /**
      * club을 생성합니다.
@@ -30,7 +30,7 @@ public class ClubController {
      */
     @PostMapping
     public void create(@RequestBody Club club) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         clubService.create(memberId, club);
     }
 
@@ -41,7 +41,7 @@ public class ClubController {
      */
     @PostMapping("/{clubId}/join")
     public void join(@PathVariable int clubId) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         clubService.join(clubId, memberId);
     }
 
@@ -52,7 +52,7 @@ public class ClubController {
      */
     @DeleteMapping("/{clubId}/member-delete")
     public void memberDelete(@PathVariable int clubId) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         if (!clubMemberService.isClubMember(clubId, memberId)) {
             throw new NoPermissionException(NOT_CLUB_MEMBER);
         }
@@ -71,7 +71,7 @@ public class ClubController {
      */
     @GetMapping("/{clubId}/club-members")
     public List<ClubMember> clubMember(@PathVariable int clubId, @RequestParam boolean approve) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         if (!clubMemberService.isClubMember(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
@@ -90,7 +90,7 @@ public class ClubController {
      */
     @PatchMapping("/{clubId}/name")
     public void updateName(@PathVariable int clubId, @RequestParam String name) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
@@ -106,7 +106,7 @@ public class ClubController {
      */
     @PatchMapping("/{clubId}/address-id")
     public void updateAddressId(@PathVariable int clubId, @RequestParam int addressId) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
@@ -122,7 +122,7 @@ public class ClubController {
      */
     @PatchMapping("/{clubId}/monthly-fee")
     public void updateMonthlyFee(@PathVariable int clubId, @RequestParam int monthlyFee) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
@@ -137,7 +137,7 @@ public class ClubController {
      */
     @PatchMapping("/club-member/{clubMemberId}/approve")
     public void approve(@PathVariable int clubMemberId) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         ClubMember clubMember = clubMemberService.getClubMemberById(clubMemberId);
         int clubId = clubMember.getClubId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
@@ -154,7 +154,7 @@ public class ClubController {
      */
     @PostMapping("/{clubId}/pay/monthly-fee/{year}/{month}")
     public void payMonthlyFee(@PathVariable int clubId, @PathVariable int year, @PathVariable int month) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         if (!clubMemberService.isClubMember(clubId, memberId)) {
             throw new NoPermissionException(NOT_CLUB_MEMBER);
         }
@@ -171,7 +171,7 @@ public class ClubController {
      */
     @GetMapping("/{clubId}/{year}/{month}/club-members")
     public List<ClubMember> getClubMembersByPayment(@PathVariable int clubId, @PathVariable int year, @PathVariable int month, @RequestParam boolean payment) {
-        int memberId = authorizeService.getMemberId();
+        int memberId = loginService.getMemberId();
         if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
