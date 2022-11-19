@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Bulletin;
-import soccerfriend.exception.ExceptionInfo;
-import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.service.BulletinService;
 import soccerfriend.service.ClubMemberService;
 import soccerfriend.service.LoginService;
@@ -23,11 +21,8 @@ public class BulletinController {
     public void create(@Validated @RequestBody Bulletin bulletin) {
         int memberId = loginService.getMemberId();
         int clubId = bulletin.getClubId();
-        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
-            throw new NoPermissionException(ExceptionInfo.NO_CLUB_PERMISSION);
-        }
 
-        bulletinService.create(bulletin);
+        bulletinService.create(memberId, bulletin);
     }
 
     @DeleteMapping("/{id}")

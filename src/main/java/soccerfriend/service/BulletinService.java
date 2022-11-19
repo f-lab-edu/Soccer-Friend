@@ -8,7 +8,9 @@ import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.mapper.BulletinMapper;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static soccerfriend.exception.ExceptionInfo.*;
 
@@ -18,16 +20,22 @@ public class BulletinService {
     private final ClubService clubService;
     private final ClubMemberService clubMemberService;
     private final BulletinMapper mapper;
+    private final Map<Integer, Bulletin> bulletinMap = new HashMap<>();
 
-    public void create(Bulletin bulletin) {
+    public void create(int memberId, Bulletin bulletin) {
         int clubId = bulletin.getClubId();
         String name = bulletin.getName();
+
+        if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
+            throw new NoPermissionException(NO_CLUB_PERMISSION);
+        }
         if (!clubService.isIdExist(clubId)) {
             throw new BadRequestException(CLUB_ID_NOT_EXIST);
         }
         if (isNameExist(clubId, name)) {
             throw new DuplicatedException(BULLETIN_NAME_DUPLICATED);
         }
+
         mapper.insert(bulletin);
     }
 

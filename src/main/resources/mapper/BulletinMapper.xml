@@ -6,15 +6,16 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.Bulletin">
         INSERT
-        INTO bulletin(club_id, name, deleted, created_at, updated_at)
-        VALUES (#{clubId}, #{name}, 0, now(), now())
+        INTO bulletin(club_id, name, category, deleted, created_at, updated_at)
+        VALUES (#{clubId}, #{name}, #{category.code}, 0, now(), now())
     </insert>
 
     <update id="delete">
         UPDATE bulletin
         SET deleted    = 1,
             updated_at = now()
-        WHERE id = #{id} AND deleted = 0
+        WHERE id = #{id}
+          AND deleted = 0
     </update>
 
     <delete id="deletePermanently">
