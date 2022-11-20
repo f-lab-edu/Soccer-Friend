@@ -1,13 +1,13 @@
 package soccerfriend.authentication;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
-import soccerfriend.service.BulletinService;
 import soccerfriend.service.ClubMemberService;
 import soccerfriend.service.LoginService;
 
@@ -18,13 +18,13 @@ import java.util.Map;
 import static soccerfriend.exception.ExceptionInfo.CLUB_NOT_EXIST;
 import static soccerfriend.exception.ExceptionInfo.NO_CLUB_PERMISSION;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 
     private final LoginService loginService;
     private final ClubMemberService clubMemberService;
-    private final BulletinService bulletinService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -45,6 +45,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             int memberId = loginService.getMemberId();
             Integer clubId = Integer.parseInt(pathVariables.get("clubId"));
             if (clubId == null) {
+                log.warn("PathVaribale에 clubId가 없습니다.");
                 throw new BadRequestException(CLUB_NOT_EXIST);
             }
 
@@ -61,6 +62,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             int memberId = loginService.getMemberId();
             Integer clubId = Integer.parseInt(pathVariables.get("clubId"));
             if (clubId == null) {
+                log.warn("PathVaribale에 clubId가 없습니다.");
                 throw new BadRequestException(CLUB_NOT_EXIST);
             }
 
