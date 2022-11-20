@@ -43,11 +43,12 @@ public class AuthInterceptor implements HandlerInterceptor {
                             .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
             int memberId = loginService.getMemberId();
-            Integer clubId = Integer.parseInt(pathVariables.get("clubId"));
-            if (clubId == null) {
+            String clubIdVariable = pathVariables.get("clubId");
+            if (clubIdVariable == null) {
                 log.warn("PathVaribale에 clubId가 없습니다.");
                 throw new BadRequestException(CLUB_NOT_EXIST);
             }
+            int clubId = Integer.parseInt(clubIdVariable);
 
             if (!clubMemberService.isClubMember(clubId, memberId)) {
                 throw new NoPermissionException(NO_CLUB_PERMISSION);
@@ -60,11 +61,12 @@ public class AuthInterceptor implements HandlerInterceptor {
                             .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
             int memberId = loginService.getMemberId();
-            Integer clubId = Integer.parseInt(pathVariables.get("clubId"));
-            if (clubId == null) {
+            String clubIdVariable = pathVariables.get("clubId");
+            if (clubIdVariable == null) {
                 log.warn("PathVaribale에 clubId가 없습니다.");
                 throw new BadRequestException(CLUB_NOT_EXIST);
             }
+            Integer clubId = Integer.parseInt(clubIdVariable);
 
             if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
                 throw new NoPermissionException(NO_CLUB_PERMISSION);
