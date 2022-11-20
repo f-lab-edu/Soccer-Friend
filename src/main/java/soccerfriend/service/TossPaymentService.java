@@ -2,7 +2,6 @@ package soccerfriend.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ public class TossPaymentService implements PaymentService {
     private final OrderInfoService orderInfoService;
     private final String SECRET_KEY;
 
-    @Autowired
     public TossPaymentService(RestTemplate restTemplate,
                               ObjectMapper objectMapper,
                               OrderInfoService orderInfoService,

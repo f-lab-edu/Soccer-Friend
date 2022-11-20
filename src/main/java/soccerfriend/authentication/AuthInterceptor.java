@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
+import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.service.BulletinService;
 import soccerfriend.service.ClubMemberService;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
+import static soccerfriend.exception.ExceptionInfo.CLUB_NOT_EXIST;
 import static soccerfriend.exception.ExceptionInfo.NO_CLUB_PERMISSION;
 
 @RequiredArgsConstructor
@@ -41,7 +43,10 @@ public class AuthInterceptor implements HandlerInterceptor {
                             .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
             int memberId = loginService.getMemberId();
-            int clubId = Integer.parseInt(pathVariables.get("clubId"));
+            Integer clubId = Integer.parseInt(pathVariables.get("clubId"));
+            if (clubId == null) {
+                throw new BadRequestException(CLUB_NOT_EXIST);
+            }
 
             if (!clubMemberService.isClubMember(clubId, memberId)) {
                 throw new NoPermissionException(NO_CLUB_PERMISSION);
@@ -54,7 +59,10 @@ public class AuthInterceptor implements HandlerInterceptor {
                             .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
             int memberId = loginService.getMemberId();
-            int clubId = Integer.parseInt(pathVariables.get("clubId"));
+            Integer clubId = Integer.parseInt(pathVariables.get("clubId"));
+            if (clubId == null) {
+                throw new BadRequestException(CLUB_NOT_EXIST);
+            }
 
             if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
                 throw new NoPermissionException(NO_CLUB_PERMISSION);
