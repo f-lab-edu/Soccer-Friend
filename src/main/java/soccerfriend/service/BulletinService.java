@@ -83,16 +83,6 @@ public class BulletinService {
     }
 
     /**
-     * 해당 id의 게시판이 존재하는지 확인합니다.
-     *
-     * @param id 게시판의 id
-     * @return 게시판 존재유무
-     */
-    public boolean isIdExist(int id) {
-        return mapper.isIdExist(id);
-    }
-
-    /**
      * 해당 id의 게시판이 삭제여부와 관계없이 db내에 존재하는지 확인합니다.
      *
      * @param id
