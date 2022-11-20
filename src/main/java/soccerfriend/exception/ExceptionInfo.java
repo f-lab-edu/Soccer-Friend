@@ -44,6 +44,7 @@ public enum ExceptionInfo {
     PAYER_TYPE_NOT_EXIST(404, "결제 대상이 아닙니다."),
 
 
+    SAME_NAME_FOR_UPDATE(409, "이전과 동일한 이름입니다."),
     CLUB_BULLETINS_FULL(409, "클럽내 게시판 개수가 최대입니다."),
     BULLETIN_NAME_DUPLICATED(409, "이미 존재하는 게시판 이름입니다."),
     CODE_INCORRECT(409, "일치하지 않은 코드입니다."),

@@ -8,6 +8,7 @@ import soccerfriend.authentication.IsClubMember;
 import soccerfriend.dto.Bulletin;
 import soccerfriend.service.BulletinService;
 
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @RestController
@@ -57,12 +58,27 @@ public class BulletinController {
      * 클럽에 존재하는 특정 id의 게시판을 반환합니다.
      *
      * @param clubId 클럽의 id
-     * @param id 게시판의 id
+     * @param id     게시판의 id
      * @return 클럽에 존재하는 특정 id의 게시판
      */
     @GetMapping("/club/{clubId}/{id}")
     @IsClubMember
     public Bulletin getBulletinById(@PathVariable int clubId, @PathVariable int id) {
         return bulletinService.getBulletinById(id);
+    }
+
+    /**
+     * 클럽에 존재하는 게시판의 이름을 변경합니다.
+     *
+     * @param clubId 클럽의 id
+     * @param id 게시판의 id
+     * @param name 새로운 게시판 이름
+     */
+    @PatchMapping("/club/{clubId}/{id}")
+    @IsClubLeaderOrManager
+    public void updateName(@PathVariable int clubId,
+                           @PathVariable int id,
+                           @RequestParam @Size(min = 1, max = 16) String name) {
+        bulletinService.updateName(id, name);
     }
 }

@@ -23,4 +23,6 @@ public interface BulletinMapper {
     public Bulletin getBulletinById(int id);
 
     public List<Bulletin> getBulletinsByClubId(int clubId);
+
+    public void updateName(@Param("id") int id, @Param("name") String name);
 }

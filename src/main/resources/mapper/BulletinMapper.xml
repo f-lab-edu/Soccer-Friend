@@ -50,4 +50,12 @@
         WHERE club_id = #{clubId}
           AND deleted = 0
     </select>
+
+    <update id="updateName">
+        UPDATE bulletin
+        SET name       = #{name},
+            updated_at = now()
+        WHERE id = #{id}
+          AND deleted = 0
+    </update>
 </mapper>
