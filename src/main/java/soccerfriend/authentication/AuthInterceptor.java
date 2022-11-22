@@ -6,8 +6,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
+import soccerfriend.dto.Bulletin;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
+import soccerfriend.service.BulletinService;
 import soccerfriend.service.ClubMemberService;
 import soccerfriend.service.LoginService;
 
@@ -15,8 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-import static soccerfriend.exception.ExceptionInfo.CLUB_NOT_EXIST;
-import static soccerfriend.exception.ExceptionInfo.NO_CLUB_PERMISSION;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private final LoginService loginService;
     private final ClubMemberService clubMemberService;
+    private final BulletinService bulletinService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -32,6 +34,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         MemberLoginCheck memberLoginCheck = ((HandlerMethod) handler).getMethodAnnotation(MemberLoginCheck.class);
         IsClubLeaderOrManager isClubLeaderOrManager = ((HandlerMethod) handler).getMethodAnnotation(IsClubLeaderOrManager.class);
         IsClubMember isClubMember = ((HandlerMethod) handler).getMethodAnnotation(IsClubMember.class);
+        BulletinWriteAuth bulletinWriteAuth = ((HandlerMethod) handler).getMethodAnnotation(BulletinWriteAuth.class);
 
         if (memberLoginCheck != null) {
             loginService.getMemberId();
@@ -66,9 +69,30 @@ public class AuthInterceptor implements HandlerInterceptor {
                 log.warn("PathVaribale에 clubId가 없습니다.");
                 throw new BadRequestException(CLUB_NOT_EXIST);
             }
-            Integer clubId = Integer.parseInt(clubIdVariable);
+            int clubId = Integer.parseInt(clubIdVariable);
 
             if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
+                throw new NoPermissionException(NO_CLUB_PERMISSION);
+            }
+        }
+
+        if (bulletinWriteAuth != null) {
+            Map<String, String> pathVariables =
+                    (Map<String, String>) request
+                            .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+
+            int memberId = loginService.getMemberId();
+            String bulletinVariable = pathVariables.get("bulletinId");
+            if (bulletinVariable == null) {
+                log.warn("PathVaribale에 bulletinId가 없습니다.");
+                throw new BadRequestException(BULLETIN_NOT_EXIST);
+            }
+
+            int bulletinId = Integer.parseInt(bulletinVariable);
+            Bulletin bulletin = bulletinService.getBulletinById(bulletinId);
+            int clubId = bulletin.getClubId();
+
+            if (!clubMemberService.isClubMember(clubId, memberId)) {
                 throw new NoPermissionException(NO_CLUB_PERMISSION);
             }
         }
