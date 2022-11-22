@@ -12,12 +12,14 @@ import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.service.BulletinService;
 import soccerfriend.service.ClubMemberService;
 import soccerfriend.service.LoginService;
+import soccerfriend.utility.RedisUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 import static soccerfriend.exception.ExceptionInfo.*;
+import static soccerfriend.service.PostService.RECENTLY_POST;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     private final LoginService loginService;
     private final ClubMemberService clubMemberService;
     private final BulletinService bulletinService;
+    private final RedisUtil redisUtil;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -35,6 +38,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         IsClubLeaderOrManager isClubLeaderOrManager = ((HandlerMethod) handler).getMethodAnnotation(IsClubLeaderOrManager.class);
         IsClubMember isClubMember = ((HandlerMethod) handler).getMethodAnnotation(IsClubMember.class);
         BulletinWriteAuth bulletinWriteAuth = ((HandlerMethod) handler).getMethodAnnotation(BulletinWriteAuth.class);
+        NotRecentlyPost notRecentlyPost = ((HandlerMethod) handler).getMethodAnnotation(NotRecentlyPost.class);
 
         if (memberLoginCheck != null) {
             loginService.getMemberId();
@@ -94,6 +98,14 @@ public class AuthInterceptor implements HandlerInterceptor {
 
             if (!clubMemberService.isClubMember(clubId, memberId)) {
                 throw new NoPermissionException(NO_CLUB_PERMISSION);
+            }
+        }
+
+        if (notRecentlyPost != null) {
+            int memberId = loginService.getMemberId();
+            String value = redisUtil.getStringData(RECENTLY_POST + " " + memberId);
+            if (value != null) {
+                throw new NoPermissionException(RECENTLY_CREATE_POST);
             }
         }
 

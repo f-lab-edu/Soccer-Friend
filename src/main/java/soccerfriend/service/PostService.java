@@ -11,6 +11,7 @@ import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.mapper.PostMapper;
 
+import java.time.Duration;
 import java.util.List;
 
 import static soccerfriend.exception.ExceptionInfo.*;
@@ -24,6 +25,7 @@ public class PostService {
     private final BulletinService bulletinService;
     private final ClubMemberService clubMemberService;
     private final RedisTemplate redisTemplate;
+    public static final String RECENTLY_POST = "recentlyPost";
 
     public void create(int bulletinId, int memberId, Post post) {
         if (post == null) {
@@ -54,6 +56,7 @@ public class PostService {
 
         mapper.insert(newPost);
         deletePostPageCache(bulletinId);
+        redisTemplate.opsForValue().set(RECENTLY_POST + " " + memberId, memberId, Duration.ofMinutes(1));
     }
 
     @Cacheable(value = "POST", key = "#id")

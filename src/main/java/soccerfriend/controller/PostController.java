@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.authentication.BulletinWriteAuth;
+import soccerfriend.authentication.NotRecentlyPost;
 import soccerfriend.dto.Post;
 import soccerfriend.service.LoginService;
 import soccerfriend.service.PostService;
@@ -20,6 +21,7 @@ public class PostController {
 
     @PostMapping("/bulletin/{bulletinId}")
     @BulletinWriteAuth
+    @NotRecentlyPost
     public void create(@PathVariable int bulletinId, @Validated @RequestBody Post post) {
         int memberId = loginService.getMemberId();
         postService.create(bulletinId, memberId, post);
