@@ -44,10 +44,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
             int memberId = loginService.getMemberId();
             String clubIdVariable = pathVariables.get("clubId");
-            if (clubIdVariable == null) {
-                log.warn("PathVaribale에 clubId가 없습니다.");
-                throw new BadRequestException(CLUB_NOT_EXIST);
-            }
+            clubPathVariableCheck(clubIdVariable);
             int clubId = Integer.parseInt(clubIdVariable);
 
             if (!clubMemberService.isClubMember(clubId, memberId)) {
@@ -62,10 +59,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
             int memberId = loginService.getMemberId();
             String clubIdVariable = pathVariables.get("clubId");
-            if (clubIdVariable == null) {
-                log.warn("PathVaribale에 clubId가 없습니다.");
-                throw new BadRequestException(CLUB_NOT_EXIST);
-            }
+            clubPathVariableCheck(clubIdVariable);
             Integer clubId = Integer.parseInt(clubIdVariable);
 
             if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
@@ -74,5 +68,12 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         return true;
+    }
+
+    private void clubPathVariableCheck(String pathVariable) {
+        if (pathVariable == null) {
+            log.warn("PathVaribale에 club 정보가 없습니다.");
+            throw new BadRequestException(CLUB_NOT_EXIST);
+        }
     }
 }
