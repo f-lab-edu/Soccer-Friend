@@ -9,7 +9,8 @@ import soccerfriend.mapper.ClubMemberMapper;
 
 import java.util.List;
 
-import static soccerfriend.dto.ClubMember.ClubMemberGrade.*;
+import static soccerfriend.dto.ClubMember.ClubMemberGrade.LEADER;
+import static soccerfriend.dto.ClubMember.ClubMemberGrade.MEMBER;
 import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
@@ -215,5 +216,20 @@ public class ClubMemberService {
      */
     public List<ClubMember> getNotPaidClubMembers(int clubId, int year, int month) {
         return mapper.getNotPaidClubMembers(clubId, year, month);
+    }
+
+    /**
+     * 특정 member가 속한 모든 club의 id들을 반환합니다.
+     *
+     * @param memberId member의 id
+     * @return member가 속한 club의 id
+     */
+    public List<Integer> getClubIdOfMember(int memberId) {
+        List<Integer> clubIdOfMember = mapper.getClubIdOfMember(memberId);
+        if (clubIdOfMember.isEmpty()) {
+            throw new BadRequestException(NOT_CLUB_MEMBER);
+        }
+
+        return clubIdOfMember;
     }
 }

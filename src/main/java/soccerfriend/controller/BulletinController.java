@@ -3,8 +3,8 @@ package soccerfriend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import soccerfriend.authentication.IsClubLeaderOrManager;
-import soccerfriend.authentication.IsClubMember;
+import soccerfriend.authentication.BulletinChangeable;
+import soccerfriend.authentication.BulletinReadable;
 import soccerfriend.dto.Bulletin;
 import soccerfriend.service.BulletinService;
 
@@ -25,7 +25,7 @@ public class BulletinController {
      * @param bulletin 새로 추가할 게시판의 정보
      */
     @PostMapping("/club/{clubId}")
-    @IsClubLeaderOrManager
+    @BulletinChangeable
     public void create(@PathVariable int clubId, @Validated @RequestBody Bulletin bulletin) {
         bulletinService.create(clubId, bulletin);
     }
@@ -36,8 +36,8 @@ public class BulletinController {
      * @param clubId 게시판을 삭제할 클럽의 id
      * @param id     삭제할 게시판의 id
      */
-    @DeleteMapping("/club/{clubId}/{id}")
-    @IsClubLeaderOrManager
+    @DeleteMapping("/{id}")
+    @BulletinChangeable
     public void delete(@PathVariable int clubId, @PathVariable int id) {
         bulletinService.delete(id);
     }
@@ -49,7 +49,7 @@ public class BulletinController {
      * @return 특정 클럽에 존재하는 모든 게시판의 정보
      */
     @GetMapping("/club/{clubId}")
-    @IsClubMember
+    @BulletinReadable
     public List<Bulletin> getBulletinsByClubId(@PathVariable int clubId) {
         return bulletinService.getBulletinsByClubId(clubId);
     }
@@ -57,13 +57,12 @@ public class BulletinController {
     /**
      * 클럽에 존재하는 특정 id의 게시판을 반환합니다.
      *
-     * @param clubId 클럽의 id
      * @param id     게시판의 id
      * @return 클럽에 존재하는 특정 id의 게시판
      */
-    @GetMapping("/club/{clubId}/{id}")
-    @IsClubMember
-    public Bulletin getBulletinById(@PathVariable int clubId, @PathVariable int id) {
+    @GetMapping("/{id}")
+    @BulletinReadable
+    public Bulletin getBulletinById(@PathVariable int id) {
         return bulletinService.getBulletinById(id);
     }
 
@@ -75,7 +74,7 @@ public class BulletinController {
      * @param name 새로운 게시판 이름
      */
     @PatchMapping("/club/{clubId}/{id}")
-    @IsClubLeaderOrManager
+    @BulletinChangeable
     public void updateName(@PathVariable int clubId,
                            @PathVariable int id,
                            @RequestParam @Size(min = 1, max = 16) String name) {

@@ -42,6 +42,16 @@
                    )
     </select>
 
+    <select id="bulletinReadable" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT *
+                       FROM club_member
+                       WHERE club_id = #{clubId}
+                         AND member_id = #{memberId}
+                         AND approved = 1
+                   )
+    </select>
+
     <select id="isApplied" resultType="boolean">
         SELECT EXISTS(
                        SELECT *
@@ -144,5 +154,11 @@
                  LEFT OUTER JOIN club_monthly_fee b
                                  ON a.id = b.club_member_id
         WHERE a.club_id = #{clubId}
+    </select>
+
+    <select id="getClubIdOfMember" resultType="int">
+        SELECT club_id
+        FROM club_member
+        WHERE member_id = #{memberId}
     </select>
 </mapper>

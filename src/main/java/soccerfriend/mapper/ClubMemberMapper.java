@@ -34,5 +34,7 @@ public interface ClubMemberMapper {
     public List<ClubMember> getPaidClubMembers(@Param("clubId") int clubId, @Param("year") int year, @Param("month") int month);
 
     public List<ClubMember> getNotPaidClubMembers(@Param("clubId") int clubId, @Param("year") int year, @Param("month") int month);
+
+    public List<Integer> getClubIdOfMember(int memberId);
 }
 
