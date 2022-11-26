@@ -34,6 +34,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         MemberLoginCheck memberLoginCheck = ((HandlerMethod) handler).getMethodAnnotation(MemberLoginCheck.class);
         BulletinChangeable bulletinChangeable = ((HandlerMethod) handler).getMethodAnnotation(BulletinChangeable.class);
         BulletinReadable bulletinReadable = ((HandlerMethod) handler).getMethodAnnotation(BulletinReadable.class);
+        IsClubLeaderOrManager isClubLeaderOrManager = ((HandlerMethod) handler).getMethodAnnotation(IsClubLeaderOrManager.class);
         Map<String, String> pathVariables =
                 (Map<String, String>) request
                         .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
@@ -63,6 +64,18 @@ public class AuthInterceptor implements HandlerInterceptor {
 
             int memberId = loginService.getMemberId();
             int clubId = bulletinService.getBulletinById(bulletinId).getClubId();
+            if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
+                throw new NoPermissionException(NO_CLUB_PERMISSION);
+            }
+        }
+
+        if (isClubLeaderOrManager != null) {
+            Integer clubId = Integer.valueOf(pathVariables.get("clubId"));
+            if (clubId == null) {
+                throw new BadRequestException(CLUB_NOT_EXIST);
+            }
+
+            int memberId = loginService.getMemberId();
             if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
                 throw new NoPermissionException(NO_CLUB_PERMISSION);
             }

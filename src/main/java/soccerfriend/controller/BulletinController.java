@@ -5,6 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.authentication.BulletinChangeable;
 import soccerfriend.authentication.BulletinReadable;
+import soccerfriend.authentication.IsClubLeaderOrManager;
 import soccerfriend.dto.Bulletin;
 import soccerfriend.service.BulletinService;
 
@@ -25,7 +26,7 @@ public class BulletinController {
      * @param bulletin 새로 추가할 게시판의 정보
      */
     @PostMapping("/club/{clubId}")
-    @BulletinChangeable
+    @IsClubLeaderOrManager
     public void create(@PathVariable int clubId, @Validated @RequestBody Bulletin bulletin) {
         bulletinService.create(clubId, bulletin);
     }
@@ -33,12 +34,11 @@ public class BulletinController {
     /**
      * 클럽에 있는 게시판을 삭제합니다.
      *
-     * @param clubId 게시판을 삭제할 클럽의 id
-     * @param id     삭제할 게시판의 id
+     * @param id 삭제할 게시판의 id
      */
     @DeleteMapping("/{id}")
     @BulletinChangeable
-    public void delete(@PathVariable int clubId, @PathVariable int id) {
+    public void delete(@PathVariable int id) {
         bulletinService.delete(id);
     }
 
@@ -57,7 +57,7 @@ public class BulletinController {
     /**
      * 클럽에 존재하는 특정 id의 게시판을 반환합니다.
      *
-     * @param id     게시판의 id
+     * @param id 게시판의 id
      * @return 클럽에 존재하는 특정 id의 게시판
      */
     @GetMapping("/{id}")
@@ -69,14 +69,12 @@ public class BulletinController {
     /**
      * 클럽에 존재하는 게시판의 이름을 변경합니다.
      *
-     * @param clubId 클럽의 id
-     * @param id 게시판의 id
+     * @param id   게시판의 id
      * @param name 새로운 게시판 이름
      */
-    @PatchMapping("/club/{clubId}/{id}")
+    @PatchMapping("/{id}")
     @BulletinChangeable
-    public void updateName(@PathVariable int clubId,
-                           @PathVariable int id,
+    public void updateName(@PathVariable int id,
                            @RequestParam @Size(min = 1, max = 16) String name) {
         bulletinService.updateName(id, name);
     }
