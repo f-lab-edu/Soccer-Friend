@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import soccerfriend.dto.Bulletin;
 import soccerfriend.dto.Member;
 import soccerfriend.dto.Post;
@@ -11,6 +12,9 @@ import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.mapper.PostMapper;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.util.List;
 
@@ -146,9 +150,12 @@ public class PostService {
      *
      * @param memberId 게시물을 조회하는 member의 id
      * @param id       게시물의 id
+     * @param req
+     * @param res
      * @return 특정 id의 게시물
      */
-    public Post readPost(int memberId, int id) {
+    @Transactional
+    public Post readPost(int memberId, int id, HttpServletRequest req, HttpServletResponse res) {
         Member member = memberService.getMemberById(memberId);
         if (member == null) {
             throw new BadRequestException(MEMBER_NOT_EXIST);
@@ -158,7 +165,65 @@ public class PostService {
             throw new BadRequestException(POST_NOT_EXIST);
         }
 
-        // 조회수 증가 로직 추가예정
+        if (!postViewCheck(req, res, id)) {
+            increaseViews(id);
+        }
+
         return post;
+    }
+
+    /**
+     * 해당 게시물을 24시간 이내에 읽었는지 확인합니다.
+     *
+     * @param req
+     * @param res
+     * @param id  게시물의 id
+     * @return 게시물을 24시간 이내에 읽었는지 여부
+     */
+    public boolean postViewCheck(HttpServletRequest req, HttpServletResponse res, int id) {
+        Cookie oldCookie = null;
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("postView")) {
+                    oldCookie = cookie;
+                    break;
+                }
+            }
+        }
+
+        if (oldCookie != null) {
+            if (!oldCookie.getValue().contains("[" + Integer.toString(id) + "]")) {
+                oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
+                oldCookie.setPath("/");
+                oldCookie.setMaxAge(60 * 60 * 24);
+                res.addCookie(oldCookie);
+
+                return false;
+            }
+            return true;
+        }
+        else {
+            Cookie newCookie = new Cookie("postView", "[" + id + "]");
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60 * 60 * 24);
+            res.addCookie(newCookie);
+
+            return false;
+        }
+    }
+
+    /**
+     * 특정 id의 게시물을 1 증가시킵니다.
+     *
+     * @param id 게시물의 id
+     */
+    public void increaseViews(int id) {
+        Post post = getPostById(id);
+        if (post == null) {
+            throw new BadRequestException(POST_NOT_EXIST);
+        }
+
+        mapper.increaseViews(id);
     }
 }

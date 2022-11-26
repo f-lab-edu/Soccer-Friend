@@ -14,18 +14,21 @@
         SELECT id, bulletin_id, writer, title, content, views
         FROM post
         WHERE id = #{id}
+          AND deleted = 0
     </select>
 
     <select id="getPostByBulletinId" resultType="soccerfriend.dto.Post">
         SELECT id, bulletin_id, writer, title, content, views
         FROM post
         WHERE bulletin_id = #{bulletinId}
+          AND deleted = 0
     </select>
 
     <select id="getPostByBulletinPage" resultType="soccerfriend.dto.Post">
         SELECT id, bulletin_id, writer, title, content, views
         FROM post
         WHERE bulletin_id = #{bulletinId}
+          AND deleted = 0
         ORDER BY id asc
         LIMIT #{start}, 10
     </select>
@@ -34,5 +37,13 @@
         SELECT COUNT(*)
         FROM post
         WHERE bulletin_id = #{bulletinId}
+          AND deleted = 0
     </select>
+
+    <update id="increaseViews">
+        UPDATE post
+        SET views = views + 1
+        WHERE id = #{id}
+          AND deleted = 0
+    </update>
 </mapper>
