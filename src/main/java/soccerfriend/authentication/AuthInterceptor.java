@@ -20,7 +20,6 @@ import java.util.Map;
 
 import static soccerfriend.exception.ExceptionInfo.*;
 import static soccerfriend.service.PostService.RECENTLY_POST;
-import static soccerfriend.exception.ExceptionInfo.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,8 +28,6 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private final LoginService loginService;
     private final ClubMemberService clubMemberService;
-    private final BulletinService bulletinService;
-
     private final BulletinService bulletinService;
     private final RedisUtil redisUtil;
 
@@ -41,6 +38,9 @@ public class AuthInterceptor implements HandlerInterceptor {
         BulletinChangeable bulletinChangeable = ((HandlerMethod) handler).getMethodAnnotation(BulletinChangeable.class);
         BulletinReadable bulletinReadable = ((HandlerMethod) handler).getMethodAnnotation(BulletinReadable.class);
         IsClubLeaderOrManager isClubLeaderOrManager = ((HandlerMethod) handler).getMethodAnnotation(IsClubLeaderOrManager.class);
+        BulletinWriteAuth bulletinWriteAuth = ((HandlerMethod) handler).getMethodAnnotation(BulletinWriteAuth.class);
+        NotRecentlyPost notRecentlyPost = ((HandlerMethod) handler).getMethodAnnotation(NotRecentlyPost.class);
+
         Map<String, String> pathVariables =
                 (Map<String, String>) request
                         .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
@@ -52,6 +52,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (bulletinReadable != null) {
             Integer bulletinId = Integer.parseInt(pathVariables.get("id"));
             if (bulletinId == null) {
+                log.warn("PathVaribale에 id가 없습니다.");
                 throw new BadRequestException(BULLETIN_NOT_EXIST);
             }
 
@@ -65,6 +66,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (bulletinChangeable != null) {
             Integer bulletinId = Integer.parseInt(pathVariables.get("id"));
             if (bulletinId == null) {
+                log.warn("PathVaribale에 id가 없습니다.");
                 throw new BadRequestException(BULLETIN_NOT_EXIST);
             }
 
@@ -78,6 +80,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (isClubLeaderOrManager != null) {
             Integer clubId = Integer.valueOf(pathVariables.get("clubId"));
             if (clubId == null) {
+                log.warn("PathVaribale에 clubId가 없습니다.");
                 throw new BadRequestException(CLUB_NOT_EXIST);
             }
 
@@ -88,17 +91,13 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         if (bulletinWriteAuth != null) {
-            Map<String, String> pathVariables =
-                    (Map<String, String>) request
-                            .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-
-            int memberId = loginService.getMemberId();
             String bulletinVariable = pathVariables.get("bulletinId");
             if (bulletinVariable == null) {
                 log.warn("PathVaribale에 bulletinId가 없습니다.");
                 throw new BadRequestException(BULLETIN_NOT_EXIST);
             }
 
+            int memberId = loginService.getMemberId();
             int bulletinId = Integer.parseInt(bulletinVariable);
             Bulletin bulletin = bulletinService.getBulletinById(bulletinId);
             int clubId = bulletin.getClubId();
