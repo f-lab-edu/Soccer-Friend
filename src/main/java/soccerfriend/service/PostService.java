@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import soccerfriend.dto.Bulletin;
 import soccerfriend.dto.Member;
 import soccerfriend.dto.Post;
@@ -154,7 +153,6 @@ public class PostService {
      * @param res
      * @return 특정 id의 게시물
      */
-    @Transactional
     public Post readPost(int memberId, int id, HttpServletRequest req, HttpServletResponse res) {
         Member member = memberService.getMemberById(memberId);
         if (member == null) {
