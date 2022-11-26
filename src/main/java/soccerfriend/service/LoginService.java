@@ -1,6 +1,6 @@
 package soccerfriend.service;
 
-import static soccerfriend.utility.InputForm.*;
+import static soccerfriend.utility.InputForm.LoginRequest;
 
 public interface LoginService {
 

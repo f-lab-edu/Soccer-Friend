@@ -10,13 +10,12 @@ import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.utility.InputForm.LoginRequest;
 
 import javax.servlet.http.HttpSession;
-
+import java.util.List;
 import java.util.Optional;
 
 import static soccerfriend.exception.ExceptionInfo.*;
 import static soccerfriend.utility.PasswordWarning.NO_WARNING;
-import static soccerfriend.utility.SessionKey.SESSION_LOGIN_MEMBER;
-import static soccerfriend.utility.SessionKey.SESSION_LOGIN_STADIUM_OWNER;
+import static soccerfriend.utility.SessionKey.*;
 
 @RequiredArgsConstructor
 @Service
@@ -25,6 +24,7 @@ public class SessionLoginService implements LoginService {
     private final HttpSession httpSession;
     private final MemberService memberService;
     private final StadiumOwnerService stadiumOwnerService;
+    private final ClubMemberService clubMemberService;
 
     /**
      * 현재 세션에 존재하는 Member의 id를 반환합니다.
@@ -72,6 +72,11 @@ public class SessionLoginService implements LoginService {
         }
 
         httpSession.setAttribute(SESSION_LOGIN_MEMBER, member.get().getId());
+
+        int memberId = member.get().getId();
+        List<Integer> clubIdOfMember = clubMemberService.getClubIdOfMember(memberId);
+
+        clubIdOfMember.forEach((id) -> httpSession.setAttribute(SESSION_MEMBER_JOINED_CLUB, clubIdOfMember));
         httpSession.setMaxInactiveInterval(30 * 60);
     }
 
