@@ -24,7 +24,6 @@ public class SessionLoginService implements LoginService {
     private final HttpSession httpSession;
     private final MemberService memberService;
     private final StadiumOwnerService stadiumOwnerService;
-    private final ClubMemberService clubMemberService;
 
     /**
      * 현재 세션에 존재하는 Member의 id를 반환합니다.
