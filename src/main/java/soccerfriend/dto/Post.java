@@ -2,6 +2,8 @@ package soccerfriend.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -19,6 +21,10 @@ public class Post {
     private String content;
 
     private int views;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     @Builder
     public Post(String title, String content) {

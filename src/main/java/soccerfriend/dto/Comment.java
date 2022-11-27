@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -24,8 +25,12 @@ public class Comment {
     @NotNull
     private String content;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
     @Getter
-    public static class ContentInput{
+    public static class ContentInput {
         private String content;
     }
 }

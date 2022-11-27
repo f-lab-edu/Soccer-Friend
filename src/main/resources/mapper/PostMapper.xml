@@ -11,21 +11,42 @@
     </insert>
 
     <select id="getPostById" resultType="soccerfriend.dto.Post">
-        SELECT id, bulletin_id, writer, title, content, views
+        SELECT id,
+               bulletin_id,
+               writer,
+               title,
+               content,
+               views,
+               created_at,
+               updated_at
         FROM post
         WHERE id = #{id}
           AND deleted = 0
     </select>
 
     <select id="getPostByBulletinId" resultType="soccerfriend.dto.Post">
-        SELECT id, bulletin_id, writer, title, content, views
+        SELECT id,
+               bulletin_id,
+               writer,
+               title,
+               content,
+               views,
+               created_at,
+               updated_at
         FROM post
         WHERE bulletin_id = #{bulletinId}
           AND deleted = 0
     </select>
 
     <select id="getPostByBulletinPage" resultType="soccerfriend.dto.Post">
-        SELECT id, bulletin_id, writer, title, content, views
+        SELECT id,
+               bulletin_id,
+               writer,
+               title,
+               content,
+               views,
+               created_at,
+               updated_at
         FROM post
         WHERE bulletin_id = #{bulletinId}
           AND deleted = 0
