@@ -19,6 +19,7 @@ public enum ExceptionInfo {
     IS_CLUB_LEADER(401, "해당 클럽의 leader는 탈퇴할 수 없습니다."),
     PAYMENT_FAIL(401, "결제에 실패했습니다."),
 
+    COMMENT_NOT_EXIST(404, "댓글이 존재하지 않습니다."),
     POST_PAGE_NOT_EXIST(404, "해당 게시판에 존재하지 않는 페이지입니다."),
     POST_NOT_EXIST(404, "게시물이 존재하지 않습니다."),
     CODE_NOT_EXIST(404, "존재하지 않는 코드입니다."),

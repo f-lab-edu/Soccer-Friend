@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.CommentMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.Comment">
+        INSERT
+        INTO comment(post_id, writer, content, deleted, created_at, updated_at)
+        VALUES (#{postId}, #{writer}, #{content}, 0, now(), now())
+    </insert>
+
+    <update id="delete">
+        UPDATE comment
+        SET deleted    = 1,
+            updated_at = now()
+        WHERE id = #{id}
+          AND deleted = 0
+    </update>
+
+    <delete id="deletePermanently">
+        DELETE
+        FROM comment
+        WHERE deleted = true
+          AND id = #{id}
+    </delete>
+
+    <select id="getCommentById" resultType="soccerfriend.dto.Comment">
+        SELECT id, post_id, writer, content
+        FROM comment
+        WHERE id = #{id}
+          AND deleted = 0
+    </select>
+
+    <select id="getCommentById" resultType="soccerfriend.dto.Comment">
+        SELECT id, post_id, writer, content
+        FROM comment
+        WHERE id = #{id}
+          AND deleted = 0
+    </select>
+
+    <select id="getCommentsByPostId" resultType="soccerfriend.dto.Comment">
+        SELECT id, post_id, writer, content
+        FROM comment
+        WHERE post_id = #{postId}
+          AND deleted = 0
+    </select>
+
+    <select id="isCommentExistIncludeDeleted" resultType="boolean">
+        SELECT EXISTS(SELECT id FROM comment WHERE id = #{id})
+    </select>
+</mapper>
