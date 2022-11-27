@@ -23,4 +23,9 @@ public class Comment {
 
     @NotNull
     private String content;
+
+    @Getter
+    public static class ContentInput{
+        private String content;
+    }
 }

@@ -32,13 +32,6 @@
           AND deleted = 0
     </select>
 
-    <select id="getCommentById" resultType="soccerfriend.dto.Comment">
-        SELECT id, post_id, writer, content
-        FROM comment
-        WHERE id = #{id}
-          AND deleted = 0
-    </select>
-
     <select id="getCommentsByPostId" resultType="soccerfriend.dto.Comment">
         SELECT id, post_id, writer, content
         FROM comment

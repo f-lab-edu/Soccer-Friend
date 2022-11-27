@@ -5,13 +5,20 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.authentication.BulletinWriteAuth;
 import soccerfriend.authentication.NotRecentlyPost;
+import soccerfriend.dto.Comment;
+import soccerfriend.dto.Comment.ContentInput;
 import soccerfriend.dto.Post;
+import soccerfriend.exception.exception.BadRequestException;
+import soccerfriend.exception.exception.NoPermissionException;
+import soccerfriend.service.CommentService;
 import soccerfriend.service.LoginService;
 import soccerfriend.service.PostService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +27,7 @@ public class PostController {
 
     private final PostService postService;
     private final LoginService loginService;
+    private final CommentService commentService;
 
     /**
      * 특정 게시판에 게시물을 생성합니다.
@@ -61,5 +69,37 @@ public class PostController {
     @BulletinWriteAuth
     public List<Post> getPostByPage(@PathVariable int bulletinId, @PathVariable int page) {
         return postService.getPostByBulletinPage(bulletinId, page);
+    }
+
+    @PostMapping("/bulletin/{bulletinId}/{id}/comment")
+    @BulletinWriteAuth
+    public void writeComment(@PathVariable int bulletinId,
+                             @PathVariable int id,
+                             @RequestBody ContentInput content) {
+        int memberId = loginService.getMemberId();
+
+        commentService.create(id, memberId, content.getContent());
+    }
+
+    @DeleteMapping("/bulletin/{bulletinId}/comment/{commentId}")
+    @BulletinWriteAuth
+    public void deleteComment(@PathVariable int bulletinId, @PathVariable int commentId) {
+        Comment comment = commentService.getCommentById(commentId);
+        if (comment == null) {
+            throw new BadRequestException(COMMENT_NOT_EXIST);
+        }
+
+        int memberId = loginService.getMemberId();
+        if (memberId != comment.getWriter()) {
+            throw new NoPermissionException(NO_COMMENT_PERMISSION);
+        }
+
+        commentService.delete(commentId);
+    }
+
+    @GetMapping("/bulletin/{bulletinId}/{id}/comments")
+    @BulletinWriteAuth
+    public List<Comment> getComments(@PathVariable int bulletinId, @PathVariable int id) {
+        return commentService.getCommentsByPostId(id);
     }
 }
