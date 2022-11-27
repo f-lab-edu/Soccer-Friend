@@ -32,10 +32,6 @@ public class ClubMember {
 
     private LocalDateTime paidAt;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
     @Builder
     public ClubMember(int clubId, int memberId, ClubMemberGrade grade) {
         this.clubId = clubId;

@@ -5,7 +5,6 @@ import lombok.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -35,10 +34,6 @@ public class Club {
     private int paymentDay;
 
     private int bulletinNum;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
     @Builder
     public Club(String name, int addressId, int monthlyFee, int paymentDay) {
