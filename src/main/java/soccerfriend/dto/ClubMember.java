@@ -1,7 +1,9 @@
 package soccerfriend.dto;
 
 import lombok.*;
+import soccerfriend.utility.validator.ValidEnum;
 
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,10 +14,16 @@ public class ClubMember {
 
     private int id;
 
+    @NonNull
+    @Min(1)
     private int clubId;
 
+    @NonNull
+    @Min(1)
     private int memberId;
 
+    @NonNull
+    @ValidEnum(enumClass = ClubMemberGrade.class)
     private ClubMemberGrade grade;
 
     private boolean approved;
