@@ -2,6 +2,7 @@ package soccerfriend.authentication;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -12,7 +13,6 @@ import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.service.BulletinService;
 import soccerfriend.service.ClubMemberService;
 import soccerfriend.service.LoginService;
-import soccerfriend.utility.RedisUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +29,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     private final LoginService loginService;
     private final ClubMemberService clubMemberService;
     private final BulletinService bulletinService;
-    private final RedisUtil redisUtil;
+    private final RedisTemplate redisTemplate;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -109,7 +109,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         if (notRecentlyPost != null) {
             int memberId = loginService.getMemberId();
-            String value = redisUtil.getStringData(RECENTLY_POST + " " + memberId);
+            String value = (String) redisTemplate.opsForValue().get(RECENTLY_POST + " " + memberId);
             if (value != null) {
                 throw new NoPermissionException(RECENTLY_CREATE_POST);
             }
