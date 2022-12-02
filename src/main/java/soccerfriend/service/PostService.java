@@ -62,7 +62,6 @@ public class PostService {
                            .build();
 
         mapper.insert(newPost);
-        deletePostPageCache(bulletinId);
         redisTemplate.opsForValue().set(RECENTLY_POST + " " + memberId, memberId, Duration.ofMinutes(1));
     }
 
@@ -122,23 +121,6 @@ public class PostService {
      */
     public int getPostCountFromBulletin(int bulletinId) {
         return mapper.getPostCountFromBulletin(bulletinId);
-    }
-
-    /**
-     * 특정 게시판에 존재하는 모든 페이지로 분류된 게시물들의 캐싱 정보를 삭제합니다. '
-     *
-     * @param bulletinId 게시판의 id
-     */
-    public void deletePostPageCache(int bulletinId) {
-        Bulletin bulletin = bulletinService.getBulletinById(bulletinId);
-        if (bulletin == null) {
-            throw new BadRequestException(BULLETIN_NOT_EXIST);
-        }
-
-        int numPost = getPostCountFromBulletin(bulletinId);
-        for (int i = 1; i < (numPost / 10) + 1; i++) {
-            redisTemplate.delete("POSTPAGE::" + bulletinId + " " + i);
-        }
     }
 
     /**
