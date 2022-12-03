@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import soccerfriend.dto.Bulletin;
 import soccerfriend.dto.Member;
@@ -12,8 +13,6 @@ import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.mapper.PostMapper;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class PostService {
     private final BulletinService bulletinService;
     private final ClubMemberService clubMemberService;
     private final RedisTemplate redisTemplate;
-    private final FileManageService fileManageService;
+    private final PostImageService postImageService;
     public static final String RECENTLY_POST = "recentlyPost";
 
     /**
@@ -37,8 +36,10 @@ public class PostService {
      * @param bulletinId 게시판의 id
      * @param memberId   member의 id
      * @param post       게시물 정보
+     * @param images     첨부된 이미지
      */
-    public void create(int bulletinId, int memberId, Post post) {
+    @Transactional
+    public void create(int bulletinId, int memberId, Post post, List<MultipartFile> images) {
         if (post == null) {
             throw new BadRequestException(POST_NOT_EXIST);
         }
@@ -57,6 +58,10 @@ public class PostService {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
+        if (images.size() >= 3) {
+            throw new BadRequestException(TOO_MUCH_FILES);
+        }
+
         Post newPost = Post.builder()
                            .bulletinId(bulletinId)
                            .writer(memberId)
@@ -65,8 +70,11 @@ public class PostService {
                            .views(0)
                            .build();
 
-        mapper.insert(newPost);
-        redisTemplate.opsForValue().set(RECENTLY_POST + " " + memberId, memberId, Duration.ofMinutes(1));
+        int postId = mapper.insert(newPost);
+
+        if (!images.isEmpty()) {
+            postImageService.uploadImage(postId, images);
+        }
     }
 
     /**
@@ -180,21 +188,5 @@ public class PostService {
         }
 
         mapper.increaseViews(id);
-    }
-
-    public void uploadImage(List<MultipartFile> images) {
-        if (images.isEmpty()) {
-            throw new BadRequestException(IMAGE_NOT_EXIST);
-        }
-
-        for (MultipartFile image : images) {
-            try {
-                File file = new File(image.getName());
-                image.transferTo(file);
-                fileManageService.upload(file);
-            } catch (IOException e) {
-                throw new BadRequestException(IMAGE_NOT_EXIST);
-            }
-        }
     }
 }

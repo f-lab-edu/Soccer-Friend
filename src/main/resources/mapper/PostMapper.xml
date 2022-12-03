@@ -4,7 +4,7 @@
 
 <mapper namespace="soccerfriend.mapper.PostMapper">
 
-    <insert id="insert" parameterType="soccerfriend.dto.Post">
+    <insert id="insert" parameterType="soccerfriend.dto.Post" keyColumn="id">
         INSERT
         INTO post(bulletin_id, writer, title, content, views, deleted, created_at, updated_at)
         VALUES (#{bulletinId}, #{writer}, #{title}, #{content}, #{views}, 0, now(), now())

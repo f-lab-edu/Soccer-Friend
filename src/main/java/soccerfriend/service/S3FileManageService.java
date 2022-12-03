@@ -10,12 +10,14 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import soccerfriend.exception.exception.BadRequestException;
 
 import java.io.*;
 
 import static soccerfriend.exception.ExceptionInfo.FILE_NOT_EXIST;
 
+@Service
 public class S3FileManageService implements FileManageService {
 
     private final String endPoint;
@@ -43,6 +45,11 @@ public class S3FileManageService implements FileManageService {
                                   .build();
     }
 
+    /**
+     * 파일을 저장소에 업로드합니다.
+     *
+     * @param file 파일 정보
+     */
     @Override
     public void upload(File file) {
         if (file == null) {
@@ -60,6 +67,12 @@ public class S3FileManageService implements FileManageService {
         }
     }
 
+    /**
+     * 저장소로부터 파일을 다운로드합니다.
+     *
+     * @param fileName 파일 이름
+     * @param path 파일 경로
+     */
     @Override
     public void download(String fileName, String path) {
         try {
