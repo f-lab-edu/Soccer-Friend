@@ -130,6 +130,7 @@ public class PostService {
      * @param id       게시물의 id
      * @return 특정 id의 게시물
      */
+    @Cacheable(value = "POST", key = "#id")
     public Post readPost(int memberId, int id) {
         Member member = memberService.getMemberById(memberId);
         if (member == null) {
