@@ -50,10 +50,10 @@ public class PostController {
      */
     @GetMapping("/bulletin/{bulletinId}/{postId}")
     @BulletinWriteAuth
-    public Post readPost(@PathVariable int bulletinId, @PathVariable int postId, HttpServletRequest req, HttpServletResponse res) {
+    public Post readPost(@PathVariable int bulletinId, @PathVariable int postId) {
         int memberId = loginService.getMemberId();
 
-        return postService.readPost(memberId, postId, req, res);
+        return postService.readPost(memberId, postId);
     }
 
     /**
