@@ -9,8 +9,6 @@ import soccerfriend.dto.Post;
 import soccerfriend.service.LoginService;
 import soccerfriend.service.PostService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -44,10 +42,10 @@ public class PostController {
      */
     @GetMapping("/bulletin/{bulletinId}/{id}")
     @BulletinWriteAuth
-    public Post readPost(@PathVariable int bulletinId, @PathVariable int id, HttpServletRequest req, HttpServletResponse res) {
+    public Post readPost(@PathVariable int bulletinId, @PathVariable int id) {
         int memberId = loginService.getMemberId();
 
-        return postService.readPost(memberId, id, req, res);
+        return postService.readPost(memberId, id);
     }
 
     /**
