@@ -47,15 +47,15 @@ public class PostController {
      * 특정 게시판에 존재하는 게시물을 조회합니다.
      *
      * @param bulletinId 게시판의 id
-     * @param id         게시물의 id
+     * @param postId     게시물의 id
      * @return 특정 id의 게시물
      */
-    @GetMapping("/bulletin/{bulletinId}/{id}")
+    @GetMapping("/bulletin/{bulletinId}/{postId}")
     @BulletinWriteAuth
-    public Post readPost(@PathVariable int bulletinId, @PathVariable int id, HttpServletRequest req, HttpServletResponse res) {
+    public Post readPost(@PathVariable int bulletinId, @PathVariable int postId, HttpServletRequest req, HttpServletResponse res) {
         int memberId = loginService.getMemberId();
 
-        return postService.readPost(memberId, id, req, res);
+        return postService.readPost(memberId, postId, req, res);
     }
 
     /**
@@ -71,16 +71,29 @@ public class PostController {
         return postService.getPostByBulletinPage(bulletinId, page);
     }
 
-    @PostMapping("/bulletin/{bulletinId}/{id}/comment")
+    /**
+     * 게시물에 댓글을 작성합니다.
+     *
+     * @param bulletinId 게시판의 id
+     * @param postId     게시물의 id
+     * @param content    댓글 내용
+     */
+    @PostMapping("/bulletin/{bulletinId}/{postId}/comment")
     @BulletinWriteAuth
     public void writeComment(@PathVariable int bulletinId,
-                             @PathVariable int id,
+                             @PathVariable int postId,
                              @RequestBody ContentInput content) {
         int memberId = loginService.getMemberId();
 
-        commentService.create(id, memberId, content.getContent());
+        commentService.create(postId, memberId, content.getContent());
     }
 
+    /**
+     * 댓글을 삭제합니다.
+     *
+     * @param bulletinId 게시판의 id
+     * @param commentId  댓글의 id
+     */
     @DeleteMapping("/bulletin/{bulletinId}/comment/{commentId}")
     @BulletinWriteAuth
     public void deleteComment(@PathVariable int bulletinId, @PathVariable int commentId) {
@@ -97,9 +110,16 @@ public class PostController {
         commentService.delete(commentId);
     }
 
-    @GetMapping("/bulletin/{bulletinId}/{id}/comments")
+    /**
+     * 게시물 내에 존재하는 모든 댓글을 조회합니다.
+     *
+     * @param bulletinId 게시판의 id
+     * @param postId     게시물의 id
+     * @return 게시판에 존재하는 모든 댓글들의 정보
+     */
+    @GetMapping("/bulletin/{bulletinId}/{postId}/comments")
     @BulletinWriteAuth
-    public List<Comment> getComments(@PathVariable int bulletinId, @PathVariable int id) {
-        return commentService.getCommentsByPostId(id);
+    public List<Comment> getComments(@PathVariable int bulletinId, @PathVariable int postId) {
+        return commentService.getCommentsByPostId(postId);
     }
 }
