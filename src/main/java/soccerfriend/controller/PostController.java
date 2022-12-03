@@ -14,8 +14,6 @@ import soccerfriend.service.CommentService;
 import soccerfriend.service.LoginService;
 import soccerfriend.service.PostService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static soccerfriend.exception.ExceptionInfo.*;

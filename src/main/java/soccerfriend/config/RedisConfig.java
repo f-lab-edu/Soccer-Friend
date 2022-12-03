@@ -69,7 +69,7 @@ public class RedisConfig {
         customConfigurationMap.put("SIGNUP", defaultConfiguration().entryTtl(Duration.ofDays(1)));
         customConfigurationMap.put("BULLETIN", defaultConfiguration().entryTtl(Duration.ofDays(1)));
         customConfigurationMap.put("POST", defaultConfiguration().entryTtl(Duration.ofDays(1)));
-        customConfigurationMap.put("POSTPAGE", defaultConfiguration().entryTtl(Duration.ofHours(1)));
+        customConfigurationMap.put("POSTPAGE", defaultConfiguration().entryTtl(Duration.ofSeconds(1)));
         customConfigurationMap.put("COMMENT POST", defaultConfiguration().entryTtl(Duration.ofHours(1)));
         return customConfigurationMap;
     }
