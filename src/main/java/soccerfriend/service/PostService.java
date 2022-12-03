@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import soccerfriend.dto.Bulletin;
 import soccerfriend.dto.Member;
 import soccerfriend.dto.Post;
@@ -11,6 +12,8 @@ import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.mapper.PostMapper;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
@@ -25,6 +28,7 @@ public class PostService {
     private final BulletinService bulletinService;
     private final ClubMemberService clubMemberService;
     private final RedisTemplate redisTemplate;
+    private final FileManageService fileManageService;
     public static final String RECENTLY_POST = "recentlyPost";
 
     /**
@@ -176,5 +180,21 @@ public class PostService {
         }
 
         mapper.increaseViews(id);
+    }
+
+    public void uploadImage(List<MultipartFile> images) {
+        if (images.isEmpty()) {
+            throw new BadRequestException(IMAGE_NOT_EXIST);
+        }
+
+        for (MultipartFile image : images) {
+            try {
+                File file = new File(image.getName());
+                image.transferTo(file);
+                fileManageService.upload(file);
+            } catch (IOException e) {
+                throw new BadRequestException(IMAGE_NOT_EXIST);
+            }
+        }
     }
 }
