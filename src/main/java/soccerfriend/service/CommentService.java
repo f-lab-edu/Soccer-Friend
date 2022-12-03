@@ -1,6 +1,7 @@
 package soccerfriend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -135,12 +136,11 @@ public class CommentService {
      *
      * @param postId 게시물의 id
      */
+    @CacheEvict(value = "COMMENT POST", key = "#postId")
     public void deletePostCommentCache(int postId) {
         Post post = postService.getPostById(postId);
         if (post == null) {
             throw new BadRequestException(POST_NOT_EXIST);
         }
-
-        redisTemplate.delete("COMMENT POST:" + postId);
     }
 }
