@@ -90,4 +90,20 @@ public class S3FileManageService implements FileManageService {
             throw new BadRequestException(S3_NOT_WORKING);
         }
     }
+
+    /**
+     * 저장소로부터 파일을 삭제합니다.
+     *
+     * @param fileName 파일 이름
+     */
+    @Override
+    public void delete(String fileName) {
+        try {
+            s3.deleteObject(bucketName, fileName);
+        } catch (SdkClientException e) {
+            throw new BadRequestException(S3_NOT_WORKING);
+        }
+    }
+
+
 }

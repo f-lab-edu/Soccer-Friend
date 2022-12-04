@@ -1,5 +1,6 @@
 package soccerfriend.service;
 
+import com.amazonaws.SdkClientException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,7 +46,7 @@ public class PostImageService {
                 image.transferTo(file);
                 fileManageService.upload(file);
             } catch (IOException e) {
-                throw new BadRequestException(IMAGE_NOT_EXIST);
+                deleteImageByException(postId, images);
             }
 
             PostImage postImage = PostImage.builder()
@@ -55,6 +56,27 @@ public class PostImageService {
                                            .build();
 
             mapper.insert(postImage);
+        }
+    }
+
+    /**
+     * uploadImage 과정에서 IOException이 발생했을 때 이전에 업로드된 이미지들을 삭제한다.
+     *
+     * @param postId 게시물의 id
+     * @param images 이미지들의 정보
+     */
+    public void deleteImageByException(int postId, List<MultipartFile> images) {
+        if (images.isEmpty()) {
+            throw new BadRequestException(IMAGE_NOT_EXIST);
+        }
+
+        for (MultipartFile image : images) {
+            String fileName = "POST_" + postId + "_" + image.getName();
+            try {
+                fileManageService.delete(fileName);
+            } catch (SdkClientException e) {
+                throw new BadRequestException(IMAGE_NOT_EXIST);
+            }
         }
     }
 }
