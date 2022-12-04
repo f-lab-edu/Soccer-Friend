@@ -9,4 +9,6 @@ public interface PostImageMapper {
     public void insert(PostImage postImage);
 
     public PostImage getPostImageById(int id);
+
+    public void delete(int id);
 }

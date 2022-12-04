@@ -8,11 +8,13 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 import soccerfriend.dto.Bulletin;
+import soccerfriend.dto.Post;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.service.BulletinService;
 import soccerfriend.service.ClubMemberService;
 import soccerfriend.service.LoginService;
+import soccerfriend.service.PostService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +32,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     private final ClubMemberService clubMemberService;
     private final BulletinService bulletinService;
     private final RedisTemplate redisTemplate;
+    private final PostService postService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -40,6 +43,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         IsClubLeaderOrManager isClubLeaderOrManager = ((HandlerMethod) handler).getMethodAnnotation(IsClubLeaderOrManager.class);
         BulletinWriteAuth bulletinWriteAuth = ((HandlerMethod) handler).getMethodAnnotation(BulletinWriteAuth.class);
         NotRecentlyPost notRecentlyPost = ((HandlerMethod) handler).getMethodAnnotation(NotRecentlyPost.class);
+        PostWriteAuth postWriteAuth = ((HandlerMethod) handler).getMethodAnnotation(PostWriteAuth.class);
 
         Map<String, String> pathVariables =
                 (Map<String, String>) request
@@ -112,6 +116,20 @@ public class AuthInterceptor implements HandlerInterceptor {
             String value = (String) redisTemplate.opsForValue().get(RECENTLY_POST + " " + memberId);
             if (value != null) {
                 throw new NoPermissionException(RECENTLY_CREATE_POST);
+            }
+        }
+
+        if (postWriteAuth != null) {
+            int memberId = loginService.getMemberId();
+            Integer postId = Integer.parseInt(pathVariables.get("postId"));
+            if (postId == null) {
+                log.warn("PathVaribale에 postId가 없습니다.");
+                throw new BadRequestException(POST_NOT_EXIST);
+            }
+
+            Post post = postService.getPostById(postId);
+            if (memberId != post.getWriter()) {
+                throw new NoPermissionException(NO_POST_PERMISSION);
             }
         }
 
