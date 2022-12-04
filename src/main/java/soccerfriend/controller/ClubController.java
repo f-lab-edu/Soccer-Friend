@@ -1,6 +1,7 @@
 package soccerfriend.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import soccerfriend.dto.Club;
 import soccerfriend.dto.ClubMember;
@@ -29,7 +30,7 @@ public class ClubController {
      * @param club 기본 정보를 포함한 club 객체
      */
     @PostMapping
-    public void create(@RequestBody Club club) {
+    public void create(@Validated @RequestBody Club club) {
         int memberId = loginService.getMemberId();
         clubService.create(memberId, club);
     }

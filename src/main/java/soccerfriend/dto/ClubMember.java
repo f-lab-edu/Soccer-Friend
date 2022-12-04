@@ -2,6 +2,7 @@ package soccerfriend.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,10 +13,15 @@ public class ClubMember {
 
     private int id;
 
+    @NonNull
+    @Min(1)
     private int clubId;
 
+    @NonNull
+    @Min(1)
     private int memberId;
 
+    @NonNull
     private ClubMemberGrade grade;
 
     private boolean approved;
@@ -23,10 +29,6 @@ public class ClubMember {
     private boolean paymentStatus;
 
     private LocalDateTime paidAt;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
     @Builder
     public ClubMember(int clubId, int memberId, ClubMemberGrade grade) {
