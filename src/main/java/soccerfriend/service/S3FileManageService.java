@@ -6,7 +6,6 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +15,7 @@ import soccerfriend.exception.exception.BadRequestException;
 import java.io.*;
 
 import static soccerfriend.exception.ExceptionInfo.FILE_NOT_EXIST;
+import static soccerfriend.exception.ExceptionInfo.S3_NOT_WORKING;
 
 @Service
 public class S3FileManageService implements FileManageService {
@@ -27,11 +27,11 @@ public class S3FileManageService implements FileManageService {
     private final String bucketName;
     private final AmazonS3 s3;
 
-    public S3FileManageService(@Value("${ncp.storage.endpoint}") String endPoint,
-                               @Value("${ncp.storage.regionName}") String regionName,
-                               @Value("${ncp.storage.accessKey}") String accessKey,
-                               @Value("${ncp.storage.secretKey}") String secretKey,
-                               @Value("${ncp.storage.bucketName}") String bucketName) {
+    public S3FileManageService(@Value("${s3.storage.endpoint}") String endPoint,
+                               @Value("${s3.storage.regionName}") String regionName,
+                               @Value("${s3.storage.accessKey}") String accessKey,
+                               @Value("${s3.storage.secretKey}") String secretKey,
+                               @Value("${s3.storage.bucketName}") String bucketName) {
         this.endPoint = endPoint;
         this.regionName = regionName;
         this.accessKey = accessKey;
@@ -60,10 +60,8 @@ public class S3FileManageService implements FileManageService {
 
         try {
             s3.putObject(bucketName, objectName, file);
-        } catch (AmazonS3Exception e) {
-            e.printStackTrace();
         } catch (SdkClientException e) {
-            e.printStackTrace();
+            throw new BadRequestException(S3_NOT_WORKING);
         }
     }
 
@@ -71,7 +69,7 @@ public class S3FileManageService implements FileManageService {
      * 저장소로부터 파일을 다운로드합니다.
      *
      * @param fileName 파일 이름
-     * @param path 파일 경로
+     * @param path     파일 경로
      */
     @Override
     public void download(String fileName, String path) {
@@ -88,14 +86,8 @@ public class S3FileManageService implements FileManageService {
 
             outputStream.close();
             s3ObjectInputStream.close();
-        } catch (AmazonS3Exception e) {
-            e.printStackTrace();
-        } catch (SdkClientException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (SdkClientException | IOException e) {
+            throw new BadRequestException(S3_NOT_WORKING);
         }
     }
 }

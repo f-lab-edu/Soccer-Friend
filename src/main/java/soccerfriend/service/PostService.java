@@ -1,6 +1,6 @@
 package soccerfriend.service;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,6 @@ import java.util.List;
 import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
-@RequiredArgsConstructor
 public class PostService {
 
     private final PostMapper mapper;
@@ -28,7 +27,21 @@ public class PostService {
     private final ClubMemberService clubMemberService;
     private final RedisTemplate redisTemplate;
     private final PostImageService postImageService;
+    private final int imageAmount;
     public static final String RECENTLY_POST = "recentlyPost";
+
+    public PostService(PostMapper mapper, MemberService memberService,
+                       BulletinService bulletinService, ClubMemberService clubMemberService,
+                       RedisTemplate redisTemplate, PostImageService postImageService,
+                       @Value("${post.image.amount}") int imageAmount) {
+        this.mapper = mapper;
+        this.memberService = memberService;
+        this.bulletinService = bulletinService;
+        this.clubMemberService = clubMemberService;
+        this.redisTemplate = redisTemplate;
+        this.postImageService = postImageService;
+        this.imageAmount = imageAmount;
+    }
 
     /**
      * 게시판에 게시물을 작성합니다.
@@ -58,7 +71,7 @@ public class PostService {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
-        if (images.size() >= 3) {
+        if (images.size() >= imageAmount) {
             throw new BadRequestException(TOO_MUCH_FILES);
         }
 

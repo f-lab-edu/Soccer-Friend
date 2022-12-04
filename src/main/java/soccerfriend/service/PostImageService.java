@@ -21,7 +21,7 @@ public class PostImageService {
     private final String path;
 
     public PostImageService(PostImageMapper mapper, FileManageService fileManageService,
-                            @Value("${ncp.storage.postImage.folder}") String path) {
+                            @Value("${s3.storage.postImage.folder}") String path) {
         this.mapper = mapper;
         this.fileManageService = fileManageService;
         this.path = path;
