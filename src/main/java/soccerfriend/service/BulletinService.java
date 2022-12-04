@@ -62,12 +62,14 @@ public class BulletinService {
     @Transactional
     public void delete(int id) {
         Bulletin bulletin = getBulletinById(id);
+        if (bulletin == null) {
+            throw new BadRequestException(BULLETIN_NOT_EXIST);
+        }
         int clubId = bulletin.getClubId();
 
         mapper.delete(id);
         clubService.decreaseBulletinNum(clubId);
-        redisTemplate.delete("BULLETIN::BULLETIN" + String.valueOf(id));
-        redisTemplate.delete("BULLETIN::BULLETIN CLUB" + String.valueOf(clubId));
+        deleteCache(id, clubId);
     }
 
     /**
@@ -133,5 +135,38 @@ public class BulletinService {
         }
 
         return bulletins;
+    }
+
+    /**
+     * 게시판의 이름을 변경합니다.
+     *
+     * @param id   게시판의 id
+     * @param name 새로운 이름
+     */
+    public void updateName(int id, String name) {
+        Bulletin bulletin = getBulletinById(id);
+        if (bulletin == null) {
+            throw new BadRequestException(BULLETIN_NOT_EXIST);
+        }
+
+        int clubId = bulletin.getClubId();
+        String oldName = bulletin.getName();
+        if (oldName == name) {
+            throw new BadRequestException(SAME_NAME_FOR_UPDATE);
+        }
+
+        deleteCache(id, clubId);
+        mapper.updateName(id, name);
+    }
+
+    /**
+     * 캐시에 저장되어 있는 해당 게시판과 관련된 정보를 모두 삭제합니다.
+     *
+     * @param id     게시판의 id
+     * @param clubId 클럽의 id
+     */
+    public void deleteCache(int id, int clubId) {
+        redisTemplate.delete("BULLETIN::BULLETIN" + String.valueOf(id));
+        redisTemplate.delete("BULLETIN::BULLETIN CLUB" + String.valueOf(clubId));
     }
 }

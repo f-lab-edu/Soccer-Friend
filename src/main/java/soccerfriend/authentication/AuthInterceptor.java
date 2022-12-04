@@ -8,6 +8,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
+import soccerfriend.service.BulletinService;
 import soccerfriend.service.ClubMemberService;
 import soccerfriend.service.LoginService;
 
@@ -15,8 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-import static soccerfriend.exception.ExceptionInfo.CLUB_NOT_EXIST;
-import static soccerfriend.exception.ExceptionInfo.NO_CLUB_PERMISSION;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,55 +25,62 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private final LoginService loginService;
     private final ClubMemberService clubMemberService;
+    private final BulletinService bulletinService;
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         MemberLoginCheck memberLoginCheck = ((HandlerMethod) handler).getMethodAnnotation(MemberLoginCheck.class);
+        BulletinChangeable bulletinChangeable = ((HandlerMethod) handler).getMethodAnnotation(BulletinChangeable.class);
+        BulletinReadable bulletinReadable = ((HandlerMethod) handler).getMethodAnnotation(BulletinReadable.class);
         IsClubLeaderOrManager isClubLeaderOrManager = ((HandlerMethod) handler).getMethodAnnotation(IsClubLeaderOrManager.class);
-        IsClubMember isClubMember = ((HandlerMethod) handler).getMethodAnnotation(IsClubMember.class);
+        Map<String, String> pathVariables =
+                (Map<String, String>) request
+                        .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
         if (memberLoginCheck != null) {
             loginService.getMemberId();
         }
 
-        if (isClubMember != null) {
-            Map<String, String> pathVariables =
-                    (Map<String, String>) request
-                            .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        if (bulletinReadable != null) {
+            Integer bulletinId = Integer.parseInt(pathVariables.get("id"));
+            if (bulletinId == null) {
+                throw new BadRequestException(BULLETIN_NOT_EXIST);
+            }
 
             int memberId = loginService.getMemberId();
-            String clubIdVariable = pathVariables.get("clubId");
-            clubPathVariableCheck(clubIdVariable);
-            int clubId = Integer.parseInt(clubIdVariable);
-
+            int clubId = bulletinService.getBulletinById(bulletinId).getClubId();
             if (!clubMemberService.isClubMember(clubId, memberId)) {
                 throw new NoPermissionException(NO_CLUB_PERMISSION);
             }
         }
 
-        if (isClubLeaderOrManager != null) {
-            Map<String, String> pathVariables =
-                    (Map<String, String>) request
-                            .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        if (bulletinChangeable != null) {
+            Integer bulletinId = Integer.parseInt(pathVariables.get("id"));
+            if (bulletinId == null) {
+                throw new BadRequestException(BULLETIN_NOT_EXIST);
+            }
 
             int memberId = loginService.getMemberId();
-            String clubIdVariable = pathVariables.get("clubId");
-            clubPathVariableCheck(clubIdVariable);
-            Integer clubId = Integer.parseInt(clubIdVariable);
+            int clubId = bulletinService.getBulletinById(bulletinId).getClubId();
+            if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
+                throw new NoPermissionException(NO_CLUB_PERMISSION);
+            }
+        }
 
+        if (isClubLeaderOrManager != null) {
+            Integer clubId = Integer.valueOf(pathVariables.get("clubId"));
+            if (clubId == null) {
+                throw new BadRequestException(CLUB_NOT_EXIST);
+            }
+
+            int memberId = loginService.getMemberId();
             if (!clubMemberService.isClubLeaderOrStaff(clubId, memberId)) {
                 throw new NoPermissionException(NO_CLUB_PERMISSION);
             }
         }
 
         return true;
-    }
-
-    private void clubPathVariableCheck(String pathVariable) {
-        if (pathVariable == null) {
-            log.warn("PathVaribale에 club 정보가 없습니다.");
-            throw new BadRequestException(CLUB_NOT_EXIST);
-        }
     }
 }

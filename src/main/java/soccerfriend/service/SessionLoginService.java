@@ -10,7 +10,6 @@ import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.utility.InputForm.LoginRequest;
 
 import javax.servlet.http.HttpSession;
-
 import java.util.Optional;
 
 import static soccerfriend.exception.ExceptionInfo.*;
