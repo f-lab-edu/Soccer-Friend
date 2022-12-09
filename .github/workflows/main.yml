@@ -1,4 +1,4 @@
-name: soccerfriend_CI
+name: soccerfriend_CI2
 
 # 하기 내용에 해당하는 이벤트 발생 시 github action 동작
 on:
