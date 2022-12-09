@@ -9,6 +9,6 @@ public class SampleTest {
     public void sample() {
         int a = 3;
         int b = 3;
-        Assertions.assertEquals(a, b);
+        Assertions.assertEquals(a, 3);
     }
 }
