@@ -1,25 +1,24 @@
 package soccerfriend.service;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mindrot.jbcrypt.BCrypt;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soccerfriend.dto.Member;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.mapper.MemberMapper;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
@@ -30,20 +29,11 @@ class MemberServiceTest {
     @Mock
     private MemberMapper memberMapper;
 
-    private static MockedStatic<BCrypt> mBcrypt;
+    @Mock
+    private EncryptService encryptService;
 
     private Member newMember;
     private Member member;
-
-    @BeforeClass
-    public void before() {
-        mBcrypt = mockStatic(BCrypt.class);
-    }
-
-    @AfterClass
-    public void after() {
-        mBcrypt.close();
-    }
 
     @BeforeEach
     public void init() {
@@ -166,5 +156,18 @@ class MemberServiceTest {
         Member testMember = memberService.getMemberByEmail(member.getEmail());
 
         assertEquals(testMember, member);
+    }
+
+    @Test
+    @DisplayName("memberId와 비밀번호로 member 조회")
+    void memberId_비밀번호로_member_조회() {
+        when(memberMapper.isMemberIdExist(member.getMemberId())).thenReturn(true);
+        when(memberMapper.getMemberByMemberId(member.getMemberId())).thenReturn(member);
+        when(encryptService.checkPassword(any(), any())).thenReturn(true);
+
+        Optional<Member> optionalMember =
+                memberService.getMemberByMemberIdAndPassword(member.getMemberId(), member.getPassword());
+
+        assertEquals(optionalMember.get(), member);
     }
 }
