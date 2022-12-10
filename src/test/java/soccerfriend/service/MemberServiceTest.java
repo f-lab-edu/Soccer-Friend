@@ -1,7 +1,5 @@
 package soccerfriend.service;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +17,8 @@ import soccerfriend.mapper.MemberMapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
@@ -34,16 +33,6 @@ class MemberServiceTest {
 
     private Member newMember;
     private Member member;
-
-    @BeforeClass
-    public void before() {
-        mBcrypt = mockStatic(BCrypt.class);
-    }
-
-    @AfterClass
-    public void after() {
-        mBcrypt.close();
-    }
 
     @BeforeEach
     public void init() {
