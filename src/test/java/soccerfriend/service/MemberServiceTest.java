@@ -1,15 +1,11 @@
 package soccerfriend.service;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mindrot.jbcrypt.BCrypt;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import soccerfriend.dto.Member;
 import soccerfriend.exception.exception.BadRequestException;
@@ -19,7 +15,8 @@ import soccerfriend.mapper.MemberMapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
@@ -30,20 +27,8 @@ class MemberServiceTest {
     @Mock
     private MemberMapper memberMapper;
 
-    private static MockedStatic<BCrypt> mBcrypt;
-
     private Member newMember;
     private Member member;
-
-    @BeforeClass
-    public void before() {
-        mBcrypt = mockStatic(BCrypt.class);
-    }
-
-    @AfterClass
-    public void after() {
-        mBcrypt.close();
-    }
 
     @BeforeEach
     public void init() {
