@@ -34,6 +34,9 @@ public class MemberService {
      * @param member memberId, password, nickname, positionsId, addressId를 포함하는 member 객체
      */
     public void signUp(Member member) {
+        if (member == null) {
+            throw new BadRequestException(MEMBER_NOT_EXIST);
+        }
         if (isMemberIdExist(member.getMemberId())) {
             throw new DuplicatedException(ID_DUPLICATED);
         }
@@ -60,6 +63,11 @@ public class MemberService {
      * 회원정보를 삭제합니다.
      */
     public void deleteAccount(int id) {
+        Member member = getMemberById(id);
+        if (member == null) {
+            throw new BadRequestException(MEMBER_NOT_EXIST);
+        }
+
         mapper.delete(id);
     }
 
@@ -68,15 +76,6 @@ public class MemberService {
      */
     public void deletePermanently(int id) {
         mapper.deletePermanently(id);
-    }
-
-    /**
-     * 며칠 이전의 삭제된 계정들을 영구삭제합니다.
-     *
-     * @param days 영구삭제하고자 하는 계정삭제의 최소 일수
-     */
-    public void deletePermanentlyDaysBefore(int days) {
-        mapper.deletePermanentlyDaysBefore(days);
     }
 
     /**
