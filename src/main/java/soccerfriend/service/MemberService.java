@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import soccerfriend.dto.Member;
 import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
-import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.mapper.MemberMapper;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 import soccerfriend.utility.PasswordWarning;
@@ -64,9 +63,6 @@ public class MemberService {
      */
     public void deleteAccount(int id) {
         Member member = getMemberById(id);
-        if (member == null) {
-            throw new BadRequestException(MEMBER_NOT_EXIST);
-        }
 
         mapper.delete(id);
     }
@@ -194,12 +190,18 @@ public class MemberService {
      * @param passwordRequest before(현재 password), after(새로운 password)를 가지는 객체
      */
     public void updatePasswordByRequest(int id, UpdatePasswordRequest passwordRequest) {
+        Member member = getMemberById(id);
+
         String before = passwordRequest.getBefore();
         String after = passwordRequest.getAfter();
+        if (before == after) {
+            throw new BadRequestException(PASSWORD_SAME);
+        }
+
         String encryptedCurrent = getMemberById(id).getPassword();
 
         if (encryptService.checkPassword(after, encryptedCurrent)) {
-            throw new NotMatchException(PASSWORD_SAME);
+            throw new DuplicatedException(PASSWORD_SAME);
         }
 
         after = encryptService.encrypt(after);
@@ -213,6 +215,12 @@ public class MemberService {
      * @param password 새로운 비밀번호
      */
     public void updatePassword(int id, String password) {
+        Member member = getMemberById(id);
+
+        if (encryptService.checkPassword(password, member.getPassword())) {
+            throw new DuplicatedException(PASSWORD_SAME);
+        }
+
         String encryptedPassword = encryptService.encrypt(password);
         mapper.updatePassword(id, encryptedPassword);
     }
@@ -224,6 +232,12 @@ public class MemberService {
      * @param point 증가시키고자 하는 point의 양
      */
     public void increasePoint(int id, int point) {
+        Member member = getMemberById(id);
+
+        if (point < 1) {
+            throw new BadRequestException(INCREASE_POINT_TOO_LOW);
+        }
+
         mapper.increasePoint(id, point);
     }
 
@@ -235,6 +249,7 @@ public class MemberService {
      */
     public void decreasePoint(int id, int point) {
         Member member = getMemberById(id);
+
         if (member.getPoint() < point) {
             throw new BadRequestException(NOT_ENOUGH_POINT);
         }

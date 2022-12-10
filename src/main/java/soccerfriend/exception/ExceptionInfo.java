@@ -52,6 +52,7 @@ public enum ExceptionInfo {
     CLUB_MEMBER_NOT_EXIST(404, "해당 클럽회원이 존재하지 않습니다"),
     CLUB_NOT_EXIST(404, "해당 클럽이 존재하지 않습니다"),
     PAYER_TYPE_NOT_EXIST(404, "결제 대상이 아닙니다."),
+    INCREASE_POINT_TOO_LOW(404, "포인트를 증가하기 위해서는 0보다 커야합니다."),
 
     SAME_NAME_FOR_UPDATE(409, "이전과 동일한 이름입니다."),
     CLUB_BULLETINS_FULL(409, "클럽내 게시판 개수가 최대입니다."),

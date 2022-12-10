@@ -1,5 +1,6 @@
 package soccerfriend.utility;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,6 +15,7 @@ public class InputForm {
      */
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class UpdatePasswordRequest {
         private String before;
         private String after;

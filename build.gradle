@@ -19,6 +19,7 @@ dependencies {
     implementation 'de.svenkubiak:jBCrypt:0.4.3'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.session:spring-session-data-redis'
+    implementation 'junit:junit:4.13.1'
     runtimeOnly 'mysql:mysql-connector-java:8.0.30'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -30,6 +31,7 @@ dependencies {
 
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+    testImplementation 'org.mockito:mockito-inline:3.6.0'
 }
 
 tasks.named('test') {
