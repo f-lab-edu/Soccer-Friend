@@ -12,6 +12,8 @@ import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.DuplicatedException;
 import soccerfriend.mapper.MemberMapper;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,6 +28,9 @@ class MemberServiceTest {
 
     @Mock
     private MemberMapper memberMapper;
+
+    @Mock
+    private EncryptService encryptService;
 
     private Member newMember;
     private Member member;
@@ -151,5 +156,18 @@ class MemberServiceTest {
         Member testMember = memberService.getMemberByEmail(member.getEmail());
 
         assertEquals(testMember, member);
+    }
+
+    @Test
+    @DisplayName("memberId와 비밀번호로 member 조회")
+    void memberId_비밀번호로_member_조회() {
+        when(memberMapper.isMemberIdExist(member.getMemberId())).thenReturn(true);
+        when(memberMapper.getMemberByMemberId(member.getMemberId())).thenReturn(member);
+        when(encryptService.checkPassword(any(), any())).thenReturn(true);
+
+        Optional<Member> optionalMember =
+                memberService.getMemberByMemberIdAndPassword(member.getMemberId(), member.getPassword());
+
+        assertEquals(optionalMember.get(), member);
     }
 }

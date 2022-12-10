@@ -1,7 +1,6 @@
 package soccerfriend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import soccerfriend.dto.Member;
@@ -27,6 +26,7 @@ public class MemberService {
     private final MemberMapper mapper;
     private final EmailService emailService;
     private final RedisTemplate redisTemplate;
+    private final EncryptService encryptService;
 
     /**
      * 회원가입을 수행합니다.
@@ -48,7 +48,7 @@ public class MemberService {
         }
         Member encryptedMember = Member.builder()
                                        .memberId(member.getMemberId())
-                                       .password(BCrypt.hashpw(member.getPassword(), BCrypt.gensalt()))
+                                       .password(encryptService.encrypt(member.getPassword()))
                                        .email(member.getEmail())
                                        .nickname(member.getNickname())
                                        .positionsId(member.getPositionsId())
@@ -167,7 +167,7 @@ public class MemberService {
         Optional<Member> member =
                 Optional.ofNullable(mapper.getMemberByMemberId(memberId));
 
-        if (BCrypt.checkpw(password, member.get().getPassword())) {
+        if (encryptService.checkPassword(password, member.get().getPassword())) {
             return member;
         }
 
@@ -198,11 +198,11 @@ public class MemberService {
         String after = passwordRequest.getAfter();
         String encryptedCurrent = getMemberById(id).getPassword();
 
-        if (BCrypt.checkpw(after, encryptedCurrent)) {
+        if (encryptService.checkPassword(after, encryptedCurrent)) {
             throw new NotMatchException(PASSWORD_SAME);
         }
 
-        after = BCrypt.hashpw(after, BCrypt.gensalt());
+        after = encryptService.encrypt(after);
         mapper.updatePassword(id, after);
     }
 
@@ -213,7 +213,7 @@ public class MemberService {
      * @param password 새로운 비밀번호
      */
     public void updatePassword(int id, String password) {
-        String encryptedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        String encryptedPassword = encryptService.encrypt(password);
         mapper.updatePassword(id, encryptedPassword);
     }
 
