@@ -24,7 +24,7 @@ public class PostService {
     private final MemberService memberService;
     private final BulletinService bulletinService;
     private final ClubMemberService clubMemberService;
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
     public static final String RECENTLY_POST = "recentlyPost";
 
     /**
@@ -62,7 +62,8 @@ public class PostService {
                            .build();
 
         mapper.insert(newPost);
-        redisTemplate.opsForValue().set(RECENTLY_POST + " " + memberId, memberId, Duration.ofMinutes(1));
+        redisTemplate.opsForValue()
+                     .set(RECENTLY_POST + " " + memberId, String.valueOf(memberId), Duration.ofMinutes(1));
     }
 
     /**
@@ -145,7 +146,7 @@ public class PostService {
             increaseViews(id);
         }
 
-        redisTemplate.opsForValue().set("POST " + id + " MEMBER " + memberId, 1, Duration.ofDays(1));
+        redisTemplate.opsForValue().set(viewCheckKey(id, memberId), "1", Duration.ofDays(1));
 
         return post;
     }
@@ -157,7 +158,7 @@ public class PostService {
      * @return 게시물을 24시간 이내에 읽었는지 여부
      */
     public boolean postViewCheck(int memberId, int id) {
-        String str = (String) redisTemplate.opsForValue().get("POST " + id + " MEMBER " + memberId);
+        String str = redisTemplate.opsForValue().get(viewCheckKey(id, memberId));
         if (str == null) {
             return false;
         }
@@ -176,5 +177,9 @@ public class PostService {
         }
 
         mapper.increaseViews(id);
+    }
+
+    public String viewCheckKey(int postId, int memberId) {
+        return "POST " + postId + " MEMBER " + memberId;
     }
 }
