@@ -1,9 +1,11 @@
 package soccerfriend.service;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import soccerfriend.dto.Bulletin;
 import soccerfriend.dto.Member;
 import soccerfriend.dto.Post;
@@ -17,15 +19,29 @@ import java.util.List;
 import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
-@RequiredArgsConstructor
 public class PostService {
 
     private final PostMapper mapper;
     private final MemberService memberService;
     private final BulletinService bulletinService;
     private final ClubMemberService clubMemberService;
+    private final PostImageService postImageService;
+    private final int imageAmount;
     private final RedisTemplate<String, String> redisTemplate;
     public static final String RECENTLY_POST = "recentlyPost";
+
+    public PostService(PostMapper mapper, MemberService memberService,
+                       BulletinService bulletinService, ClubMemberService clubMemberService,
+                       RedisTemplate<String, String> redisTemplate, PostImageService postImageService,
+                       @Value("${post.image.amount}") int imageAmount) {
+        this.mapper = mapper;
+        this.memberService = memberService;
+        this.bulletinService = bulletinService;
+        this.clubMemberService = clubMemberService;
+        this.redisTemplate = redisTemplate;
+        this.postImageService = postImageService;
+        this.imageAmount = imageAmount;
+    }
 
     /**
      * 게시판에 게시물을 작성합니다.
@@ -33,8 +49,10 @@ public class PostService {
      * @param bulletinId 게시판의 id
      * @param memberId   member의 id
      * @param post       게시물 정보
+     * @param images     첨부된 이미지
      */
-    public void create(int bulletinId, int memberId, Post post) {
+    @Transactional
+    public void create(int bulletinId, int memberId, Post post, List<MultipartFile> images) {
         if (post == null) {
             throw new BadRequestException(POST_NOT_EXIST);
         }
@@ -53,6 +71,10 @@ public class PostService {
             throw new NoPermissionException(NO_CLUB_PERMISSION);
         }
 
+        if (images.size() >= imageAmount) {
+            throw new BadRequestException(TOO_MUCH_FILES);
+        }
+
         Post newPost = Post.builder()
                            .bulletinId(bulletinId)
                            .writer(memberId)
@@ -61,9 +83,11 @@ public class PostService {
                            .views(0)
                            .build();
 
-        mapper.insert(newPost);
-        redisTemplate.opsForValue()
-                     .set(RECENTLY_POST + " " + memberId, String.valueOf(memberId), Duration.ofMinutes(1));
+        int postId = mapper.insert(newPost);
+
+        if (!images.isEmpty()) {
+            postImageService.uploadImage(postId, images);
+        }
     }
 
     /**

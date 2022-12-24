@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.PostImageMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.PostImage">
+        INSERT
+        INTO post_image(post_id, file_name, path, deleted, created_at, updated_at)
+        VALUES (#{postId}, #{fileName}, #{path}, 0, now(), now())
+    </insert>
+
+    <select id="getPostImageById" resultType="soccerfriend.dto.PostImage">
+        SELECT id, post_id, file_name, path
+        FROM post_image
+        WHERE id = #{id}
+    </select>
+
+</mapper>

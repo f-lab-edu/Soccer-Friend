@@ -3,6 +3,7 @@ package soccerfriend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import soccerfriend.authentication.BulletinWriteAuth;
 import soccerfriend.authentication.NotRecentlyPost;
 import soccerfriend.dto.Comment;
@@ -16,7 +17,8 @@ import soccerfriend.service.PostService;
 
 import java.util.List;
 
-import static soccerfriend.exception.ExceptionInfo.*;
+import static soccerfriend.exception.ExceptionInfo.COMMENT_NOT_EXIST;
+import static soccerfriend.exception.ExceptionInfo.NO_COMMENT_PERMISSION;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,9 +38,11 @@ public class PostController {
     @PostMapping("/bulletin/{bulletinId}")
     @BulletinWriteAuth
     @NotRecentlyPost
-    public void create(@PathVariable int bulletinId, @Validated @RequestBody Post post) {
+    public void create(@PathVariable int bulletinId,
+                       @Validated @RequestBody Post post,
+                       @RequestPart List<MultipartFile> images) {
         int memberId = loginService.getMemberId();
-        postService.create(bulletinId, memberId, post);
+        postService.create(bulletinId, memberId, post, images);
     }
 
     /**
