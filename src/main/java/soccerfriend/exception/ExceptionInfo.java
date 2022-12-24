@@ -20,6 +20,7 @@ public enum ExceptionInfo {
     PAYMENT_FAIL(401, "결제에 실패했습니다."),
     NO_COMMENT_PERMISSION(401, "해당 댓글을 수정혹은 삭제할 권한이 없습니다."),
 
+    DOWNLOAD_FAIL(404, "다운로드에 실패했습니다."),
     S3_NOT_WORKING(404, "s3 SDK 연동과정에서 오류가 발생했습니다."),
     TOO_MUCH_FILES(404, "파일의 개수가 3개가 넘습니다."),
     FILE_NOT_EXIST(404, "파일이 존재하지 않습니다."),

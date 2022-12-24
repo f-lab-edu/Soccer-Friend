@@ -14,8 +14,7 @@ import soccerfriend.exception.exception.BadRequestException;
 
 import java.io.*;
 
-import static soccerfriend.exception.ExceptionInfo.FILE_NOT_EXIST;
-import static soccerfriend.exception.ExceptionInfo.S3_NOT_WORKING;
+import static soccerfriend.exception.ExceptionInfo.*;
 
 @Service
 public class S3FileManageService implements FileManageService {
@@ -86,8 +85,10 @@ public class S3FileManageService implements FileManageService {
 
             outputStream.close();
             s3ObjectInputStream.close();
-        } catch (SdkClientException | IOException e) {
+        } catch (SdkClientException e) {
             throw new BadRequestException(S3_NOT_WORKING);
+        } catch (IOException e) {
+            throw new BadRequestException(DOWNLOAD_FAIL);
         }
     }
 
@@ -104,6 +105,4 @@ public class S3FileManageService implements FileManageService {
             throw new BadRequestException(S3_NOT_WORKING);
         }
     }
-
-
 }

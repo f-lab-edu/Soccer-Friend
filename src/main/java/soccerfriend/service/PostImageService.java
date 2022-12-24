@@ -46,7 +46,7 @@ public class PostImageService {
                 image.transferTo(file);
                 fileManageService.upload(file);
             } catch (IOException e) {
-                deleteImageByException(postId, images);
+                deleteImagesFromPost(postId, images);
             }
 
             PostImage postImage = PostImage.builder()
@@ -60,12 +60,12 @@ public class PostImageService {
     }
 
     /**
-     * uploadImage 과정에서 IOException이 발생했을 때 이전에 업로드된 이미지들을 삭제한다.
+     * 특정 post에 images들이 존재하면 삭제합니다.
      *
      * @param postId 게시물의 id
      * @param images 이미지들의 정보
      */
-    public void deleteImageByException(int postId, List<MultipartFile> images) {
+    public void deleteImagesFromPost(int postId, List<MultipartFile> images) {
         if (images.isEmpty()) {
             throw new BadRequestException(IMAGE_NOT_EXIST);
         }
