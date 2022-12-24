@@ -24,7 +24,7 @@ public class PostService {
     private final MemberService memberService;
     private final BulletinService bulletinService;
     private final ClubMemberService clubMemberService;
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
     public static final String RECENTLY_POST = "recentlyPost";
 
     /**
@@ -62,7 +62,8 @@ public class PostService {
                            .build();
 
         mapper.insert(newPost);
-        redisTemplate.opsForValue().set(RECENTLY_POST + " " + memberId, memberId, Duration.ofMinutes(1));
+        redisTemplate.opsForValue()
+                     .set(RECENTLY_POST + " " + memberId, String.valueOf(memberId), Duration.ofMinutes(1));
     }
 
     /**
@@ -130,6 +131,7 @@ public class PostService {
      * @param id       게시물의 id
      * @return 특정 id의 게시물
      */
+    @Cacheable(value = "POST", key = "#id")
     public Post readPost(int memberId, int id) {
         Member member = memberService.getMemberById(memberId);
         if (member == null) {
@@ -140,7 +142,44 @@ public class PostService {
             throw new BadRequestException(POST_NOT_EXIST);
         }
 
-        // 조회수 증가 로직 추가예정
+        if (!postViewCheck(memberId, id)) {
+            increaseViews(id);
+        }
+
+        redisTemplate.opsForValue().set(viewCheckKey(id, memberId), "1", Duration.ofDays(1));
+
         return post;
+    }
+
+    /**
+     * 해당 게시물을 24시간 이내에 읽었는지 확인합니다.
+     *
+     * @param id 게시물의 id
+     * @return 게시물을 24시간 이내에 읽었는지 여부
+     */
+    public boolean postViewCheck(int memberId, int id) {
+        String str = redisTemplate.opsForValue().get(viewCheckKey(id, memberId));
+        if (str == null) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 특정 id의 게시물을 1 증가시킵니다.
+     *
+     * @param id 게시물의 id
+     */
+    public void increaseViews(int id) {
+        Post post = getPostById(id);
+        if (post == null) {
+            throw new BadRequestException(POST_NOT_EXIST);
+        }
+
+        mapper.increaseViews(id);
+    }
+
+    public String viewCheckKey(int postId, int memberId) {
+        return "POST " + postId + " MEMBER " + memberId;
     }
 }

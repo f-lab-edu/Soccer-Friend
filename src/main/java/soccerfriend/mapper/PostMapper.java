@@ -16,4 +16,6 @@ public interface PostMapper {
     public List<Post> getPostByBulletinPage(@Param("bulletinId") int bulletinId, @Param("start") int start);
 
     public int getPostCountFromBulletin(int bulletinId);
+
+    public void increaseViews(int id);
 }

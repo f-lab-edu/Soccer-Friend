@@ -66,9 +66,7 @@
                club_id,
                member_id,
                grade,
-               approved,
-               created_at,
-               updated_at
+               approved
         FROM club_member
         WHERE id = #{id}
     </select>
@@ -78,9 +76,7 @@
                club_id,
                member_id,
                grade,
-               approved,
-               created_at,
-               updated_at
+               approved
         FROM club_member
         WHERE club_id = #{clubId}
           AND member_id = #{memberId}
@@ -91,9 +87,7 @@
                club_id,
                member_id,
                grade,
-               approved,
-               created_at,
-               updated_at
+               approved
         FROM club_member
         WHERE club_id = #{clubId}
           AND approved = 1
@@ -104,9 +98,7 @@
                club_id,
                member_id,
                grade,
-               approved,
-               created_at,
-               updated_at
+               approved
         FROM club_member
         WHERE club_id = #{clubId}
           AND approved = 0
@@ -131,9 +123,7 @@
                a.club_id,
                a.member_id,
                a.grade,
-               a.approved,
-               a.created_at,
-               a.updated_at
+               a.approved
         FROM club_member a
                  INNER JOIN club_monthly_fee b
                             ON a.id = b.club_member_id
@@ -147,9 +137,7 @@
                a.club_id,
                a.member_id,
                a.grade,
-               a.approved,
-               a.created_at,
-               a.updated_at
+               a.approved
         FROM club_member a
                  LEFT OUTER JOIN club_monthly_fee b
                                  ON a.id = b.club_member_id
