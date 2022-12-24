@@ -26,7 +26,7 @@ public class MemberService {
 
     private final MemberMapper mapper;
     private final EmailService emailService;
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     /**
      * 회원가입을 수행합니다.
@@ -248,7 +248,7 @@ public class MemberService {
      * @param email 인증하려는 email
      */
     public void emailAuthentication(String email) {
-        String emailCode = (String) redisTemplate.opsForValue().get(email);
+        String emailCode = redisTemplate.opsForValue().get(email);
         if (emailCode != null) {
             throw new BadRequestException(ALREADY_SENT_EMAIL_CODE);
         }
@@ -277,7 +277,7 @@ public class MemberService {
      * @return 인증여부
      */
     public boolean approveEmail(String email, String code) {
-        String emailCode = (String) redisTemplate.opsForValue().get(email);
+        String emailCode = redisTemplate.opsForValue().get(email);
         if (!code.equals(emailCode)) {
             return false;
         }
