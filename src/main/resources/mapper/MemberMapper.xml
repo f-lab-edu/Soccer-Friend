@@ -6,10 +6,9 @@
 
     <insert id="insert" parameterType="soccerfriend.dto.Member">
         INSERT
-        INTO member(member_id, password, email, nickname, point, positions_id, address_id, email_approved, deleted,
+        INTO member(member_id, password, email, nickname, point, positions_id, address_id, deleted,
                     password_warning, created_at, updated_at)
-        VALUES (#{memberId}, #{password}, #{email}, #{nickname}, #{point}, #{positionsId}, #{addressId}, 0, 0,
-                0, now(),
+        VALUES (#{memberId}, #{password}, #{email}, #{nickname}, #{point}, #{positionsId}, #{addressId}, 0, 0, now(),
                 now())
     </insert>
 
