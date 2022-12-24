@@ -2,7 +2,10 @@ package soccerfriend.dto;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Builder
@@ -12,23 +15,29 @@ public class Club {
 
     private int id;
 
+    @NotNull
+    @Size(min = 2, max = 20)
     private String name;
 
     private int leader;
 
+    @NotNull
+    @Min(0)
+    @Max(25)
     private int addressId;
 
     private int point;
 
+    @NotNull
+    @Min(0)
     private int monthlyFee;
 
+    @NotNull
+    @Min(0)
+    @Max(28)
     private int paymentDay;
 
     private int bulletinNum;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
     @Builder
     public Club(String name, int addressId, int monthlyFee, int paymentDay) {

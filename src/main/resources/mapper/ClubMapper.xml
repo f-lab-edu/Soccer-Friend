@@ -18,9 +18,7 @@
                point,
                monthly_fee,
                payment_day,
-               bulletin_num,
-               created_at,
-               updated_at
+               bulletin_num
         FROM club
         WHERE id = #{id}
     </select>
@@ -32,9 +30,7 @@
                address_id,
                point,
                monthly_fee,
-               bulletin_num,
-               created_at,
-               updated_at
+               bulletin_num
         FROM club
         WHERE name = #{name}
     </select>
