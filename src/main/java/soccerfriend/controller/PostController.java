@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import soccerfriend.authentication.BulletinWriteAuth;
 import soccerfriend.authentication.NotRecentlyPost;
+import soccerfriend.authentication.PostWriteAuth;
 import soccerfriend.dto.Comment;
 import soccerfriend.dto.Comment.ContentInput;
 import soccerfriend.dto.Post;
@@ -13,6 +14,7 @@ import soccerfriend.exception.exception.BadRequestException;
 import soccerfriend.exception.exception.NoPermissionException;
 import soccerfriend.service.CommentService;
 import soccerfriend.service.LoginService;
+import soccerfriend.service.PostImageService;
 import soccerfriend.service.PostService;
 
 import java.util.List;
@@ -28,6 +30,7 @@ public class PostController {
     private final PostService postService;
     private final LoginService loginService;
     private final CommentService commentService;
+    private final PostImageService postImageService;
 
     /**
      * 특정 게시판에 게시물을 생성합니다.
@@ -123,5 +126,17 @@ public class PostController {
     @BulletinWriteAuth
     public List<Comment> getComments(@PathVariable int bulletinId, @PathVariable int postId) {
         return commentService.getCommentsByPostId(postId);
+    }
+
+    /**
+     * 이미 업로드된 게시물의 이미지를 삭제합니다. 게시물 수정권한이 있는 자만 삭제가능합니다.
+     *
+     * @param postId      게시물의 id
+     * @param postImageId 삭제하려는 이미지의 id
+     */
+    @DeleteMapping("post/{postId}/post-image/{postImageId}")
+    @PostWriteAuth
+    public void deleteImage(@PathVariable int postId, @PathVariable int postImageId) {
+        postImageService.delete(postImageId);
     }
 }

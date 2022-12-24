@@ -16,4 +16,11 @@
         WHERE id = #{id}
     </select>
 
+    <update id="delete">
+        UPDATE post_image
+        SET deleted    = 1,
+            updated_at = now()
+        WHERE id = #{id}
+    </update>
+
 </mapper>

@@ -79,4 +79,28 @@ public class PostImageService {
             }
         }
     }
+
+    /**
+     * 특정 id의 게시물에 업로드된 사진을 삭제합니다. 이 때 디스크에 저장된 파일은 삭제되지 않습니다.
+     *
+     * @param id 게시물에 업로드된 사진의 id
+     */
+    public void delete(int id) {
+        PostImage postImage = getPostImageById(id);
+        if (postImage == null) {
+            throw new BadRequestException(IMAGE_NOT_EXIST);
+        }
+
+        mapper.delete(id);
+    }
+
+    /**
+     * 특정 id의 게시물에 업로드된 사진을 반환합니다.
+     *
+     * @param id 게시물에 업로드된 사진의 id
+     * @return 특정 id의 게시물에 업로드된 사진
+     */
+    public PostImage getPostImageById(int id) {
+        return mapper.getPostImageById(id);
+    }
 }
