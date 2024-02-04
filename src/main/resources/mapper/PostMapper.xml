@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="soccerfriend.mapper.PostMapper">
+
+    <insert id="insert" parameterType="soccerfriend.dto.Post">
+        INSERT
+        INTO post(bulletin_id, writer, title, content, views, deleted, created_at, updated_at)
+        VALUES (#{bulletinId}, #{writer}, #{title}, #{content}, #{views}, 0, now(), now())
+    </insert>
+
+    <select id="getPostById" resultType="soccerfriend.dto.Post">
+        SELECT id, bulletin_id, writer, title, content, views
+        FROM post
+        WHERE id = #{id}
+    </select>
+
+    <select id="getPostByBulletinId" resultType="soccerfriend.dto.Post">
+        SELECT id, bulletin_id, writer, title, content, views
+        FROM post
+        WHERE bulletin_id = #{bulletinId}
+    </select>
+
+    <select id="getPostByBulletinPage" resultType="soccerfriend.dto.Post">
+        SELECT id, bulletin_id, writer, title, content, views
+        FROM post
+        WHERE bulletin_id = #{bulletinId}
+        ORDER BY id asc
+        LIMIT #{start}, 10
+    </select>
+
+    <select id="getPostCountFromBulletin" resultType="int">
+        SELECT COUNT(*)
+        FROM post
+        WHERE bulletin_id = #{bulletinId}
+    </select>
+</mapper>

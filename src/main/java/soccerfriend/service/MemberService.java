@@ -11,7 +11,6 @@ import soccerfriend.exception.exception.NotMatchException;
 import soccerfriend.mapper.MemberMapper;
 import soccerfriend.utility.InputForm.UpdatePasswordRequest;
 import soccerfriend.utility.PasswordWarning;
-import soccerfriend.utility.RedisUtil;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -27,8 +26,7 @@ public class MemberService {
 
     private final MemberMapper mapper;
     private final EmailService emailService;
-    private final RedisUtil redisUtil;
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     /**
      * 회원가입을 수행합니다.
@@ -250,7 +248,7 @@ public class MemberService {
      * @param email 인증하려는 email
      */
     public void emailAuthentication(String email) {
-        String emailCode = redisUtil.getStringData(email);
+        String emailCode = redisTemplate.opsForValue().get(email);
         if (emailCode != null) {
             throw new BadRequestException(ALREADY_SENT_EMAIL_CODE);
         }
@@ -279,12 +277,12 @@ public class MemberService {
      * @return 인증여부
      */
     public boolean approveEmail(String email, String code) {
-        String emailCode = redisUtil.getStringData(email);
+        String emailCode = redisTemplate.opsForValue().get(email);
         if (!code.equals(emailCode)) {
             return false;
         }
 
-        redisUtil.deleteData(email);
+        redisTemplate.delete(email);
         return true;
     }
 

@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum ExceptionInfo {
 
+    RECENTLY_CREATE_POST(401, "게시물 작성 후 1분 동안 게시물 작성이 제한됩니다."),
     CHANGE_PASSWORD_REQUIRED(401, "비밀번호를 변경해주세요"),
     NOT_LOGIN(401, "로그인되어있지 않습니다."),
     NO_ORDER_PERMISSION(401, "해당 주문에 관한 권한이 없습니다."),
@@ -18,6 +19,8 @@ public enum ExceptionInfo {
     IS_CLUB_LEADER(401, "해당 클럽의 leader는 탈퇴할 수 없습니다."),
     PAYMENT_FAIL(401, "결제에 실패했습니다."),
 
+    POST_PAGE_NOT_EXIST(404, "해당 게시판에 존재하지 않는 페이지입니다."),
+    POST_NOT_EXIST(404, "게시물이 존재하지 않습니다."),
     CODE_NOT_EXIST(404, "존재하지 않는 코드입니다."),
     TOSS_PAYMENT_FAIL(404, "토스페이먼트 결제승인과정에서 오류가 발생했습니다."),
     ORDER_INFO_NOT_EXIST(404, "주문 정보가 존재하지 않습니다."),
@@ -42,7 +45,6 @@ public enum ExceptionInfo {
     CLUB_MEMBER_NOT_EXIST(404, "해당 클럽회원이 존재하지 않습니다"),
     CLUB_NOT_EXIST(404, "해당 클럽이 존재하지 않습니다"),
     PAYER_TYPE_NOT_EXIST(404, "결제 대상이 아닙니다."),
-
 
     SAME_NAME_FOR_UPDATE(409, "이전과 동일한 이름입니다."),
     CLUB_BULLETINS_FULL(409, "클럽내 게시판 개수가 최대입니다."),

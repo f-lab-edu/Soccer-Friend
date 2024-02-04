@@ -68,6 +68,8 @@ public class RedisConfig {
         Map<String, RedisCacheConfiguration> customConfigurationMap = new HashMap<>();
         customConfigurationMap.put("SIGNUP", defaultConfiguration().entryTtl(Duration.ofDays(1)));
         customConfigurationMap.put("BULLETIN", defaultConfiguration().entryTtl(Duration.ofDays(1)));
+        customConfigurationMap.put("POST", defaultConfiguration().entryTtl(Duration.ofDays(1)));
+        customConfigurationMap.put("POSTPAGE", defaultConfiguration().entryTtl(Duration.ofSeconds(1)));
         return customConfigurationMap;
     }
 }
